@@ -15,4 +15,4 @@ db = SQLAlchemy(app)
 from app.model import User, Event, Reminder
 
 # 只有在app对象之后声明，用于导入view模块
-from app.controller import manage
+from app.controller import user_controller, event_controller, message_controller,reminder_controller

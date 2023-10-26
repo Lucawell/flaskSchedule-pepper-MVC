@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>Event Management</title>
+</head>
+<body>
+<h1>Reminder Management</h1>
+    <ul>
+        {% for reminder in reminder %}
+            <li>{{ reminder.time }} - {{ reminder.method }} [<a href="{{ url_for('edit_reminder', reminder_id=reminders.id) }}">Edit</a>] [<a href="{{ url_for('delete_reminder', reminder_id=reminders.id) }}">Delete</a>]</li>
+        {% endfor %}
+    </ul>
+    <h2>Add Reminder</h2>
+    <form method="post" action="{{ url_for('add_reminder') }}">
+        <label>Event ID: <input type="text" name="event_id" required></label>
+        <label>Time: <input type="datetime-local" name="time" required></label>
+        <label>Method: <input type="text" name="method" required></label>
+        <input type="submit" value="Add Reminder">
+    </form>
+</body>
+</html>
