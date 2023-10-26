@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>Edit User</title>
+</head>
+<body>
+    <h1>Edit User</h1>
+    <form method="post" action="">
+        <label>Name: <input type="text" name="name" value="{{ user.name }}" required></label>
+        <label>Email: <input type="email" name="email" value="{{ user.email }}" required></label>
+        <label>Phone: <input type="text" name="phone" value="{{ user.phone }}" required></label>
+        <input type="submit" value="Save">
+    </form>
+</body>
+</html>
