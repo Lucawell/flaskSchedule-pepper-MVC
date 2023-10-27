@@ -4,6 +4,7 @@ from app.model.User import User
 from app import app
 from flask import request, jsonify
 
+
 # 发送消息
 @app.route("/getdata")
 def getdata():
@@ -24,6 +25,7 @@ def getdata():
 
     # 使用 return 语句返回 JSON 对象
     return json_response
+
 
 # 接收消息
 @app.route('/receive_message', methods=['POST', 'GET'])

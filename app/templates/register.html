@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>用户注册</title>
+</head>
+<body>
+    <h1>用户注册</h1>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <label for="name">用户名</label>
+        <input type="text" id="name" name="name" value="{{ form.name.data }}" required>
+        <br>
+        <label for="email">邮箱</label>
+        <input type="email" id="email" name="email" value="{{ form.email.data }}" required>
+        <br>
+        <label for="phone">电话</label>
+        <input type="text" id="phone" name="phone" value="{{ form.phone.data }}">
+        <br>
+        <label for="password">密码</label>
+        <input type="password" id="password" name="password" required>
+        <br>
+        <label for="confirm_password">确认密码</label>
+        <input type="password" id="confirm_password" name="confirm_password" required>
+        <br>
+        <input type="submit" value="注册">
+    </form>
+
+    <p>已有账户？ <a href="{{ url_for('login') }}">点击这里登录</a></p>
+</body>
+</html>
