@@ -76,6 +76,7 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+    # form.email.data = "输入您邮箱"  # 设置初始值
     if form.validate_on_submit():
         email = form.email.data  # 修改为使用邮箱作为登录凭据
         password = form.password.data
