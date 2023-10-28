@@ -1,10 +1,9 @@
 # encoding:utf-8
 from app.model.User import User
-
 from app import app
 from flask import request, jsonify
 
-
+# ----------------------------------以下是测试部分，不要在生产环境调用-----------------------------------
 # 发送消息
 @app.route("/getdata")
 def getdata():

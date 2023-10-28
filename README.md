@@ -6,9 +6,9 @@
 │  requirements.txt //项目依赖
 │  schedule.sql //数据库文件
 ├─app
-│  │  README.md
 │  │  setting.py //配置文件,数据库连接(需要在环境变量中加入此路径)
 │  │  __init__.py //模块初始化文件，Flask 程序对象的创建须在 __init__.py 文件里完成
+│  │  forms.py //Flask-WTF表单验证器来验证用户输入
 │  │
 │  ├─controller //MVC中的控制器(C)
 │  │  │  event_controller.py //事件控制器
@@ -27,6 +27,9 @@
 │  │      index.html
 │  │      reminders.html
 │  │      users.html
+│  │      login.html
+│  │      register.html
+
 ```
 
 # 项目依赖

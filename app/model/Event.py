@@ -1,6 +1,7 @@
 from app import db
 from app.model.User import User
 
+
 class Event(db.Model):
     __tablename__ = 'events'
     id = db.Column(db.Integer, primary_key=True)
@@ -11,7 +12,7 @@ class Event(db.Model):
     location = db.Column(db.String(255))
     description = db.Column(db.String(255))
 
-    def __init__(self,user_id,title,start_time,end_time,location,description):
+    def __init__(self, user_id, title, start_time, end_time, location, description):
         self.user_id = user_id
         self.title = title
         self.start_time = start_time

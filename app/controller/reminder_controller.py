@@ -3,6 +3,8 @@ from app.model.Reminder import Reminder
 from app import app, db
 from flask import request, render_template, url_for, redirect
 
+
+# ----------------------------------以下是测试部分，不要在生产环境调用-----------------------------------
 @app.route('/reminders')
 def reminder_list():
     reminders = Reminder.query.all()

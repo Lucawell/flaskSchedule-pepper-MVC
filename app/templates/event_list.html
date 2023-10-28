@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>事件列表</title>
+</head>
+<body>
+    <h1>事件列表</h1>
+    <ul>
+        {% for event in events %}
+            <li>
+                <strong>{{ event.title }}</strong>
+                <p>开始时间: {{ event.start_time }}</p>
+                <p>结束时间: {{ event.end_time }}</p>
+                <p>地点: {{ event.location }}</p>
+                <p>描述: {{ event.description }}</p>
+                <a href="{{ url_for('edit_event', event_id=event.id) }}">编辑</a>
+                <form method="post" action="{{ url_for('delete_event', event_id=event.id) }}">
+                    <input type="submit" value="删除">
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('create_event') }}">创建事件</a>
+</body>
+</html>

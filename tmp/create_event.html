@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Create Event</title>
+</head>
+<body>
+    <h1>Create Event</h1>
+    <form method="POST">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required><br><br>
+
+        <label for="start_time">Start Time:</label>
+        <input type="text" id="start_time" name="start_time" required><br><br>
+
+        <label for="end_time">End Time:</label>
+        <input type="text" id="end_time" name="end_time" required><br><br>
+
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location"><br><br>
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" rows="4"></textarea><br><br>
+
+        <button type="submit">Create Event</button>
+    </form>
+    <a href="{{ url_for('event_list') }}">事件列表</a>
+</body>
+
+</html>

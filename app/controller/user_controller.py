@@ -1,20 +1,24 @@
 # encoding:utf-8
+from flask_login import current_user, login_required, logout_user, login_user
 from app.model.User import User
-from app import app, db
+from app import app, db, login_manager
 from flask import request, render_template, url_for, redirect, flash
 from app.forms import RegisterForm, LoginForm
 
+
+# -----------------------------以下为测速部分不要在生产环境调用------------------------------------------
 @app.route("/users")
 def user_list():
     users = User.query.all()
     return render_template('users.html', users=users)
+
 
 @app.route('/add_user', methods=['POST'])
 def add_user():
     name = request.form['name']
     email = request.form['email']
     phone = request.form['phone']
-
+    # password_hash
     new_user = User(name=name, email=email, phone=phone)
     db.session.add(new_user)
     db.session.commit()
@@ -73,22 +77,38 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
+# ----------------------以下为开发生产部分---------------------------------------------
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        # 如果用户已登录，重定向到受保护的页面
+        return redirect(url_for('create_event'))
     form = LoginForm()
-    # form.email.data = "输入您邮箱"  # 设置初始值
     if form.validate_on_submit():
         email = form.email.data  # 修改为使用邮箱作为登录凭据
         password = form.password.data
-
         user = User.query.filter_by(email=email).first()
-
         if user and user.check_password(password):
             # 用户验证成功，将用户标记为已登录
             # 可以使用 Flask-Login 或自己的会话管理逻辑来处理登录状态
+            login_user(user)
             flash('登录成功', 'success')
-            return redirect(url_for('user_list'))  # 跳转到用户仪表板或其他受保护的页面
+            return redirect(url_for('create_event'))  # 跳转到用户仪表板或其他受保护的页面
         else:
             flash('登录失败，请检查邮箱或密码', 'error')
 
     return render_template('login.html', form=form)
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()  # 使用 Flask-Login 注销用户
+    flash('成功注销', 'success')
+    return redirect(url_for('login'))
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    # 使用用户 ID 查询用户对象
+    return User.query.get(int(user_id))
