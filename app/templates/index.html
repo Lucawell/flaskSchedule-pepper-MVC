@@ -24,8 +24,8 @@
 
     <h1>Reminder Management</h1>
     <ul>
-        {% for reminder in reminder %}
-            <li>{{ reminder.time }} - {{ reminder.method }} [<a href="{{ url_for('edit_reminder', reminder_id=reminders.id) }}">Edit</a>] [<a href="{{ url_for('delete_reminder', reminder_id=reminders.id) }}">Delete</a>]</li>
+        {% for reminder in reminders %}
+            <li>{{ reminder.time }} - {{ reminder.method }} [<a href="{{ url_for('edit_reminder', reminder_id=reminder.id) }}">Edit</a>] [<a href="{{ url_for('delete_reminder', reminder_id=reminder.id) }}">Delete</a>]</li>
         {% endfor %}
     </ul>
     <h2>Add Reminder</h2>

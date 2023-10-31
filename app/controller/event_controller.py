@@ -1,11 +1,12 @@
 # encoding:utf-8
 from app.model.Event import Event
+from app.model.Reminder import Reminder
 from app import app, db
 from flask import request, render_template, url_for, redirect, flash
 from app.forms import EventForm
 from flask_login import login_required, current_user
 
-# ----------------------------------以下是测试部分，不要在生产环境调用-----------------------------------
+# ----------------------------------以下是管理员部分，不要在用户环境调用-----------------------------------
 # @app.route('/events')
 # def event_list():
 #     events = Event.query.all()
@@ -58,8 +59,8 @@ from flask_login import login_required, current_user
 #
 #     return redirect(url_for('event_list'))
 
-# ----------------------------------以下是生产和开发部分-----------------------------------
 
+# ----------------------------------以下是用户环境部分-----------------------------------
 @app.route('/event_list')
 @login_required
 def event_list():

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>创建提醒</title>
+    <link rel="stylesheet" href="../static/css/http_cdn.jsdelivr.net_npm_flatpickr_dist_flatpickr.css">
+    <script src="../static/js/http_cdn.jsdelivr.net_npm_flatpickr.js"></script>
+</head>
+<body>
+    <h1>创建提醒</h1>
+    <form method="POST" action="{{ url_for('create_reminder', event_id=event.id) }}">
+        {{ form.hidden_tag() }}
+
+        <div>
+            {{ form.time.label(class="form-label") }}
+            {{ form.time(class="form-control flatpickr",id="time") }}
+            {% for error in form.time.errors %}
+                <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div>
+            {{ form.method.label(class="form-label") }}
+            {{ form.method(class="form-control") }}
+            {% for error in form.method.errors %}
+                <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div>
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+    <a href="{{ url_for('event_list') }}">返回事件列表</a>
+<script>
+    flatpickr('#time', {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+    });
+</script>
+</body>
+</html>

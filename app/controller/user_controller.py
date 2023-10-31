@@ -6,12 +6,11 @@ from flask import request, render_template, url_for, redirect, flash
 from app.forms import RegisterForm, LoginForm
 
 
-# -----------------------------以下为测速部分不要在生产环境调用------------------------------------------
+# -----------------------------以下为管理员部分不要在用户环境调用------------------------------------------
 @app.route("/users")
 def user_list():
     users = User.query.all()
     return render_template('users.html', users=users)
-
 
 @app.route('/add_user', methods=['POST'])
 def add_user():
@@ -24,7 +23,6 @@ def add_user():
     db.session.commit()
 
     return redirect(url_for('user_list'))
-
 
 @app.route('/edit_user/<int:user_id>', methods=['GET', 'POST'])
 def edit_user(user_id):
@@ -51,6 +49,7 @@ def delete_user(user_id):
 
     return redirect(url_for('user_list'))
 
+# ----------------------以下为用户开发部分---------------------------------------------
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -77,12 +76,11 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
-# ----------------------以下为开发生产部分---------------------------------------------
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
         # 如果用户已登录，重定向到受保护的页面
-        return redirect(url_for('create_event'))
+        return redirect(url_for('event_list'))
     form = LoginForm()
     if form.validate_on_submit():
         email = form.email.data  # 修改为使用邮箱作为登录凭据
@@ -93,7 +91,7 @@ def login():
             # 可以使用 Flask-Login 或自己的会话管理逻辑来处理登录状态
             login_user(user)
             flash('登录成功', 'success')
-            return redirect(url_for('create_event'))  # 跳转到用户仪表板或其他受保护的页面
+            return redirect(url_for('event_list'))  # 跳转到用户仪表板或其他受保护的页面
         else:
             flash('登录失败，请检查邮箱或密码', 'error')
 

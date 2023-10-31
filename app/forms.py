@@ -29,3 +29,9 @@ class EventForm(FlaskForm):
     location = StringField('地点', validators=[validators.Length(max=255)])
     description = StringField('描述', validators=[validators.Length(max=255)])
     submit = SubmitField('Submit')  # 添加这一行来定义 submit 字段
+
+
+class ReminderForm(FlaskForm):
+    time = DateTimeField('提醒时间', format='%Y-%m-%d %H:%M', validators=[validators.DataRequired()])
+    method = StringField('提醒方法', validators=[validators.DataRequired(), validators.Length(max=255)])
+    submit = SubmitField('创建提醒')

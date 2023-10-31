@@ -1,5 +1,6 @@
 from app import db
-from app.model.Event import Event 
+from app.model.Event import Event
+
 
 class Reminder(db.Model):
     __tablename__ = 'reminders'
@@ -8,10 +9,10 @@ class Reminder(db.Model):
     time = db.Column(db.DateTime, nullable=False)
     method = db.Column(db.String(255), nullable=False)
 
-    def __init__(self,event_id,time,method):
+    def __init__(self, event_id, time, method):
         self.event_id = event_id
         self.time = time
         self.method = method
-    
+
     def __repr__(self):
         return '<Reminder %r>' % self.event_id

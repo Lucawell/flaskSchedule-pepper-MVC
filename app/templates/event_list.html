@@ -17,6 +17,7 @@
                 <form method="post" action="{{ url_for('delete_event', event_id=event.id) }}">
                     <input type="submit" value="删除">
                 </form>
+                <a href="{{ url_for('create_reminder', event_id=event.id) }}">创建提醒</a>
             </li>
         {% endfor %}
     </ul>
