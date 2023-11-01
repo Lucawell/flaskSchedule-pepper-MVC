@@ -1,16 +1,23 @@
 # encoding:utf-8
 from app.model.Event import Event
+from app.model.Reminder import Reminder
 from app import db
-from flask import request, render_template, url_for, redirect, flash
+from flask import Blueprint, request, render_template, url_for, redirect, flash
 from app.forms import EventForm
 from flask_login import login_required, current_user
 
+event_blueprint = Blueprint('event', __name__)
+
+
+@event_blueprint.route('/event_list')
 @login_required
 def event_list():
     # 查询当前用户的所有事件
     events = Event.query.filter_by(user_id=current_user.id).all()
     return render_template('event_list.html', events=events)
 
+
+@event_blueprint.route('/create_event', methods=['GET', 'POST'])
 @login_required
 def create_event():
     form = EventForm()  # 使用您的事件表单来接收用户输入
@@ -44,6 +51,8 @@ def create_event():
 
     return render_template('create_event.html', form=form)
 
+
+@event_blueprint.route('/delete_event/<int:event_id>', methods=['POST'])
 @login_required
 def delete_event(event_id):
     # 查询要删除的事件
@@ -59,6 +68,8 @@ def delete_event(event_id):
 
     return redirect(url_for('event.event_list'))
 
+
+@event_blueprint.route('/edit_event/<int:event_id>', methods=['GET', 'POST'])
 @login_required
 def edit_event(event_id):
     # 查询要编辑的事件

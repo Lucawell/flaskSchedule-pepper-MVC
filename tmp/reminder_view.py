@@ -4,13 +4,17 @@ from app.forms import ReminderForm
 from app.model.Event import Event
 from app.model.Reminder import Reminder
 from app import db
-from flask import render_template, url_for, redirect, flash
+from flask import Blueprint, request, render_template, url_for, redirect, flash
 
+reminders_blueprint = Blueprint('reminders', __name__)
+
+@reminders_blueprint.route('/reminders', methods=['GET'])
 @login_required
 def reminder_list():
     reminders = Reminder.query.all()  # 查询所有提醒
     return render_template('event_list.html', reminders=reminders)
 
+@reminders_blueprint.route('/create_reminder/<int:event_id>', methods=['GET', 'POST'])
 @login_required
 def create_reminder(event_id):
     form = ReminderForm()  # 使用提醒表单来接收用户输入
@@ -45,6 +49,7 @@ def create_reminder(event_id):
 
     return render_template('create_reminder.html', form=form, event=event)
 
+@reminders_blueprint.route('/delete_reminder/<int:reminder_id>', methods=['POST'])
 @login_required
 def delete_reminder(reminder_id):
     reminder = Reminder.query.get(reminder_id)

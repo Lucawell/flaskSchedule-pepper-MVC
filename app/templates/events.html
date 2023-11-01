@@ -11,7 +11,7 @@
         {% endfor %}
     </ul>
     <h2>Add Event</h2>
-    <form method="post" action="{{ url_for('add_event') }}">
+    <form method="post" action="{{ url_for('event.add_event') }}">
         <label>User ID: <input type="text" name="user_id" required></label>
         <label>Title: <input type="text" name="title" required></label>
         <label>Start Time: <input type="datetime-local" name="start_time" required></label>

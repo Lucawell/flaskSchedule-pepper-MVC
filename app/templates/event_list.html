@@ -13,14 +13,14 @@
                 <p>结束时间: {{ event.end_time }}</p>
                 <p>地点: {{ event.location }}</p>
                 <p>描述: {{ event.description }}</p>
-                <a href="{{ url_for('edit_event', event_id=event.id) }}">编辑</a>
-                <form method="post" action="{{ url_for('delete_event', event_id=event.id) }}">
+                <a href="{{ url_for('event.edit_event', event_id=event.id) }}">编辑</a>
+                <form method="post" action="{{ url_for('event.delete_event', event_id=event.id) }}">
                     <input type="submit" value="删除">
                 </form>
-                <a href="{{ url_for('create_reminder', event_id=event.id) }}">创建提醒</a>
+                <a href="{{ url_for('reminders.create_reminder', event_id=event.id) }}">创建提醒</a>
             </li>
         {% endfor %}
     </ul>
-    <a href="{{ url_for('create_event') }}">创建事件</a>
+    <a href="{{ url_for('event.create_event') }}">创建事件</a>
 </body>
 </html>
