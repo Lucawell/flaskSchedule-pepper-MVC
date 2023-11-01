@@ -20,9 +20,12 @@ def create_app():
     from app.views.event_view import event_blueprint
     from app.views.reminder_view import reminders_blueprint
 
+    from app.controller.api_controller import api_login_blueprint
+
     app.register_blueprint(index_blueprint, url_prefix='/')
     app.register_blueprint(user_blueprint, url_prefix='/user')
     app.register_blueprint(event_blueprint, url_prefix='/event')
     app.register_blueprint(reminders_blueprint, url_prefix='/reminders')
+    app.register_blueprint(api_login_blueprint)
 
     return app
