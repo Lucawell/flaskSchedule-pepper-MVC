@@ -7,23 +7,29 @@
 │  requirements.txt //项目依赖
 │  schedule.sql //数据库文件
 ├─app
-│  │  setting.py //配置文件,数据库连接(需要在环境变量中加入此路径)
+│  │  config.py //配置文件,数据库连接(需要在环境变量中加入此路径)
 │  │  forms.py //验证表单程序
 │  │  __init__.py //模块初始化文件，Flask 程序对象的创建须在 __init__.py 文件里完成
 │  │
 │  ├─controller //MVC中的控制器(C)
-│  │  │  event_controller.py //事件控制器
-│  │  │  message_controller.py //消息控制器
-│  │  │  reminder_controller.py //提醒控制器
-│  │  │  user_controller.py //用户控制器
+│  │     event_controller.py //事件控制器
+│  │     api_controller.py //api控制器
+│  │     reminder_controller.py //提醒控制器
+│  │     user_controller.py //用户控制器
 │  │  
 │  ├─model //MVC中的模型,数据库中的表(M)
-│  │  │  Event.py //事件表
-│  │  │  Reminder.py //提醒表
-│  │  │  User.py //用户表
+│  │     Event.py //事件表
+│  │     Reminder.py //提醒表
+│  │     User.py //用户表
 │  │
+│  ├─views //MVC中的视图(V)
+│  │     event_view.py
+│  │     index_view.py
+│  │     reminder_view.py
+│  │     user_view.py
+│  │ 
 │  ├─static //静态资源，css，js等
-│  ├─templates //MCVC中的视图(V)
+│  ├─templates //视图映射的页面
 │  │      events.html
 │  │      index.html //主页
 │  │      reminders.html
@@ -42,7 +48,7 @@
 
 # 配置文件
 
-## setting.py
+## config.py
 
 ```python
 # encoding:utf-8  
@@ -63,46 +69,55 @@ SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:123456@localhost/" + DATABASE
 ## \_\_init\_\_.py
 
 ```python
-# encoding:utf-8  
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, current_user, login_required
-
-# 创建项目对象  
-app = Flask(__name__)
-app.config.from_object('app.config')  # 模块下的config文件名，不用加py后缀  
-app.config.from_envvar('FLASKR_CONFIGS')  # 环境变量，指向配置文件config的路径  
-# 创建数据库对象  
-db = SQLAlchemy(app)
-# 登录配置  
-login_manager = LoginManager(app)
-login_manager.init_app(app)
-login_manager.login_view = 'login'  # 设置登录视图的名称（在这个示例中是 'login'）  
-
-# app 導入後才能import  
-from app.model import User, Event, Reminder
-# 只有在app对象之后声明，用于导入view模块  
-from app.controller import user_controller, event_controller, api_controller, reminder_controller
+# # encoding:utf-8  
+from flask import Flask  
+from flask_sqlalchemy import SQLAlchemy  
+from flask_login import LoginManager  
+  
+db = SQLAlchemy()  
+login_manager = LoginManager()  
+  
+def create_app():  
+app = Flask(__name__)  
+app.config.from_object('app.config')  
+app.config.from_envvar('FLASKR_CONFIGS')  
+  
+db.init_app(app)  
+login_manager.init_app(app)  
+login_manager.login_view = 'user.login' # 设置登录视图的名称（在这个示例中是 'user.login'）  
+  
+from app.views.index_view import index_blueprint  
+from app.views.user_view import user_blueprint  
+from app.views.event_view import event_blueprint  
+from app.views.reminder_view import reminders_blueprint  
+  
+app.register_blueprint(index_blueprint, url_prefix='/')  
+app.register_blueprint(user_blueprint, url_prefix='/user')  
+app.register_blueprint(event_blueprint, url_prefix='/event')  
+app.register_blueprint(reminders_blueprint, url_prefix='/reminders')  
+  
+return app
 ```
 
 ## runserver.py
 
 ```python
-from app import app  
+from app import create_app  
 from app.model.User import User  
 from app.model.Event import Event  
 from app.model.Reminder import Reminder  
 from flask import render_template  
   
-@app.route('/')  
-def index():  
-users = User.query.all()  
-events = Event.query.all()  
-reminders = Reminder.query.all()  
-  
-return render_template('index.html', users=users, events=events, reminders=reminders)  
+# @app.route('/')  
+# def index():  
+# users = User.query.all()  
+# events = Event.query.all()  
+# reminders = Reminder.query.all()  
+#  
+# return render_template('index.html', users=users, events=events, reminders=reminders)  
   
 if __name__ == '__main__':  
+app = create_app()  
 app.run(host='0.0.0.0', port=5000, debug=True)
 ```
 # 数据库E-R图
