@@ -1,6 +1,6 @@
 # forms.py
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, validators, DateTimeField, SubmitField
+from wtforms import StringField, PasswordField, validators, DateTimeField, SubmitField, ValidationError
 
 
 class RegisterForm(FlaskForm):
@@ -29,6 +29,10 @@ class EventForm(FlaskForm):
     location = StringField('地点', validators=[validators.Length(max=255)])
     description = StringField('描述', validators=[validators.Length(max=255)])
     submit = SubmitField('Submit')  # 添加这一行来定义 submit 字段
+
+    def validate_end_time(self, field):
+        if field.data <= self.start_time.data:
+            raise ValidationError('End time must be greater than start time')
 
 
 class ReminderForm(FlaskForm):

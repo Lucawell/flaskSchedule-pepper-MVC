@@ -5,7 +5,7 @@ from app.model.Event import Event
 class Reminder(db.Model):
     __tablename__ = 'reminders'
     id = db.Column(db.Integer, primary_key=True)
-    event_id = db.Column(db.Integer, db.ForeignKey(Event.id), nullable=False)
+    event_id = db.Column(db.Integer, db.ForeignKey(Event.id, ondelete='CASCADE'), nullable=False)
     time = db.Column(db.DateTime, nullable=False)
     method = db.Column(db.String(255), nullable=False)
 
