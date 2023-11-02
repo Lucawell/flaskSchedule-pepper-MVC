@@ -12,12 +12,12 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(255), nullable=False)  # 添加密码哈希字段
     api_token = db.Column(db.String(255), unique=True)
 
-    def __init__(self, name, email, phone, password):
+    def __init__(self, name, email, phone, password, api_token):
         self.name = name
         self.email = email
         self.phone = phone
         self.set_password(password)  # 在初始化时设置密码哈希值
-        self.api_token = None  # 您可以根据需要生成和设置 API令牌
+        self.api_token = api_token  # 您可以根据需要生成和设置 API令牌
 
     def __repr__(self):
         return '<User %r>' % self.name

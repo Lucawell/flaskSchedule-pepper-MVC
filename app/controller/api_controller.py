@@ -38,40 +38,33 @@
 #     else:
 #         return "GET request received."
 # ----------------------------------以下是用户环境-----------------------------------
-from flask import Blueprint, request, jsonify
-from flask_login import login_user
-from app.forms import LoginForm
-from app.model.User import User
+from flask import request
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_restful import Resource, reqparse, fields, marshal_with
+from app.model.Event import Event
+from app import db
 
-api_login_blueprint = Blueprint('api_login', __name__)
+# 定义用于格式化事件数据的字段
+event_fields = {
+    'id': fields.Integer,
+    'user_id': fields.Integer,
+    'title': fields.String,
+    'start_time': fields.DateTime(dt_format='iso8601'),
+    'end_time': fields.DateTime(dt_format='iso8601'),
+    'location': fields.String,
+    'description': fields.String,
+}
 
-@api_login_blueprint.route('/api/login', methods=['POST'])
-def api_login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        email = form.email.data
-        password = form.password.data
-        user = User.query.filter_by(email=email).first()
 
-        if user and user.check_password(password):
-            login_user(user)  # 使用 Flask-Login 登录用户
+class EventListResource(Resource):
+    @jwt_required  # 使用 JWT Token 进行身份验证
 
-            # 如果登录成功，可以返回成功的响应，也可以返回用户信息
-            response = {
-                "message": "登录成功",
-                "user_id": user.id,
-                "user_name": user.name,
-                # 其他用户信息
-            }
-            return jsonify(response), 200
-        else:
-            response = {
-                "message": "登录失败，请检查邮箱或密码"
-            }
-            return jsonify(response), 401  # 401 表示未授权
+    @marshal_with(event_fields)
+    def get(self):
+        current_user_id = get_jwt_identity()  # 获取当前用户的 ID（从 JWT Token 中提取）
+        # 查询与当前用户相关的事件
+        events = Event.query.filter_by(user_id=current_user_id).all()
+        return events
 
-    response = {
-        "message": "请求参数无效"
-    }
-    return jsonify(response), 400  # 400 表示请求无效
+
 
