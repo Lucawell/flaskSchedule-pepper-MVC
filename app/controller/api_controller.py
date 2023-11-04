@@ -38,33 +38,24 @@
 #     else:
 #         return "GET request received."
 # ----------------------------------以下是用户环境-----------------------------------
-from flask import request
-from flask_jwt_extended import jwt_required, get_jwt_identity
-from flask_restful import Resource, reqparse, fields, marshal_with
+from flask_restful import Resource, fields, marshal_with
 from app.model.Event import Event
-from app import db
 
-# 定义用于格式化事件数据的字段
 event_fields = {
     'id': fields.Integer,
     'user_id': fields.Integer,
     'title': fields.String,
-    'start_time': fields.DateTime(dt_format='iso8601'),
-    'end_time': fields.DateTime(dt_format='iso8601'),
+    'start_time': fields.DateTime,
+    'end_time': fields.DateTime,
     'location': fields.String,
     'description': fields.String,
 }
 
-
-class EventListResource(Resource):
-    @jwt_required  # 使用 JWT Token 进行身份验证
-
+class EventResource(Resource):
     @marshal_with(event_fields)
-    def get(self):
-        current_user_id = get_jwt_identity()  # 获取当前用户的 ID（从 JWT Token 中提取）
-        # 查询与当前用户相关的事件
-        events = Event.query.filter_by(user_id=current_user_id).all()
+    def get(self, user_id):
+        # 根据用户ID查询日程信息
+        events = Event.query.filter_by(user_id=user_id).all()
         return events
-
 
 

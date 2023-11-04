@@ -10,14 +10,16 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(255), nullable=False, unique=True)
     phone = db.Column(db.String(255), nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)  # 添加密码哈希字段
-    api_token = db.Column(db.String(255), unique=True)
+    is_admin = db.Column(db.Boolean, default=False, nullable=False)  # 新增 is_admin 字段
 
-    def __init__(self, name, email, phone, password, api_token):
+    event = db.relationship('Event', backref='user', lazy='dynamic')
+
+    def __init__(self, name, email, phone, password, is_admin=False):
         self.name = name
         self.email = email
         self.phone = phone
         self.set_password(password)  # 在初始化时设置密码哈希值
-        self.api_token = api_token  # 您可以根据需要生成和设置 API令牌
+        self.is_admin = is_admin  # 设置用户是否是管理员
 
     def __repr__(self):
         return '<User %r>' % self.name

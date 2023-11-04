@@ -1,6 +1,7 @@
 # forms.py
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, validators, DateTimeField, SubmitField, ValidationError
+from wtforms import StringField, PasswordField, validators, DateTimeField, SubmitField, ValidationError, SelectField
+from app.model.Event import RepeatType
 
 
 class RegisterForm(FlaskForm):
@@ -28,6 +29,8 @@ class EventForm(FlaskForm):
     end_time = DateTimeField('结束时间', format='%Y-%m-%d %H:%M', validators=[validators.DataRequired()])
     location = StringField('地点', validators=[validators.Length(max=255)])
     description = StringField('描述', validators=[validators.Length(max=255)])
+    repeat = SelectField('重复类型', choices=[(repeat.value, repeat.name) for repeat in RepeatType],
+                         default=RepeatType.NONE)
     submit = SubmitField('Submit')  # 添加这一行来定义 submit 字段
 
     def validate_end_time(self, field):

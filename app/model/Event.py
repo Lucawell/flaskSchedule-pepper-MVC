@@ -11,7 +11,6 @@ class RepeatType(Enum):
     WEEKLY = "weekly"
     MONTHLY = "monthly"
 
-
 class Event(db.Model):
     __tablename__ = 'events'
     id = db.Column(db.Integer, primary_key=True)
@@ -23,11 +22,7 @@ class Event(db.Model):
     description = db.Column(db.String(255))
     repeat = db.Column(db.Enum(RepeatType), nullable=False, default=RepeatType.NONE)
 
-    @validates('end_time')
-    def validate_end_time(self, value):
-        if value <= self.start_time:
-            raise ValueError("End time must be greater than start time")
-        return value
+    reminder = db.relationship('Reminder', backref='event', lazy='dynamic')
 
     @hybrid_property
     def duration(self):

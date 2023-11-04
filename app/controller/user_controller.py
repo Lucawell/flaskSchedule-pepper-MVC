@@ -6,12 +6,6 @@ from app.model.User import User
 from app import db, login_manager
 from flask_jwt_extended import create_access_token
 
-def generate_api_token(user):
-    # 使用用户的 ID 作为 Token 的标识
-    api_token = create_access_token(identity=user.id)
-    user.api_token = api_token
-    db.session.commit()
-    return api_token
 
 def register():
     form = RegisterForm()
@@ -32,9 +26,6 @@ def register():
         new_user = User(name=name, email=email, phone=phone, password=password)
         db.session.add(new_user)
         db.session.commit()
-
-        # 生成并存储 API Token
-        api_token = generate_api_token(new_user)
 
         flash('注册成功，请登录', 'success')
         return redirect(url_for('user.login'))

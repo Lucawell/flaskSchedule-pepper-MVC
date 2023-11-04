@@ -45,6 +45,16 @@
             {% endfor %}
         </div>
         <div>
+            <label>
+                {{ form.repeat.label(class="form-label") }}
+                <select class="form-control" name="repeat">
+                    {% for value, label in form.repeat.choices %}
+                    <option value="{{ value }}">{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+        <div>
             {{ form.submit(class="btn btn-primary") }}
         </div>
     </form>
