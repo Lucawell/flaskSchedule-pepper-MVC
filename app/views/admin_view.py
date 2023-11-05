@@ -29,7 +29,8 @@ class UserAdminView(ModelView):
 
 class EventAdminView(ModelView):
     column_searchable_list = ('user_id',)
-    column_list = ('user.name', 'user_id', 'title', 'start_time', 'end_time', 'location', 'description', 'repeat',)
+    column_list = ('user.name', 'user_id', 'title', 'start_date', 'event_time', 'end_date',
+                   'location', 'description', 'repeat', 'reminder_type', 'reminder_time')
     column_formatters = {
         'user.name': lambda view, context, model, name: model.user.name  # 假设user有一个name字段
     }

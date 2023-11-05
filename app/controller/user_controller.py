@@ -34,7 +34,7 @@ def register():
 def login():
     if current_user.is_authenticated:
         # 如果用户已登录，重定向到受保护的页面
-        return redirect(url_for('event.event_list'))
+        return redirect(url_for('event.show_event'))
     form = LoginForm()
     if form.validate_on_submit():
         email = form.email.data  # 修改为使用邮箱作为登录凭据
@@ -45,7 +45,7 @@ def login():
             # 可以使用 Flask-Login 或自己的会话管理逻辑来处理登录状态
             login_user(user)
             flash('登录成功', 'success')
-            return redirect(url_for('event.event_list'))  # 跳转到用户仪表板或其他受保护的页面
+            return redirect(url_for('event.show_event'))  # 跳转到用户仪表板或其他受保护的页面
         else:
             flash('登录失败，请检查邮箱或密码', 'error')
 

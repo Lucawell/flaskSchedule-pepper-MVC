@@ -1,7 +1,7 @@
 # forms.py
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, validators, DateTimeField, SubmitField, ValidationError, SelectField
-from app.model.Event import RepeatType
+from wtforms import StringField, PasswordField, validators, DateTimeField, SubmitField, ValidationError, SelectField, \
+    DateField, TimeField
 
 
 class RegisterForm(FlaskForm):
@@ -25,20 +25,17 @@ class LoginForm(FlaskForm):
 
 class EventForm(FlaskForm):
     title = StringField('标题', validators=[validators.DataRequired(), validators.Length(max=255)])
-    start_time = DateTimeField('开始时间', format='%Y-%m-%d %H:%M', validators=[validators.DataRequired()])
-    end_time = DateTimeField('结束时间', format='%Y-%m-%d %H:%M', validators=[validators.DataRequired()])
+    start_date = DateField('开始日期', format='%Y-%m-%d', validators=[validators.DataRequired()])
+    event_time = TimeField('事件时间', format='%H:%M')
+    end_date = DateField('结束时间', format='%Y-%m-%d')
     location = StringField('地点', validators=[validators.Length(max=255)])
     description = StringField('描述', validators=[validators.Length(max=255)])
-    repeat = SelectField('重复类型', choices=[(repeat.value, repeat.name) for repeat in RepeatType],
-                         default=RepeatType.NONE)
+    repeat = StringField('重复')
+    reminder_type = StringField('提醒类型')
+    reminder_time = StringField('Reminder Time')
     submit = SubmitField('Submit')  # 添加这一行来定义 submit 字段
 
     def validate_end_time(self, field):
-        if field.data <= self.start_time.data:
+        if field.data <= self.start_date.data:
             raise ValidationError('End time must be greater than start time')
 
-
-class ReminderForm(FlaskForm):
-    time = DateTimeField('提醒时间', format='%Y-%m-%d %H:%M', validators=[validators.DataRequired()])
-    method = StringField('提醒方法', validators=[validators.DataRequired(), validators.Length(max=255)])
-    submit = SubmitField('创建提醒')

@@ -30,13 +30,11 @@ def create_app():
     # 导入数据库模型
     from app.model.User import User
     from app.model.Event import Event
-    from app.model.Reminder import Reminder
 
     # 导入视图
     from app.views.index_view import index_blueprint
     from app.views.user_view import user_blueprint
     from app.views.event_view import event_blueprint
-    from app.views.reminder_view import reminders_blueprint
     import app.views.admin_view as views
 
     # 导入控制器
@@ -46,7 +44,6 @@ def create_app():
     app.register_blueprint(index_blueprint, url_prefix='/')
     app.register_blueprint(user_blueprint, url_prefix='/user')
     app.register_blueprint(event_blueprint, url_prefix='/event')
-    app.register_blueprint(reminders_blueprint, url_prefix='/reminders')
 
     # 将资源添加到您的 API
     api.add_resource(EventResource, '/api/events/<int:user_id>')
@@ -55,6 +52,5 @@ def create_app():
     admin = Admin(app, index_view=views.MyAdminIndexView())
     admin.add_view(views.UserAdminView(User, db.session, url='users', name='users', endpoint='users_admin'))
     admin.add_view(views.EventAdminView(Event, db.session, url='events', name='events', endpoint='events_admin'))
-    admin.add_view(views.ReminderAdminView(Reminder, db.session, url='reminders', name='reminders', endpoint='reminders_admin'))
 
     return app

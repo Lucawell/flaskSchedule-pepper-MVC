@@ -17,16 +17,23 @@
             {% endfor %}
         </div>
         <div>
-            {{ form.start_time.label(class="form-label") }}
-            {{ form.start_time(class="form-control flatpickr",id="start_time") }}
-            {% for error in form.start_time.errors %}
+            {{ form.start_date.label(class="form-label") }}
+            {{ form.start_date(class="form-control flatpickr",id="start_date") }}
+            {% for error in form.start_date.errors %}
+                <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </div>
+            <div>
+            {{ form.event_time.label(class="form-label") }}
+            {{ form.event_time(class="form-control flatpickr",id="event_time") }}
+            {% for error in form.event_time.errors %}
                 <span style="color: red;">{{ error }}</span>
             {% endfor %}
         </div>
         <div>
-            {{ form.end_time.label(class="form-label") }}
-            {{ form.end_time(class="form-control, flatpickr",id="end_time") }}
-            {% for error in form.end_time.errors %}
+            {{ form.end_date.label(class="form-label") }}
+            {{ form.end_date(class="form-control, flatpickr",id="end_date") }}
+            {% for error in form.end_date.errors %}
                 <span style="color: red;">{{ error }}</span>
             {% endfor %}
         </div>
@@ -45,28 +52,49 @@
             {% endfor %}
         </div>
         <div>
-            <label>
-                {{ form.repeat.label(class="form-label") }}
-                <select class="form-control" name="repeat">
-                    {% for value, label in form.repeat.choices %}
-                    <option value="{{ value }}">{{ label }}</option>
-                    {% endfor %}
-                </select>
-            </label>
+            <label for="repeatSelect">{{ form.repeat.label(class="form-label") }}</label>
+            <select name="repeat" id="repeatSelect" class="form-control">
+                <option value="none">无</option>
+                <option value="daily">每天</option>
+                <option value="weekly">每周</option>
+                <option value="month">每月</option>
+            </select>
+            {% for error in form.repeat.errors %}
+                <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.reminder_type.label(class="form-label") }}
+            {{ form.reminder_type(class="form-control") }}
+            {% for error in form.reminder_type.errors %}
+                <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.reminder_time.label(class="form-label") }}
+            {{ form.reminder_time(class="form-control") }}
+            {% for error in form.reminder_time.errors %}
+                <span style="color: red;">{{ error }}</span>
+            {% endfor %}
         </div>
         <div>
             {{ form.submit(class="btn btn-primary") }}
         </div>
     </form>
 <script>
-    flatpickr('#start_time', {
-        enableTime: true,
-        dateFormat: "Y-m-d H:i",
+    flatpickr('#start_date', {
+        enableTime: false,
+        dateFormat: "Y-m-d",
     });
-
-    flatpickr('#end_time', {
+    flatpickr('#event_time', {
         enableTime: true,
-        dateFormat: "Y-m-d H:i",
+        noCalendar: true, // 禁用日期选择
+        time_24hr: true, // 使用24小时制
+        dateFormat: "H:i",
+    });
+    flatpickr('#end_date', {
+        enableTime: false,
+        dateFormat: "Y-m-d",
     });
 </script>
 </body>
