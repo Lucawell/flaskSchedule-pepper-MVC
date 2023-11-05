@@ -38,24 +38,68 @@
 #     else:
 #         return "GET request received."
 # ----------------------------------以下是用户环境-----------------------------------
-from flask_restful import Resource, fields, marshal_with
+from flask_restful import Resource
 from app.model.Event import Event
+from datetime import timedelta, datetime
 
-event_fields = {
-    'id': fields.Integer,
-    'user_id': fields.Integer,
-    'title': fields.String,
-    'start_time': fields.DateTime,
-    'end_time': fields.DateTime,
-    'location': fields.String,
-    'description': fields.String,
-}
+
+def generate_repeat_event(event, current_date):
+    new_event = Event(
+        user_id=event.user_id,
+        title=event.title,
+        start_date=current_date,
+        end_date=current_date,
+        event_time=event.event_time,
+        location=event.location,
+        description=event.description,
+        repeat=event.repeat,
+        reminder_type=event.reminder_type,
+        reminder_time=event.reminder_time
+    )
+    new_event.id = event.id  # 设置新事件的ID为原事件的ID
+    return new_event
+
 
 class EventResource(Resource):
-    @marshal_with(event_fields)
     def get(self, user_id):
-        # 根据用户ID查询日程信息
+        # 查询当前用户的所有事件
         events = Event.query.filter_by(user_id=user_id).all()
-        return events
+        today = datetime.now().date()  # 获取当前日期
+        today_events = []
 
+        for event in events:
+            if event.repeat == "none" and event.start_date <= today <= event.end_date:
+                today_events.append(event)
+            else:
+                start_date = event.start_date
+                end_date = event.end_date
 
+                if event.repeat == "daily":
+                    current_date = start_date
+                    while current_date <= end_date:
+                        if current_date >= today:
+                            new_event = generate_repeat_event(event, current_date)
+                            today_events.append(new_event)
+                            break
+                        current_date += timedelta(days=1)
+                elif event.repeat == "weekly":
+                    current_date = start_date
+                    while current_date <= end_date:
+                        if current_date >= today:
+                            last_week_event = generate_repeat_event(event, current_date)
+                            today_events.append(last_week_event)
+                            break
+                        current_date += timedelta(weeks=1)
+
+        # 将事件对象转换为 JSON 格式返回给客户端
+        event_data = [
+            {"id": event.id,
+             "title": event.title,
+             "event_time": str(event.event_time),
+             "start_date": str(event.start_date),
+             "end_date": str(event.end_date),
+             "location": event.location,
+             "description": event.description,
+             } for event in today_events
+        ]
+        return {"events": event_data}

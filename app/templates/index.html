@@ -22,13 +22,5 @@
     <h2>Add Event</h2>
     <a href="{{ url_for('event.show_event') }}" class="btn btn-primary">事件</a>
 
-    <h1>Reminder Management</h1>
-    <ul>
-        {% for reminder in reminders %}
-            <li>{{ reminder.time }} - {{ reminder.method }} [<a href="{{ url_for('reminders.edit_reminder', reminder_id=reminder.id) }}">Edit</a>] [<a href="{{ url_for('reminders.delete_reminder', reminder_id=reminder.id) }}">Delete</a>]</li>
-        {% endfor %}
-    </ul>
-    <h2>Add Reminder</h2>
-    <a href="{{ url_for('reminders.reminder_list') }}" class="btn btn-primary">提醒</a>
 </body>
 </html>
