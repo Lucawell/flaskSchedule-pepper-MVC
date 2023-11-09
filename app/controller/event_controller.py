@@ -15,7 +15,7 @@ def show_event():
     today_events = []
 
     for event in events:
-        if event.repeat == "none" and event.start_date <= today <= event.end_date:
+        if event.repeat == "none" and today <= event.end_date:
             today_events.append(event)
         else:
             start_date = event.start_date

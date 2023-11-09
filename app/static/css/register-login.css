@@ -1,4 +1,9 @@
-	*{
+		/*
+			create by zrong.me
+			请大家关注我的个人微博 说Z先生爱你
+			也请大家关注我的个人网站 zrong.me
+		*/
+		*{
 			padding: 0;
 			margin: 0;
 			list-style: none;
@@ -144,7 +149,7 @@
     		color: #666;
     		position: relative;
 		}
-		#password,#phone,#email,#name,#confirm_password{
+		#password,#verify,#user,#password1{
 			border-top: 1px solid #e8e8e8;
 		}
 		.imgcode{

@@ -31,8 +31,8 @@ class EventForm(FlaskForm):
     location = StringField('地点', validators=[validators.Length(max=255)])
     description = StringField('描述', validators=[validators.Length(max=255)])
     repeat = StringField('重复')
-    reminder_type = StringField('提醒类型')
-    reminder_time = StringField('Reminder Time')
+    reminder_type = StringField('提醒类型', validators=[validators.DataRequired()])
+    reminder_time = StringField('提醒时间')
     submit = SubmitField('Submit')  # 添加这一行来定义 submit 字段
 
     def validate_end_time(self, field):
