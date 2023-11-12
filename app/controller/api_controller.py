@@ -38,27 +38,9 @@
 #     else:
 #         return "GET request received."
 # ----------------------------------以下是用户环境-----------------------------------
-from flask_restful import Resource
+from flask_restful import Resource, reqparse
 from app.model.Event import Event
 from datetime import timedelta, datetime
-
-
-def generate_repeat_event(event, current_date):
-    new_event = Event(
-        user_id=event.user_id,
-        title=event.title,
-        start_date=current_date,
-        end_date=current_date,
-        event_time=event.event_time,
-        location=event.location,
-        description=event.description,
-        repeat=event.repeat,
-        reminder_type=event.reminder_type,
-        reminder_time=event.reminder_time
-    )
-    new_event.id = event.id  # 设置新事件的ID为原事件的ID
-    return new_event
-
 
 class EventResource(Resource):
     def get(self, user_id):
@@ -103,3 +85,31 @@ class EventResource(Resource):
              } for event in today_events
         ]
         return {"events": event_data}
+def generate_repeat_event(event, current_date):
+    new_event = Event(
+        user_id=event.user_id,
+        title=event.title,
+        start_date=current_date,
+        end_date=current_date,
+        event_time=event.event_time,
+        location=event.location,
+        description=event.description,
+        repeat=event.repeat,
+        reminder_type=event.reminder_type,
+        reminder_time=event.reminder_time
+    )
+    new_event.id = event.id  # 设置新事件的ID为原事件的ID
+    return new_event
+
+# 接收信息
+class MessageStore:
+    messages = []
+class MessageResource(Resource):
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('message', type=str, help='Message to be received', required=True)
+        args = parser.parse_args()
+        message = args['message']
+        MessageStore.messages.append(message)
+        print("Received message:", message)
+        return {'message': message}

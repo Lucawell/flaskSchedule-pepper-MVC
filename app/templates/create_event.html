@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Create Event</h1>
-    <form method="POST">
+    <form onsubmit="combineAndSubmit()" method="POST">
         {{ form.hidden_tag() }}
         <div>
             {{ form.title.label(class="form-label") }}
@@ -95,15 +95,13 @@
         <select id="minutesInput" name="minutesInput">
             <!-- 使用 JavaScript 动态生成选项 -->
         </select>
-        <br>
-        <input type="button" value="提交" onclick="combineAndSubmit()">
         </div>
         <div>
         <!-- 隐藏的input元素用于存储提醒时间 -->
             <input type="hidden" name="reminder_time" id="reminder_time" value="">
         </div>
         <div>
-            {{ form.submit(class="btn btn-primary") }}
+            {{ form.submit()}}
         </div>
     </form>
 <script>
@@ -153,7 +151,6 @@
         document.getElementById('reminder_time').value = totalMinutes;
 
         // 可以将表单提交到服务器或进行其他操作
-        // document.getElementById('reminderForm').submit();
         alert("总时间（分钟）：" + totalMinutes);
     }
 </script>
