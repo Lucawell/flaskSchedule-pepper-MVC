@@ -13,10 +13,16 @@ def show_event():
     events = Event.query.filter_by(user_id=current_user.id).all()
     today = datetime.now().date()  # 获取当前日期
     today_events = []
-
+    expired_events = []
     for event in events:
+        # 如果事件过期，将其添加到过期事件列表中
+        if event.end_date < today:
+            expired_events.append(event)
+            continue
+        # 如果事件不是重复事件，将其添加到今天事件列表中
         if event.repeat == "none" and today <= event.end_date:
             today_events.append(event)
+        # 如果事件是重复事件，动态生成后将其添加到今天事件列表中
         else:
             start_date = event.start_date
             end_date = event.end_date
@@ -37,8 +43,15 @@ def show_event():
                         today_events.append(last_week_event)
                         break
                     current_date += timedelta(weeks=1)
-    return render_template('event_list.html', events=today_events)
-
+            elif event.repeat == "monthly":
+                current_date = start_date
+                while current_date <= end_date:
+                    if current_date >= today:
+                        last_month_event = generate_repeat_event(event, current_date)
+                        today_events.append(last_month_event)
+                        break
+                    current_date += timedelta(days=30)
+    return render_template('event_list.html', events=today_events, expired_events=expired_events)
 # 创建一个函数，用于生成重复事件
 @login_required
 def generate_repeat_event(event, current_date):
@@ -56,6 +69,11 @@ def generate_repeat_event(event, current_date):
     )
     new_event.id = event.id  # 设置新事件的ID为原事件的ID
     return new_event
+
+@login_required
+def calendar():
+    events = Event.query.filter_by(user_id=current_user.id).all()
+    return render_template('calendar.html', events=events)
 
 @login_required
 def create_event():

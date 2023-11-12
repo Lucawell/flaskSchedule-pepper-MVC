@@ -35,10 +35,10 @@ def create_app():
     from app.views.index_view import index_blueprint
     from app.views.user_view import user_blueprint
     from app.views.event_view import event_blueprint
-    import app.views.admin_view as views
+    from app.views.admin_view import MyAdminIndexView, UserAdminView, EventAdminView
 
     # 导入控制器
-    from app.controller.api_controller import EventResource
+    from app.controller.api_controller import EventResource, MessageResource
 
     # 注册蓝图
     app.register_blueprint(index_blueprint, url_prefix='/')
@@ -47,10 +47,11 @@ def create_app():
 
     # 将资源添加到您的 API
     api.add_resource(EventResource, '/api/events/<int:user_id>')
+    api.add_resource(MessageResource, '/api/receive-message')
 
     # 管理员
-    admin = Admin(app, index_view=views.MyAdminIndexView())
-    admin.add_view(views.UserAdminView(User, db.session, url='users', name='users', endpoint='users_admin'))
-    admin.add_view(views.EventAdminView(Event, db.session, url='events', name='events', endpoint='events_admin'))
+    admin = Admin(app, index_view=MyAdminIndexView())
+    admin.add_view(UserAdminView(User, db.session, url='users', name='users', endpoint='users_admin'))
+    admin.add_view(EventAdminView(Event, db.session, url='events', name='events', endpoint='events_admin'))
 
     return app

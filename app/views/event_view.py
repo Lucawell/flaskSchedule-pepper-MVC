@@ -9,3 +9,5 @@ event_blueprint.route('/event_list')(event_controller.show_event)
 event_blueprint.route('/create_event', methods=['GET', 'POST'])(event_controller.create_event)
 event_blueprint.route('/delete_event/<int:event_id>', methods=['POST'])(event_controller.delete_event)
 event_blueprint.route('/edit_event/<int:event_id>', methods=['GET', 'POST'])(event_controller.edit_event)
+event_blueprint.route('/calendar')(event_controller.calendar)
+

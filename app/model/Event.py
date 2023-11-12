@@ -15,7 +15,7 @@ class Event(db.Model):
     description = db.Column(db.String(255))
     repeat = db.Column(db.String(255), nullable=False, default="none")  # Text field for custom repeat types
     reminder_type = db.Column(db.String(255), nullable=False, default="none")
-    reminder_time = db.Column(db.Float, nullable=True)
+    reminder_time = db.Column(db.Float, nullable=True, default=0)
 
     @hybrid_property
     def duration(self):
