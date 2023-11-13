@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- FullCalendar CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" />
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- Moment.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <!-- FullCalendar JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
+    <title>日历</title>
+
+</head>
+<body>
+<div id="calendar"></div>
+<script>
+  $(document).ready(function() {
+    // 初始化FullCalendar
+    $('#calendar').fullCalendar({
+      header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'month,agendaWeek,agendaDay'
+      },
+      defaultView: 'month',
+      events: [
+        {% for event in events %}
+          {
+            title: '{{ event.title }}',
+            start: '{{ event.start_date }}T{{ event.event_time or '00:00' }}',
+            end: '{{ event.end_date }}',
+            allDay: '{{ event.duration.days > 1 or event.event_time is none }}',
+          },
+        {% endfor %}
+      ]
+    });
+  });
+</script>
+</body>
+</html>

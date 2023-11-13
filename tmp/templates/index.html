@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>Management</title>
+</head>
+<body>
+{#    <h1>User Management</h1>#}
+{#    <ul>#}
+{#        {% for user in users %}#}
+{#            <li>{{ user.name }} - {{ user.email }} - {{ user.phone }} [<a href="{{ url_for('user.edit_user', user_id=user.id) }}">Edit</a>] [<a href="{{ url_for('user.delete_user', user_id=user.id) }}">Delete</a>]</li>#}
+{#        {% endfor %}#}
+{#    </ul>#}
+{#    <h2>Add User</h2>#}
+{#    <a href="{{ url_for('user.user_list') }}" class="btn btn-primary">用户</a>#}
+
+    <h1>Event Management</h1>
+    <ul>
+        {% for event in events %}
+            <li>{{ event.title }} - {{ event.start_time }} - {{ event.location }} [<a href="{{ url_for('event.edit_event', event_id=event.id) }}">Edit</a>] [<a href="{{ url_for('event.delete_event', event_id=event.id) }}">Delete</a>]</li>
+        {% endfor %}
+    </ul>
+    <h2>Add Event</h2>
+    <a href="{{ url_for('event.show_event') }}" class="btn btn-primary">事件</a>
+
+</body>
+</html>
