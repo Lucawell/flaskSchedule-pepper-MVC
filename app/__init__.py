@@ -5,11 +5,13 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_restful import Api
 from flask_admin import Admin
+from flask_mail import Mail
 
 
 db = SQLAlchemy()
 login_manager = LoginManager()
 migrate = Migrate()
+mail = Mail()
 
 
 def create_app():
@@ -23,9 +25,10 @@ def create_app():
     # 登录管理
     login_manager.init_app(app)
     login_manager.login_view = 'user.login'  # 设置登录视图的名称（在这个示例中是 'user.login'）
-
     # api管理
     api = Api(app)
+    # 邮件管理
+    mail.init_app(app)
 
     # 导入数据库模型
     from app.model.User import User

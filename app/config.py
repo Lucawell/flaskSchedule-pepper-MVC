@@ -14,3 +14,13 @@ SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:123456@localhost/" + DATABASE
 
 # JWT令牌的过期时间
 JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=30)
+
+# 邮件配置
+MAIL_SERVER = 'smtp.qq.com'
+MAIL_PORT = 465
+MAIL_USE_TLS = False
+MAIL_USE_SSL = True
+MAIL_USERNAME = '1535744300@qq.com'
+MAIL_DEFAULT_SENDER = '1535744300@qq.com'
+MAIL_PASSWORD = 'fepnmbhhyyrjjdhg'
+MAIL_DEBUG = True
