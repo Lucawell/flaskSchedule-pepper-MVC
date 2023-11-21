@@ -8,16 +8,10 @@ class EventResource(Resource):
         events = Event.query.filter_by(user_id=user_id).all()
         today = datetime.now().date()  # 获取当前日期
         today_events = []
-        expired_events = []
+
         for event in events:
-            # 如果事件过期，将其添加到过期事件列表中
-            if event.end_date < today:
-                expired_events.append(event)
-                continue
-            # 如果事件不是重复事件，将其添加到今天事件列表中
-            if event.repeat == "none" and today <= event.end_date:
+            if event.repeat == "none" and event.start_date <= today <= event.end_date:
                 today_events.append(event)
-            # 如果事件是重复事件，动态生成后将其添加到今天事件列表中
             else:
                 start_date = event.start_date
                 end_date = event.end_date
@@ -31,9 +25,6 @@ class EventResource(Resource):
                             break
                         current_date += timedelta(days=1)
                 elif event.repeat == "weekly":
-                    if end_date - today < timedelta(days=7):
-                        expired_events.append(event)
-                        continue
                     current_date = start_date
                     while current_date <= end_date:
                         if current_date >= today:
@@ -41,20 +32,9 @@ class EventResource(Resource):
                             today_events.append(last_week_event)
                             break
                         current_date += timedelta(weeks=1)
-                elif event.repeat == "monthly":
-                    if end_date - today < timedelta(days=30):
-                        expired_events.append(event)
-                        continue
-                    current_date = start_date
-                    while current_date <= end_date:
-                        if current_date >= today:
-                            last_month_event = generate_repeat_event(event, current_date)
-                            today_events.append(last_month_event)
-                            break
-                        current_date += timedelta(days=30)
 
         # 将事件对象转换为 JSON 格式返回给客户端
-        event_today = [
+        event_data = [
             {"id": event.id,
              "title": event.title,
              "event_time": str(event.event_time),
@@ -64,17 +44,7 @@ class EventResource(Resource):
              "description": event.description,
              } for event in today_events
         ]
-        expired_events = [
-            {"id": event.id,
-             "title": event.title,
-             "event_time": str(event.event_time),
-             "start_date": str(event.start_date),
-             "end_date": str(event.end_date),
-             "location": event.location,
-             "description": event.description,
-             } for event in expired_events
-        ]
-        return {"events": event_today, "expired_events": expired_events}
+        return {"events": event_data}
 def generate_repeat_event(event, current_date):
     new_event = Event(
         user_id=event.user_id,

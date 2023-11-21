@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+        <div style="color:#000;">
+            <div style="position:relative;">
+                <style>
+                    .title_bold {
+                        font-family: PingFangSC-Medium, "STHeitiSC-Light", BlinkMacSystemFont, "Helvetica", "lucida Grande", "SCHeiti", "Microsoft YaHei", sans-serif;
+                        font-weight: bold;
+                    }
+
+                    .mail_bg {
+                        background-color: #F5F5F5;
+                    }
+
+                    .mail_cnt {
+                        padding: 60px 0 160px;
+                        max-width: 700px;
+                        margin: auto;
+                        color: #2b2b2b;
+                        -webkit-font-smoothing: antialiased;
+                    }
+
+                    .mail_container {
+                        background-color: #fff;
+                        margin: auto;
+                        max-width: 702px;
+                        border-radius: 2px;
+                    }
+
+                    .eml_content {
+                        padding: 0 50px 30px 50px;
+                        font-family: "Helvetica Neue", "Arial", "PingFang SC", "Hiragino Sans GB", "STHeiti", "Microsoft YaHei", sans-serif;
+                    }
+
+                    .mail_header {
+                        text-align: right;
+                    }
+
+                    .top_line_left {
+                        width: 88%;
+                        height: 3px;
+                        background-color: #2984EF;
+                        float: left;
+                        margin-right: 1px;
+                        border-top-left-radius: 2px;
+                        display: inline-block;
+                    }
+
+                    .top_line_right {
+                        width: 12%;
+                        height: 3px;
+                        background-color: #8BD5FF;
+                        float: right;
+                        border-top-right-radius: 2px;
+                        margin-top: -3px;
+                    }
+
+                    .main_title {
+                        font-size: 16px;
+                        line-height: 24px;
+                    }
+
+                    .main_subtitle {
+                        line-height: 28px;
+                        font-size: 16px;
+                        margin-bottom: 12px;
+                    }
+
+                    .item_level_1 {
+                        margin-top: 60px;
+                    }
+
+                    .item_level_2 {
+                        margin-top: 40px;
+                    }
+
+                    .level_1_title {
+                        font-size: 16px;
+                        line-height: 28px;
+                    }
+
+                    .level_2_title {
+                        font-size: 14px;
+                        line-height: 28px;
+                        font-weight: 600;
+                    }
+
+                    .item_txt {
+                        font-size: 14px;
+                        line-height: 28px;
+                    }
+
+                    .mail_footer {
+                        font-size: 12px;
+                        line-height: 17px;
+                        color: #bebebe;
+                        margin-top: 60px;
+                        letter-spacing: 1px;
+                    }
+
+                    .mail_logo {
+                        /*这里修改LOGO*/
+                        background-image: url("../static/images/robot.png");
+                        background-size: 34px 24px;
+                        width: 34px;
+                        height: 24px;
+                        background-repeat: no-repeat;
+                        display: inline-block;
+                        margin: 27px 0 20px 0;
+                        clear: left;
+                    }
+
+                    .img_position {
+                        max-width: 100%;
+                    }
+
+                    .normalTxt {
+                        font-size: 14px;
+                        line-height: 24px;
+                        margin-top: 10px;
+                    }
+
+                    @media (max-width: 768px) {
+                        .top_line {
+                            display: none;
+                        }
+
+                        .mail_bg {
+                            background: #fff;
+                        }
+
+                        .mail_cnt {
+                            padding-bottom: 0;
+                            padding-top: 0;
+                        }
+
+                        .eml_content {
+                            padding: 0 12px 50px;
+                        }
+
+                        .phoneFontSizeTitle {
+                            font-size: 18px !important;
+                        }
+
+                        .phoneFontSizeContent {
+                            font-size: 16px !important;
+                            line-height: 28px !important;
+                        }
+
+                        .phoneFontSizeTitleLarge {
+                            font-size: 20px !important;
+                        }
+
+                        .phoneFontSizeTips {
+                            font-size: 14px !important;
+                        }
+                    }
+                </style>
+
+                <div class="qmbox">
+                    <div class="mail_bg">
+                        <div class="mail_cnt">
+                            <div class="mail_container">
+                                <div class="top_line">
+                                    <div class="top_line_left"></div>
+                                    <div class="top_line_right"></div>
+                                </div>
+                                <div class="eml_content">
+                                    <div class="mail_header">
+                                        <div class="mail_logo"></div>
+                                    </div>
+                                    <!--邮件内容正文-->
+                                    <div class="">
+
+                                        <!--普通正文-->
+                                        <p style="font-size: 16px;margin-top:20px;" class="phoneFontSizeTitle">
+                                            尊敬的{{ name }}，
+                                        </p>
+
+                                        <!--带加粗样式-->
+                                        <p style="font-size: 16px;margin-top:10px;padding-bottom: 20px" class="title_bold phoneFontSizeTitle">
+                                            我希望您一切安好,我是pepper,我想借此邮件向您汇报一下老人在家中的近况:
+                                        </p>
+
+                                        <!--一级标题-->
+                                        <div style="font-size: 20px;color: #2b2b2b;font-weight: bold;line-height: 28px;" class="phoneFontSizeTitleLarge">
+                                            {{ title }}
+                                        </div>
+
+                                        <!--二级标题带图-->
+                                        <div style="margin-bottom: 40px;margin-top: 30px;overflow: hidden;">
+                                            {{ content }}
+                                            <!--
+                                            <div style="font-size: 16px;line-height: 28px;margin-bottom: 10px;" class="title_bold phoneFontSizeTitle">1. “系统日志-登录查询”优化</div>
+                                            <div style="font-size: 14px;line-height: 24px;" class="phoneFontSizeContent">· 支持查询具体管理员的登录记录。</div>
+                                            <div style="font-size: 14px;line-height: 24px;" class="phoneFontSizeContent">· 支持超级管理员和分级管理员查询。</div>
+                                            <div style="display: inline-block;margin-top: 20px;margin-bottom: 20px;">
+                                                <img class="img_position" src="https://rescdn.qqmail.com/node/wwqy/qymng/style/images/sass/independent/newFeature2020120201b_2x.png" alt="">
+                                            </div>
+                                            -->
+                                        </div>
+                                    </div>
+                                        <p style="font-size: 16px;margin-top:20px;" class="phoneFontSizeTitle">
+                                            如果您有任何需求、喜好或者对照护计划的建议，请随时告诉我们。我们感谢您对我们工作的信任，同时也感谢您的合作。
+                                        </p>
+                                       <a href="http://121.41.44.99/" title="" style="color: rgb(0, 164, 255); text-decoration: none; word-break: break-all; overflow-wrap: normal; font-size: 14px;">
+                                           登录网站管理日程
+                                       </a>
+                                    <!--页脚信息-->
+                                    <div class="mail_footer">
+                                        pepper智能陪护机器人团队
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+</div>
+</body>
+</html>

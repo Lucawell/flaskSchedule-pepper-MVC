@@ -38,6 +38,7 @@ def create_app():
     from app.views.index_view import index_blueprint
     from app.views.user_view import user_blueprint
     from app.views.event_view import event_blueprint
+    from app.views.reminder_view import reminder_blueprint
     from app.views.admin_view import MyAdminIndexView, UserAdminView, EventAdminView
 
     # 导入控制器
@@ -47,6 +48,7 @@ def create_app():
     app.register_blueprint(index_blueprint, url_prefix='/')
     app.register_blueprint(user_blueprint, url_prefix='/user')
     app.register_blueprint(event_blueprint, url_prefix='/event')
+    app.register_blueprint(reminder_blueprint, url_prefix='/reminder')
 
     # 将资源添加到您的 API
     api.add_resource(EventResource, '/api/events/<int:user_id>')
