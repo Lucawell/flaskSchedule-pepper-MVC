@@ -42,7 +42,7 @@ def create_app():
     from app.views.admin_view import MyAdminIndexView, UserAdminView, EventAdminView
 
     # 导入控制器
-    from app.controller.api_controller import EventResource, MessageResource
+    from app.controller.api_controller import EventResource, MessageResource, EmailResource, SMSResource
 
     # 注册蓝图
     app.register_blueprint(index_blueprint, url_prefix='/')
@@ -53,6 +53,8 @@ def create_app():
     # 将资源添加到您的 API
     api.add_resource(EventResource, '/api/events/<int:user_id>')
     api.add_resource(MessageResource, '/api/receive-message')
+    api.add_resource(EmailResource, '/api/send-email')
+    api.add_resource(SMSResource, '/api/send-sms')
 
     # 管理员
     admin = Admin(app, index_view=MyAdminIndexView())
