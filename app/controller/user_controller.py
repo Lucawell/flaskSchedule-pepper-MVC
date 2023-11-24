@@ -4,7 +4,6 @@ from flask_login import login_user, login_required, logout_user, current_user
 from app.forms import RegisterForm, LoginForm
 from app.model.User import User
 from app import db, login_manager
-from flask_jwt_extended import create_access_token
 
 
 def register():

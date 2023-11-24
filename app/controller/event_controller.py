@@ -36,6 +36,9 @@ def show_event():
                         break
                     current_date += timedelta(days=1)
             elif event.repeat == "weekly":
+                if end_date-today < timedelta(days=7):
+                    expired_events.append(event)
+                    continue
                 current_date = start_date
                 while current_date <= end_date:
                     if current_date >= today:
@@ -44,6 +47,9 @@ def show_event():
                         break
                     current_date += timedelta(weeks=1)
             elif event.repeat == "monthly":
+                if end_date-today < timedelta(days=30):
+                    expired_events.append(event)
+                    continue
                 current_date = start_date
                 while current_date <= end_date:
                     if current_date >= today:

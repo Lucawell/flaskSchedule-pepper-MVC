@@ -1,5 +1,11 @@
 # encoding:utf-8
+import os
 from datetime import timedelta
+from dotenv import load_dotenv
+
+# 加载环境变量
+load_dotenv()
+
 # 调试模式是否开启
 DEBUG = True
 # 是否追踪对象的修改。
@@ -14,3 +20,18 @@ SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:123456@localhost/" + DATABASE
 
 # JWT令牌的过期时间
 JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=30)
+
+# 邮件配置
+MAIL_SERVER = 'smtp.qq.com'
+MAIL_PORT = 465
+MAIL_USE_TLS = False
+MAIL_USE_SSL = True
+MAIL_USERNAME = '1535744300@qq.com'
+MAIL_DEFAULT_SENDER = '1535744300@qq.com'
+MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
+MAIL_DEBUG = True
+
+# 短信配置
+ALIYUN_ACCESS_KEY_ID = os.getenv('ALIYUN_ACCESS_KEY_ID')
+ALIYUN_ACCESS_KEY_SECRET = os.getenv('ALIYUN_ACCESS_KEY_SECRET')
+ALIYUN_REGION_ID = 'cn-hangzhou'

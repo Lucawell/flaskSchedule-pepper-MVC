@@ -5,11 +5,13 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_restful import Api
 from flask_admin import Admin
+from flask_mail import Mail
 
 
 db = SQLAlchemy()
 login_manager = LoginManager()
 migrate = Migrate()
+mail = Mail()
 
 
 def create_app():
@@ -23,9 +25,10 @@ def create_app():
     # 登录管理
     login_manager.init_app(app)
     login_manager.login_view = 'user.login'  # 设置登录视图的名称（在这个示例中是 'user.login'）
-
     # api管理
     api = Api(app)
+    # 邮件管理
+    mail.init_app(app)
 
     # 导入数据库模型
     from app.model.User import User
@@ -35,19 +38,23 @@ def create_app():
     from app.views.index_view import index_blueprint
     from app.views.user_view import user_blueprint
     from app.views.event_view import event_blueprint
+    from app.views.reminder_view import reminder_blueprint
     from app.views.admin_view import MyAdminIndexView, UserAdminView, EventAdminView
 
     # 导入控制器
-    from app.controller.api_controller import EventResource, MessageResource
+    from app.controller.api_controller import EventResource, MessageResource, EmailResource, SMSResource
 
     # 注册蓝图
     app.register_blueprint(index_blueprint, url_prefix='/')
     app.register_blueprint(user_blueprint, url_prefix='/user')
     app.register_blueprint(event_blueprint, url_prefix='/event')
+    app.register_blueprint(reminder_blueprint, url_prefix='/reminder')
 
     # 将资源添加到您的 API
     api.add_resource(EventResource, '/api/events/<int:user_id>')
     api.add_resource(MessageResource, '/api/receive-message')
+    api.add_resource(EmailResource, '/api/send-email')
+    api.add_resource(SMSResource, '/api/send-sms')
 
     # 管理员
     admin = Admin(app, index_view=MyAdminIndexView())
