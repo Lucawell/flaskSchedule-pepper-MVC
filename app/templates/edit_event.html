@@ -804,7 +804,7 @@
                         </div>
                         <div class="rounded-lg bg-white p-6 shadow-3xl dark:bg-lightblue dark:shadow-black/10">
                             <h1 class="font-medium mb-6">编辑日程</h1>
-                            <form method="POST">
+                            <form onsubmit="combineAndSubmit()" method="POST">
                                 {{ form.hidden_tag() }}
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 py-10 border-b border-gray-300 dark:border-white/10">
                                     <div>
@@ -853,33 +853,52 @@
                                         <div class="flex flex-col sm:flex-row gap-1 sm:gap-4 sm:items-center">
                                             <label for="repeatSelect" class="text-gray-500 dark:text-indigo-300 font-medium inline-block min-w-[6rem]">{{ form.repeat.label(class="form-label") }}</label>
                                             <select name="repeat" id="repeatSelect" class="form-input flex-1">
-                                                <option value="none">无</option>
-                                                <option value="daily">每天</option>
-                                                <option value="weekly">每周</option>
-                                                <option value="month">每月</option>
+                                                <option value="none" {% if form.repeat.data == 'none' %}selected{% endif %}>无</option>
+                                                <option value="daily" {% if form.repeat.data == 'daily'%}selected{% endif %}>每天</option>
+                                                <option value="weekly" {% if form.repeat.data == 'weekly' %}selected{% endif %}>每周</option>
+                                                <option value="month" {% if form.repeat.data == 'month' %}selected{% endif %}>每月</option>
                                             </select>
                                             {% for error in form.repeat.errors %}
                                                 <span style="color: red;">{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                         <div class="flex flex-col sm:flex-row gap-1 sm:gap-4 sm:items-center">
-                                                <label for="reminder_type" class="text-gray-500 dark:text-indigo-300 font-medium inline-block min-w-[6rem]">{{ form.reminder_type.label(class="form-label") }}</label>
-                                                <select name="reminder_type" id="reminder_type" class="form-input flex-1">
-                                                    <option value="none">无</option>
-                                                    <option value="email">邮箱</option>
-                                                    <option value="phone">手机</option>
-                                                    <option value="pepper">机器人</option>
-                                                </select>
-                                                {% for error in form.reminder_type.errors %}
-                                                    <span style="color: red;">{{ error }}</span>
-                                                {% endfor %}
-                                            </div>
+                                            <label for="reminder_type" class="text-gray-500 dark:text-indigo-300 font-medium inline-block min-w-[6rem]">{{ form.reminder_type.label(class="form-label") }}</label>
+                                            <select name="reminder_type" id="reminder_type" class="form-input flex-1">
+                                                <option value="none" {% if form.reminder_type.data == 'none' %}selected{% endif %}>无</option>
+                                                <option value="email" {% if form.reminder_type.data == 'email' %}selected{% endif %}>邮箱</option>
+                                                <option value="phone" {% if form.reminder_type.data == 'phone' %}selected{% endif %}>手机</option>
+                                                <option value="pepper" {% if form.reminder_type.data == 'pepper' %}selected{% endif %}>机器人</option>
+                                            </select>
+                                            {% for error in form.reminder_type.errors %}
+                                                <span style="color: red;">{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
                                         <div class="flex flex-col sm:flex-row gap-1 sm:gap-4 sm:items-center">
-                                            {{ form.reminder_time.label(class="text-gray-500 dark:text-indigo-300 font-medium inline-block min-w-[6rem]") }}
-                                            {{ form.reminder_time(class="form-input flex-1") }}
+                                            {{ form.reminder_time.label(class="form-label") }}
+                                            {{ form.reminder_time(class="form-control") }}
+                                             <input class="btn border-indigo-600 bg-indigo-600 text-white hover:border-indigo-700 hover:bg-indigo-700" value="设置提醒" onclick="showReminderOptions()">
                                             {% for error in form.reminder_time.errors %}
                                                 <span style="color: red;">{{ error }}</span>
                                             {% endfor %}
+                                        </div>
+                                        <div id="reminderOptions" style="display: none;">
+                                        <label for="daysInput">天数：</label>
+                                        <input type="number" id="daysInput" name="daysInput" min="0">
+                                        <br>
+                                        <label for="hoursInput">小时：</label>
+                                        <select id="hoursInput" name="hoursInput">
+                                            <!-- 使用 JavaScript 动态生成选项 -->
+                                        </select>
+                                        <br>
+                                        <label for="minutesInput">分钟：</label>
+                                        <select id="minutesInput" name="minutesInput">
+                                            <!-- 使用 JavaScript 动态生成选项 -->
+                                        </select>
+                                        </div>
+                                        <div>
+                                        <!-- 隐藏的input元素用于存储提醒时间 -->
+                                            <input type="hidden" name="reminder_time" id="reminder_time" value="">
                                         </div>
                                         <div class="flex flex-col sm:flex-row gap-1 sm:gap-4 sm:items-center">
                                             {{ form.submit(class="btn border-indigo-600 bg-indigo-600 text-white hover:border-indigo-700 hover:bg-indigo-700") }}
@@ -939,5 +958,45 @@
         dateFormat: "Y-m-d",
     });
     </script>
+<script>
+    function populateOptions(element, max) {
+        for (let i = 0; i <= max; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.text = i;
+            element.appendChild(option);
+        }
+    }
+    // 动态生成小时和分钟的选项
+    populateOptions(document.getElementById('hoursInput'), 24);
+    populateOptions(document.getElementById('minutesInput'), 60);
+
+    var isReminderChanged = false; // 添加标志变量，用于判断是否更改了提醒时间
+    function showReminderOptions() {
+        // 显示提醒选项时将标志变量设置为 true
+        isReminderChanged = true;
+        // 显示设置提醒时间的选项
+        document.getElementById('reminderOptions').style.display = 'block';
+    }
+
+    function combineAndSubmit() {
+        if (isReminderChanged) { // 只有在提醒时间发生更改时才执行以下逻辑
+            var daysInput = parseFloat(document.getElementById('daysInput').value) || 0;
+            var hoursInput = parseFloat(document.getElementById('hoursInput').value) || 0;
+            var minutesInput = parseFloat(document.getElementById('minutesInput').value) || 0;
+
+            // 转换为分钟
+            var totalMinutes = daysInput * 24 * 60 + hoursInput * 60 + minutesInput;
+
+            // 将totalMinutes设置到表单的form.reminder_time字段
+            document.getElementById('reminder_time').value = totalMinutes;
+
+            // 可以将表单提交到服务器或进行其他操作
+            alert("总时间（分钟）：" + totalMinutes);
+        }
+         // 重置标志变量
+        isReminderChanged = false;
+    }
+</script>
 </body>
 </html>

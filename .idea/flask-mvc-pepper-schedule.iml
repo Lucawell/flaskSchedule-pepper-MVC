@@ -4,7 +4,10 @@
     <option name="enabled" value="true" />
   </component>
   <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/tmp/static" />
+      <excludeFolder url="file://$MODULE_DIR$/tmp/templates" />
+    </content>
     <orderEntry type="jdk" jdkName="Python 3.8 (flask-mvc-pepper-schedule)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="flatpickr" level="application" />
