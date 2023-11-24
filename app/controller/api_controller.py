@@ -6,11 +6,19 @@ from app.controller.reminder_controller import send_email
 from aliyunsdkcore.client import AcsClient
 from aliyunsdkdysmsapi.request.v20170525.SendSmsRequest import SendSmsRequest
 import json
-from app.config import ALIYUN_ACCESS_KEY_ID, ALIYUN_ACCESS_KEY_SECRET
+from app.config import ALIYUN_ACCESS_KEY_ID, ALIYUN_ACCESS_KEY_SECRET, API_TOKEN
+
+# 令牌配置
+api_token = API_TOKEN
 
 
+# 事件资源
 class EventResource(Resource):
     def get(self, user_id):
+        # 检查请求头中是否包含有效的令牌
+        token = request.headers.get("Authorization")
+        if token != api_token:
+            return {"error": "Unauthorized"}, 401
         # 查询当前用户的所有事件
         events = Event.query.filter_by(user_id=user_id).all()
         today = datetime.now().date()  # 获取当前日期
@@ -83,7 +91,6 @@ class EventResource(Resource):
         ]
         return {"events": event_today, "expired_events": expired_events}
 
-
 def generate_repeat_event(event, current_date):
     new_event = Event(
         user_id=event.user_id,
@@ -120,6 +127,10 @@ class MessageResource(Resource):
 # 发送邮件
 class EmailResource(Resource):
     def post(self):
+        # 检查请求头中是否包含有效的令牌
+        token = request.headers.get("Authorization")
+        if token != api_token:
+            return {"error": "Unauthorized"}, 401
         title = request.json.get('title')
         content = request.json.get('content')
         recipients = request.json.get('recipients')
@@ -144,6 +155,11 @@ acs_client = AcsClient(access_key_id, access_key_secret, region_id)
 
 class SMSResource(Resource):
     def post(self):
+        # 检查请求头中是否包含有效的令牌
+        token = request.headers.get("Authorization")
+        if token != api_token:
+            return {"error": "Unauthorized"}, 401
+
         # 解析请求数据
         data = request.get_json()
 
