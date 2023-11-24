@@ -876,7 +876,7 @@
                                         </div>
                                         <div class="flex flex-col sm:flex-row gap-1 sm:gap-4 sm:items-center">
                                             {{ form.reminder_time.label(class="form-label") }}
-                                            {{ form.reminder_time(class="form-control") }}
+                                            {{ form.reminder_time(class="form-control",style="display: none;") }}
                                              <input class="btn border-indigo-600 bg-indigo-600 text-white hover:border-indigo-700 hover:bg-indigo-700" value="设置提醒" onclick="showReminderOptions()">
                                             {% for error in form.reminder_time.errors %}
                                                 <span style="color: red;">{{ error }}</span>
@@ -975,6 +975,17 @@
     function showReminderOptions() {
         // 显示提醒选项时将标志变量设置为 true
         isReminderChanged = true;
+
+        var reminderTime = parseFloat(document.getElementById("reminder_time").value);
+        // 计算天数、小时和分钟
+        var days = Math.floor(reminderTime / (24 * 60));
+        var hours = Math.floor((reminderTime % (24 * 60)) / 60);
+        var minutes = reminderTime % 60;
+
+        // 更新隐藏的三个选项框的值
+        document.getElementById("daysInput").value = days;
+        document.getElementById("hoursInput").value = hours;
+        document.getElementById("minutesInput").value = minutes;
         // 显示设置提醒时间的选项
         document.getElementById('reminderOptions').style.display = 'block';
     }

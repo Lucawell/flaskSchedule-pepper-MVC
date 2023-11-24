@@ -819,7 +819,10 @@
                                     <p class="text-center text-gray-400"><strong>描述：</strong>{{ event.description }}</p>
                                     <p class="text-center text-gray-400"><strong>重复：</strong>{{ event.repeat }}</p>
                                     <p class="text-center text-gray-400"><strong>提醒类型:</strong>{{ event.reminder_type }}</p>
-                                    <p class="text-center text-gray-400"><strong>提醒时间:</strong>{{ event.reminder_time }}</p>
+{#                                    <p class="text-center text-gray-400"><strong>提醒时间:</strong>{{ event.reminder_time }}</p>#}
+                                    {% with days=event.reminder_time // (24 * 60), hours=(event.reminder_time % (24 * 60)) // 60, minutes=(event.reminder_time % 60) %}
+                                        <p class="text-center text-gray-400"><strong>提醒时间:</strong>{{ days }} 天 {{ hours }} 小时 {{ minutes }} 分钟</p>
+                                    {% endwith %}
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
                                     <a href="{{ url_for('event.edit_event', event_id=event.id) }}" class="btn border-indigo-600 justify-center bg-transparent text-indigo-600 hover:bg-indigo-600 hover:text-white">编辑</a>
@@ -841,7 +844,10 @@
                                     <p class="text-center text-gray-400"><strong>描述：</strong>{{ event.description }}</p>
                                     <p class="text-center text-gray-400"><strong>重复：</strong>{{ event.repeat }}</p>
                                     <p class="text-center text-gray-400"><strong>提醒类型:</strong>{{ event.reminder_type }}</p>
-                                    <p class="text-center text-gray-400"><strong>提醒时间:</strong>{{ event.reminder_time }}</p>
+{#                                    <p class="text-center text-gray-400"><strong>提醒时间:</strong>{{ event.reminder_time }}</p>#}
+                                    {% with days=event.reminder_time // (24 * 60), hours=(event.reminder_time % (24 * 60)) // 60, minutes=(event.reminder_time % 60) %}
+                                        <p class="text-center text-gray-400"><strong>提醒时间:</strong>{{ days }} 天 {{ hours }} 小时 {{ minutes }} 分钟</p>
+                                    {% endwith %}
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
                                     <a href="{{ url_for('event.edit_event', event_id=event.id) }}" class="btn border-indigo-600 justify-center bg-transparent text-indigo-600 hover:bg-indigo-600 hover:text-white">编辑</a>
