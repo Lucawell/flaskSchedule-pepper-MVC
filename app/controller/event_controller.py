@@ -9,8 +9,12 @@ from flask_login import login_required, current_user
 
 @login_required
 def show_event():
+    user_id = current_user.id  # 假设您有一个 current_user 对象
+    today_events, expired_events = get_user_events(user_id)
+    return render_template('event_list.html', events=today_events, expired_events=expired_events)
+def get_user_events(user_id):
     # 查询当前用户的所有事件
-    events = Event.query.filter_by(user_id=current_user.id).all()
+    events = Event.query.filter_by(user_id=user_id).all()
     today = datetime.now().date()  # 获取当前日期
     today_events = []
     expired_events = []
@@ -57,9 +61,9 @@ def show_event():
                         today_events.append(last_month_event)
                         break
                     current_date += timedelta(days=30)
-    return render_template('event_list.html', events=today_events, expired_events=expired_events)
+    return today_events, expired_events
+
 # 创建一个函数，用于生成重复事件
-@login_required
 def generate_repeat_event(event, current_date):
     new_event = Event(
         user_id=event.user_id,
