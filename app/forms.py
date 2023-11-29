@@ -21,6 +21,7 @@ class RegisterForm(FlaskForm):
 class LoginForm(FlaskForm):
     email = StringField('邮箱', [validators.DataRequired("邮箱不能为空"), validators.Email("无效的邮箱地址")])
     password = PasswordField('密码', [validators.DataRequired("密码不能为空")])
+    remember = StringField('记住我')
 
 
 class EventForm(FlaskForm):
