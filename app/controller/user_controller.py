@@ -7,6 +7,18 @@ from app import db, login_manager
 
 
 def register():
+    """
+    注册新用户。
+
+    该函数处理新用户的注册过程。它验证用户提交的表单数据，
+    检查用户是否已存在，在数据库中创建新用户，并将用户重定向到登录页面
+    注册成功后。
+
+    Returns:
+        如果表单数据有效并且用户注册成功，则将用户重定向到登录页面。
+        否则，它会呈现带有注册表单的 register.html 模板。
+
+    """
     form = RegisterForm()
     if form.validate_on_submit():
         # 获取用户提交的数据
@@ -31,6 +43,15 @@ def register():
     return render_template('register.html', form=form)
 
 def login():
+    """
+    用户登录函数
+
+    如果用户已登录，则重定向到受保护的页面。
+    如果用户提交了有效的登录表单，则验证用户凭据并将用户标记为已登录。
+    如果用户验证失败，则显示错误消息。
+
+    return: 渲染登录页面或重定向到受保护的页面
+    """
     if current_user.is_authenticated:
         # 如果用户已登录，重定向到受保护的页面
         return redirect(url_for('event.show_event'))
