@@ -1,7 +1,5 @@
 from flask import render_template, request
 from flask_restful import Resource, reqparse
-from app.model.Event import Event
-from datetime import timedelta, datetime
 from app.controller.reminder_controller import send_email
 from aliyunsdkcore.client import AcsClient
 from aliyunsdkdysmsapi.request.v20170525.SendSmsRequest import SendSmsRequest
@@ -92,6 +90,7 @@ region_id = 'cn-hangzhou'  # 阿里云短信服务所在的区域
 acs_client = AcsClient(access_key_id, access_key_secret, region_id)
 
 
+# 发送短信
 class SMSResource(Resource):
     def post(self):
         # 检查请求头中是否包含有效的令牌
@@ -125,3 +124,32 @@ class SMSResource(Resource):
         response = acs_client.do_action_with_exception(request)
 
         return json.loads(response.decode('utf-8'))
+
+
+# 上传文件
+from flask_uploads import UploadSet, IMAGES
+photos = UploadSet("photos", IMAGES)
+
+class FileUploadResource(Resource):
+    def post(self):
+        try:
+            # 检查请求中是否包含“照片”文件
+            if "photo" not in request.files:
+                return {"error": "No file part"}, 400
+
+            photo = request.files["photo"]
+
+            # 检查是否提供了文件名
+            if photo.filename == "":
+                return {"error": "No selected file"}, 400
+
+            # 保存上传的文件
+            filename = photos.save(photo)
+
+            # 获取上传文件的URL
+            file_url = photos.url(filename)
+
+            return {"status": "success", "file_url": file_url}, 201
+
+        except Exception as e:
+            return {"error": str(e)}, 500

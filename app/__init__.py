@@ -6,7 +6,7 @@ from flask_migrate import Migrate
 from flask_restful import Api
 from flask_admin import Admin
 from flask_mail import Mail
-
+from flask_uploads import configure_uploads
 
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -29,6 +29,9 @@ def create_app():
     api = Api(app)
     # 邮件管理
     mail.init_app(app)
+    # 文件上传管理
+    from app.controller.api_controller import photos
+    configure_uploads(app, photos)
 
     # 导入数据库模型
     from app.model.User import User
@@ -42,7 +45,8 @@ def create_app():
     from app.views.admin_view import MyAdminIndexView, UserAdminView, EventAdminView
 
     # 导入控制器
-    from app.controller.api_controller import EventResource, MessageResource, EmailResource, SMSResource
+    from app.controller.api_controller import EventResource, MessageResource, EmailResource, SMSResource, \
+        FileUploadResource
 
     # 注册蓝图
     app.register_blueprint(index_blueprint, url_prefix='/')
@@ -55,6 +59,7 @@ def create_app():
     api.add_resource(MessageResource, '/api/receive-message')
     api.add_resource(EmailResource, '/api/send-email')
     api.add_resource(SMSResource, '/api/send-sms')
+    api.add_resource(FileUploadResource, '/api/upload')
 
     # 管理员
     admin = Admin(app, index_view=MyAdminIndexView())
