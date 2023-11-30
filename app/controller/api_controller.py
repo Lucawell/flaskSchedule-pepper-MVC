@@ -1,11 +1,9 @@
 from flask import render_template, request
 from flask_restful import Resource, reqparse
-from app.controller.reminder_controller import send_email
 from aliyunsdkcore.client import AcsClient
 from aliyunsdkdysmsapi.request.v20170525.SendSmsRequest import SendSmsRequest
 import json
 from app.config import ALIYUN_ACCESS_KEY_ID, ALIYUN_ACCESS_KEY_SECRET, API_TOKEN
-from app.controller.event_controller import get_user_events
 
 # 令牌配置
 api_token = API_TOKEN
@@ -14,11 +12,13 @@ api_token = API_TOKEN
 # 事件资源
 class EventResource(Resource):
     def get(self, user_id):
+
         # 检查请求头中是否包含有效的令牌
         token = request.headers.get("Authorization")
         if token != api_token:
             return {"error": "Unauthorized"}, 401
         # 查询当前用户的所有事件
+        from app.controller.event_controller import get_user_events
         today_events, expired_events = get_user_events(user_id)
         # 将事件对象转换为 JSON 格式返回给客户端
 
@@ -63,6 +63,7 @@ class MessageResource(Resource):
 
 # 发送邮件
 class EmailResource(Resource):
+
     def post(self):
         # 检查请求头中是否包含有效的令牌
         token = request.headers.get("Authorization")
@@ -76,7 +77,7 @@ class EmailResource(Resource):
             return {'message': '缺少必要参数'}, 400
 
         html = render_template('email_template.html', title=title, content=content)
-
+        from app.controller.reminder_controller import send_email
         send_email(title, html, recipients)
 
         return {'message': '邮件发送成功'}, 200

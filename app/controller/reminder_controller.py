@@ -1,12 +1,12 @@
 from flask import request, render_template
 from flask_login import login_required, current_user
 from flask_mail import Message
-from app import mail
 from app.model.User import User
 
 
 # 邮件发送逻辑
 def send_email(subject, html, recipients):
+    from app import mail
     msg = Message(subject, recipients=recipients, html=html)
     mail.send(msg)
 
