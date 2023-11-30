@@ -1,4 +1,3 @@
-# encoding:utf-8
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -8,62 +7,88 @@ from flask_admin import Admin
 from flask_mail import Mail
 from flask_uploads import configure_uploads
 
-db = SQLAlchemy()
-login_manager = LoginManager()
-migrate = Migrate()
-mail = Mail()
+# 创建Flask应用实例
+db = SQLAlchemy()  # 数据库实例
+login_manager = LoginManager()  # 登录管理实例
+migrate = Migrate()  # 数据库迁移实例
+mail = Mail()  # 邮件实例
 
+def create_app() -> Flask:
+    """创建Flask应用实例并进行初始化设置。
 
-def create_app():
+    Returns:
+        Flask: 初始化设置后的Flask应用实例。
+    """
     app = Flask(__name__)
     app.config.from_object('app.config')
     app.config.from_envvar('FLASKR_CONFIGS')
-    # 初始化数据库
+
+    initialize_extensions(app)
+    register_blueprints(app)
+    configure_api_resources(app)
+    configure_admin(app)
+
+    return app
+
+def initialize_extensions(app: Flask) -> None:
+    """初始化扩展，包括数据库、登录管理、数据库迁移、邮件和文件上传。
+
+    Args:
+        app (Flask): Flask应用实例。
+    """
     db.init_app(app)
-    # 注册migrate，创建数据库迁移
     migrate.init_app(app, db)
-    # 登录管理
     login_manager.init_app(app)
-    login_manager.login_view = 'user.login'  # 设置登录视图的名称（在这个示例中是 'user.login'）
-    # api管理
-    api = Api(app)
-    # 邮件管理
+    login_manager.login_view = 'user.login'
     mail.init_app(app)
-    # 文件上传管理
+
     from app.controller.api_controller import photos
     configure_uploads(app, photos)
 
-    # 导入数据库模型
-    from app.model.User import User
-    from app.model.Event import Event
+def register_blueprints(app: Flask) -> None:
+    """注册蓝图，包括主页、用户、事件和提醒蓝图。
 
-    # 导入视图
+    Args:
+        app (Flask): Flask应用实例。
+    """
     from app.views.index_view import index_blueprint
     from app.views.user_view import user_blueprint
     from app.views.event_view import event_blueprint
     from app.views.reminder_view import reminder_blueprint
-    from app.views.admin_view import MyAdminIndexView, UserAdminView, EventAdminView
 
-    # 导入控制器
-    from app.controller.api_controller import EventResource, MessageResource, EmailResource, SMSResource, \
-        FileUploadResource
-
-    # 注册蓝图
     app.register_blueprint(index_blueprint, url_prefix='/')
     app.register_blueprint(user_blueprint, url_prefix='/user')
     app.register_blueprint(event_blueprint, url_prefix='/event')
     app.register_blueprint(reminder_blueprint, url_prefix='/reminder')
 
-    # 将资源添加到您的 API
+def configure_api_resources(app: Flask) -> None:
+    """配置API资源，包括事件、消息、邮件、短信和文件上传资源。
+
+    Args:
+        app (Flask): Flask应用实例。
+    """
+    api = Api(app)
+
+    from app.controller.api_controller import (
+        EventResource, MessageResource, EmailResource, SMSResource, FileUploadResource
+    )
+
     api.add_resource(EventResource, '/api/events/<int:user_id>')
     api.add_resource(MessageResource, '/api/receive-message')
     api.add_resource(EmailResource, '/api/send-email')
     api.add_resource(SMSResource, '/api/send-sms')
     api.add_resource(FileUploadResource, '/api/upload')
 
-    # 管理员
+def configure_admin(app: Flask) -> None:
+    """配置Flask-Admin管理界面，包括自定义首页和用户、事件管理视图。
+
+    Args:
+        app (Flask): Flask应用实例。
+    """
+    from app.views.admin_view import MyAdminIndexView, UserAdminView, EventAdminView
+    from app.model.User import User
+    from app.model.Event import Event
+
     admin = Admin(app, index_view=MyAdminIndexView())
     admin.add_view(UserAdminView(User, db.session, url='users', name='users', endpoint='users_admin'))
     admin.add_view(EventAdminView(Event, db.session, url='events', name='events', endpoint='events_admin'))
-
-    return app

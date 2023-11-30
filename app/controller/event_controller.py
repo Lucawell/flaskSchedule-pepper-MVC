@@ -2,7 +2,7 @@
 from datetime import timedelta, datetime
 from app.model.Event import Event
 from app import db
-from flask import request, render_template, url_for, redirect, flash
+from flask import render_template, url_for, redirect, flash
 from app.forms import EventForm
 from flask_login import login_required, current_user
 

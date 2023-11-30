@@ -3,16 +3,25 @@ from flask_restful import Resource, reqparse
 from aliyunsdkcore.client import AcsClient
 from aliyunsdkdysmsapi.request.v20170525.SendSmsRequest import SendSmsRequest
 import json
+from flask_uploads import UploadSet, IMAGES
 from app.config import ALIYUN_ACCESS_KEY_ID, ALIYUN_ACCESS_KEY_SECRET, API_TOKEN
 
 # 令牌配置
-api_token = API_TOKEN
+api_token = API_TOKEN  # 用于身份验证的API令牌
 
 
 # 事件资源
 class EventResource(Resource):
+    """
+    处理用户事件资源的restful API。
+    """
     def get(self, user_id):
-
+        """处理GET请求，获取用户的事件信息。
+            Args:
+                user_id (int): 用户ID。
+            Returns:
+                dict: 包含用户今天和已过期事件的字典。
+        """
         # 检查请求头中是否包含有效的令牌
         token = request.headers.get("Authorization")
         if token != api_token:
@@ -52,6 +61,11 @@ class MessageStore:
 
 class MessageResource(Resource):
     def post(self):
+        """处理POST请求，接收消息。
+
+        Returns:
+            dict: 包含接收消息的字典。
+        """
         parser = reqparse.RequestParser()
         parser.add_argument('message', type=str, help='Message to be received', required=True)
         args = parser.parse_args()
@@ -65,6 +79,11 @@ class MessageResource(Resource):
 class EmailResource(Resource):
 
     def post(self):
+        """处理POST请求，发送邮件。
+
+        Returns:
+            dict: 包含邮件发送状态的字典。
+        """
         # 检查请求头中是否包含有效的令牌
         token = request.headers.get("Authorization")
         if token != api_token:
@@ -94,6 +113,11 @@ acs_client = AcsClient(access_key_id, access_key_secret, region_id)
 # 发送短信
 class SMSResource(Resource):
     def post(self):
+        """处理POST请求，发送短信。
+
+       Returns:
+           dict: 包含短信发送状态的字典。
+       """
         # 检查请求头中是否包含有效的令牌
         token = request.headers.get("Authorization")
         if token != api_token:
@@ -112,6 +136,15 @@ class SMSResource(Resource):
         return {'status': 'success', 'result': result}
 
     def send_sms(self, phone_number, message):
+        """使用阿里云短信服务发送短信。
+
+        Args:
+            phone_number (str): 接收短信的手机号。
+            message (str): 要发送的短信内容。
+
+        Returns:
+            dict: 包含短信发送结果的字典。
+        """
         # 构造短信发送请求
         request = SendSmsRequest()
         request.set_TemplateCode('SMS_464060163')  # 替换成你在阿里云短信服务中创建的模板CODE
@@ -128,11 +161,14 @@ class SMSResource(Resource):
 
 
 # 上传文件
-from flask_uploads import UploadSet, IMAGES
 photos = UploadSet("photos", IMAGES)
-
 class FileUploadResource(Resource):
     def post(self):
+        """处理POST请求，上传文件。
+
+       Returns:
+           dict: 包含文件上传状态和文件URL的字典。
+       """
         try:
             # 检查请求中是否包含“照片”文件
             if "photo" not in request.files:
