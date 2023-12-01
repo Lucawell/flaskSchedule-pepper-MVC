@@ -42,6 +42,7 @@ def register():
         return redirect(url_for('user.login'))
     return render_template('register.html', form=form)
 
+
 def login():
     """
     用户登录函数
@@ -63,7 +64,7 @@ def login():
         if user and user.check_password(password):
             # 用户验证成功，将用户标记为已登录
             # 可以使用 Flask-Login 或自己的会话管理逻辑来处理登录状态
-            login_user(user,remember=form.remember)
+            login_user(user, remember=form.remember)
             flash('登录成功', 'success')
             return redirect(url_for('event.show_event'))  # 跳转到用户仪表板或其他受保护的页面
         else:
@@ -71,11 +72,25 @@ def login():
 
     return render_template('login.html', form=form)
 
+
+@login_required
+def profile():
+    """
+    用户个人信息页面
+    """
+    name = current_user.name
+    email = current_user.email
+    phone = current_user.phone
+
+    return render_template('profile.html', name=name, email=email, phone=phone)
+
+
 @login_required
 def logout():
     logout_user()  # 使用 Flask-Login 注销用户
     flash('成功注销', 'success')
     return redirect(url_for('user.login'))
+
 
 @login_manager.user_loader
 def load_user(user_id):
