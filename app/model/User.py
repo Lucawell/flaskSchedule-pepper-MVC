@@ -13,6 +13,7 @@ class User(db.Model, UserMixin):
     is_admin = db.Column(db.Boolean, default=False, nullable=False)  # 新增 is_admin 字段
 
     event = db.relationship('Event', backref='user', lazy='dynamic')
+    email_history = db.relationship('EmailHistory', backref='user', lazy='dynamic')
 
     def __init__(self, name, email, phone, password, is_admin=False):
         self.name = name

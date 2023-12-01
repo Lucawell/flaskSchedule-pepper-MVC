@@ -1,7 +1,6 @@
 # forms.py
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, validators, DateTimeField, SubmitField, ValidationError, SelectField, \
-    DateField, TimeField
+from wtforms import StringField, PasswordField, validators, SubmitField, ValidationError, DateField, TimeField
 
 
 class RegisterForm(FlaskForm):
@@ -21,6 +20,7 @@ class RegisterForm(FlaskForm):
 class LoginForm(FlaskForm):
     email = StringField('邮箱', [validators.DataRequired("邮箱不能为空"), validators.Email("无效的邮箱地址")])
     password = PasswordField('密码', [validators.DataRequired("密码不能为空")])
+    remember = StringField('记住我')
 
 
 class EventForm(FlaskForm):
@@ -35,7 +35,7 @@ class EventForm(FlaskForm):
     reminder_time = StringField('提醒时间')
     submit = SubmitField('Submit')  # 添加这一行来定义 submit 字段
 
+    # 如果结束时间小于或等于开始时间，则引发验证错误。
     def validate_end_time(self, field):
         if field.data <= self.start_date.data:
             raise ValidationError('End time must be greater than start time')
-

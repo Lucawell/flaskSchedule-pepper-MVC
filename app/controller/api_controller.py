@@ -1,74 +1,36 @@
 from flask import render_template, request
 from flask_restful import Resource, reqparse
-from app.model.Event import Event
-from datetime import timedelta, datetime
-from app.controller.reminder_controller import send_email
 from aliyunsdkcore.client import AcsClient
 from aliyunsdkdysmsapi.request.v20170525.SendSmsRequest import SendSmsRequest
 import json
+from flask_uploads import UploadSet, IMAGES
 from app.config import ALIYUN_ACCESS_KEY_ID, ALIYUN_ACCESS_KEY_SECRET, API_TOKEN
 
 # 令牌配置
-api_token = API_TOKEN
+api_token = API_TOKEN  # 用于身份验证的API令牌
 
 
 # 事件资源
 class EventResource(Resource):
+    """
+    处理用户事件资源的restful API。
+    """
     def get(self, user_id):
+        """处理GET请求，获取用户的事件信息。
+            Args:
+                user_id (int): 用户ID。
+            Returns:
+                dict: 包含用户今天和已过期事件的字典。
+        """
         # 检查请求头中是否包含有效的令牌
         token = request.headers.get("Authorization")
         if token != api_token:
             return {"error": "Unauthorized"}, 401
         # 查询当前用户的所有事件
-        events = Event.query.filter_by(user_id=user_id).all()
-        today = datetime.now().date()  # 获取当前日期
-        today_events = []
-        expired_events = []
-        for event in events:
-            # 如果事件过期，将其添加到过期事件列表中
-            if event.end_date < today:
-                expired_events.append(event)
-                continue
-            # 如果事件不是重复事件，将其添加到今天事件列表中
-            if event.repeat == "none" and today <= event.end_date:
-                today_events.append(event)
-            # 如果事件是重复事件，动态生成后将其添加到今天事件列表中
-            else:
-                start_date = event.start_date
-                end_date = event.end_date
-
-                if event.repeat == "daily":
-                    current_date = start_date
-                    while current_date <= end_date:
-                        if current_date >= today:
-                            new_event = generate_repeat_event(event, current_date)
-                            today_events.append(new_event)
-                            break
-                        current_date += timedelta(days=1)
-                elif event.repeat == "weekly":
-                    if end_date - today < timedelta(days=7):
-                        expired_events.append(event)
-                        continue
-                    current_date = start_date
-                    while current_date <= end_date:
-                        if current_date >= today:
-                            last_week_event = generate_repeat_event(event, current_date)
-                            today_events.append(last_week_event)
-                            break
-                        current_date += timedelta(weeks=1)
-                elif event.repeat == "monthly":
-                    if end_date - today < timedelta(days=30):
-                        expired_events.append(event)
-                        continue
-                    current_date = start_date
-                    while current_date <= end_date:
-                        if current_date >= today:
-                            last_month_event = generate_repeat_event(event, current_date)
-                            today_events.append(last_month_event)
-                            break
-                        current_date += timedelta(days=30)
-
+        from app.controller.event_controller import get_user_events
+        today_events, expired_events = get_user_events(user_id)
         # 将事件对象转换为 JSON 格式返回给客户端
+
         event_today = [
             {"id": event.id,
              "title": event.title,
@@ -91,22 +53,6 @@ class EventResource(Resource):
         ]
         return {"events": event_today, "expired_events": expired_events}
 
-def generate_repeat_event(event, current_date):
-    new_event = Event(
-        user_id=event.user_id,
-        title=event.title,
-        start_date=current_date,
-        end_date=current_date,
-        event_time=event.event_time,
-        location=event.location,
-        description=event.description,
-        repeat=event.repeat,
-        reminder_type=event.reminder_type,
-        reminder_time=event.reminder_time
-    )
-    new_event.id = event.id  # 设置新事件的ID为原事件的ID
-    return new_event
-
 
 # 接收信息
 class MessageStore:
@@ -115,6 +61,11 @@ class MessageStore:
 
 class MessageResource(Resource):
     def post(self):
+        """处理POST请求，接收消息。
+
+        Returns:
+            dict: 包含接收消息的字典。
+        """
         parser = reqparse.RequestParser()
         parser.add_argument('message', type=str, help='Message to be received', required=True)
         args = parser.parse_args()
@@ -126,7 +77,13 @@ class MessageResource(Resource):
 
 # 发送邮件
 class EmailResource(Resource):
+
     def post(self):
+        """处理POST请求，发送邮件。
+
+        Returns:
+            dict: 包含邮件发送状态的字典。
+        """
         # 检查请求头中是否包含有效的令牌
         token = request.headers.get("Authorization")
         if token != api_token:
@@ -139,7 +96,7 @@ class EmailResource(Resource):
             return {'message': '缺少必要参数'}, 400
 
         html = render_template('email_template.html', title=title, content=content)
-
+        from app.controller.reminder_controller import send_email
         send_email(title, html, recipients)
 
         return {'message': '邮件发送成功'}, 200
@@ -153,8 +110,14 @@ region_id = 'cn-hangzhou'  # 阿里云短信服务所在的区域
 acs_client = AcsClient(access_key_id, access_key_secret, region_id)
 
 
+# 发送短信
 class SMSResource(Resource):
     def post(self):
+        """处理POST请求，发送短信。
+
+       Returns:
+           dict: 包含短信发送状态的字典。
+       """
         # 检查请求头中是否包含有效的令牌
         token = request.headers.get("Authorization")
         if token != api_token:
@@ -173,6 +136,15 @@ class SMSResource(Resource):
         return {'status': 'success', 'result': result}
 
     def send_sms(self, phone_number, message):
+        """使用阿里云短信服务发送短信。
+
+        Args:
+            phone_number (str): 接收短信的手机号。
+            message (str): 要发送的短信内容。
+
+        Returns:
+            dict: 包含短信发送结果的字典。
+        """
         # 构造短信发送请求
         request = SendSmsRequest()
         request.set_TemplateCode('SMS_464060163')  # 替换成你在阿里云短信服务中创建的模板CODE
@@ -186,3 +158,35 @@ class SMSResource(Resource):
         response = acs_client.do_action_with_exception(request)
 
         return json.loads(response.decode('utf-8'))
+
+
+# 上传文件
+photos = UploadSet("photos", IMAGES)
+class FileUploadResource(Resource):
+    def post(self):
+        """处理POST请求，上传文件。
+
+       Returns:
+           dict: 包含文件上传状态和文件URL的字典。
+       """
+        try:
+            # 检查请求中是否包含“照片”文件
+            if "photo" not in request.files:
+                return {"error": "No file part"}, 400
+
+            photo = request.files["photo"]
+
+            # 检查是否提供了文件名
+            if photo.filename == "":
+                return {"error": "No selected file"}, 400
+
+            # 保存上传的文件
+            filename = photos.save(photo)
+
+            # 获取上传文件的URL
+            file_url = photos.url(filename)
+
+            return {"status": "success", "file_url": file_url}, 201
+
+        except Exception as e:
+            return {"error": str(e)}, 500

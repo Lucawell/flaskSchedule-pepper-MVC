@@ -38,3 +38,7 @@ ALIYUN_REGION_ID = 'cn-hangzhou'
 
 # api配置
 API_TOKEN = os.getenv('API_TOKEN')
+
+# 上传文件配置
+UPLOADED_PHOTOS_DEST = os.path.join(os.path.dirname(__file__), 'uploads/images')
+UPLOADS_AUTOSERVE = True

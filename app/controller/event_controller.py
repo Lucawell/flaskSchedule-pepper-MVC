@@ -2,15 +2,28 @@
 from datetime import timedelta, datetime
 from app.model.Event import Event
 from app import db
-from flask import request, render_template, url_for, redirect, flash
+from flask import render_template, url_for, redirect, flash
 from app.forms import EventForm
 from flask_login import login_required, current_user
 
 
 @login_required
 def show_event():
+    user_id = current_user.id  # 获取当前登录用户的ID
+    today_events, expired_events = get_user_events(user_id)
+    return render_template('event_list.html', events=today_events, expired_events=expired_events)
+def get_user_events(user_id):
+    """
+    查询当前用户的所有事件，并根据事件的重复规则生成今天的事件列表和过期事件列表。
+
+    Args:
+        user_id (int): 用户ID
+
+    Returns:
+        tuple: 包含今天的事件列表和过期事件列表的元组
+    """
     # 查询当前用户的所有事件
-    events = Event.query.filter_by(user_id=current_user.id).all()
+    events = Event.query.filter_by(user_id=user_id).all()
     today = datetime.now().date()  # 获取当前日期
     today_events = []
     expired_events = []
@@ -57,9 +70,9 @@ def show_event():
                         today_events.append(last_month_event)
                         break
                     current_date += timedelta(days=30)
-    return render_template('event_list.html', events=today_events, expired_events=expired_events)
+    return today_events, expired_events
+
 # 创建一个函数，用于生成重复事件
-@login_required
 def generate_repeat_event(event, current_date):
     new_event = Event(
         user_id=event.user_id,
@@ -83,6 +96,11 @@ def calendar():
 
 @login_required
 def create_event():
+    """
+    创建事件并保存到数据库。
+
+    return: 重定向到事件列表页面或其他适当的页面
+    """
     form = EventForm()  # 使用您的事件表单来接收用户输入
     if not form.validate_on_submit():
         for field, errors in form.errors.items():

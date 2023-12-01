@@ -1,10 +1,13 @@
 # encoding:utf-8
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template
+from flask_login import login_required, current_user
+from app.controller.event_controller import get_user_events
 
 index_blueprint = Blueprint('index', __name__)
 
 @index_blueprint.route('/')
+@login_required
 def home():
-    # return render_template('index.html')
-    return redirect(url_for('event.show_event'))  # 重定向到事件列表页面或其他适当的页面
-
+    user_id = current_user.id  # 假设您有一个 current_user 对象
+    today_events, expired_events = get_user_events(user_id)
+    return render_template('index.html', events=today_events, expired_events=expired_events)
