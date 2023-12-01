@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email History</title>
+</head>
+<body>
+    <h1>Email History</h1>
+    <ul>
+        {% for email in email_history %}
+            <li>
+                <strong>{{ email.title }}</strong> 发送时间: {{ email.sent_at }} 发给:{{ email.recipients }}
+                <p>内容:{{ email.content }}</p>
+                <form action="{{ url_for('reminder.delete_email_history', email_history_id=email.id) }}" method="post">
+                    <input type="submit" value="Delete">
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

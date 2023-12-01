@@ -2,6 +2,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask_login import current_user
 from flask_admin import AdminIndexView
 
+
 # 自定义页面
 # class HelloView(BaseView):
 #     @expose('/')
@@ -38,11 +39,13 @@ class EventAdminView(ModelView):
     def is_accessible(self):
         return current_user.is_authenticated and current_user.is_admin
 
-class ReminderAdminView(ModelView):
-    column_searchable_list = ('event_id',)
-    column_list = ('event.title', 'event_id', 'time', 'method')
+
+class EmailHistoryAdminView(ModelView):
+    column_searchable_list = ('user_id',)
+    column_list = ('user.name', 'user_id', 'title', 'content', 'recipients', 'sent_at')
+
     column_formatters = {
-        'event.title': lambda view, context, model, name: model.event.title  # 假设user有一个name字段
+        'user.name': lambda view, context, model, name: model.user.name  # 假设user有一个name字段
     }
 
     def is_accessible(self):

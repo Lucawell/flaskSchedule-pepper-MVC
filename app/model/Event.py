@@ -1,6 +1,5 @@
 from app import db
 from app.model.User import User
-from enum import Enum
 from sqlalchemy.ext.hybrid import hybrid_property
 
 class Event(db.Model):
