@@ -1,22 +1,873 @@
 <!DOCTYPE html>
-<html lang="en">
+<html x-data="main" class :class="[$store.app.mode]">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email History</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Premium Tailwind CSS Admin & Dashboard Template" />
+    <meta name="author" content="SRBThemes" />
+
+    <title>老年人健康管理系统</title>
+
+
+
+    <link rel="stylesheet" type="text/css" media="screen" href="../static/css/perfect-scrollbar.min.css" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="../static/css/style.css" />
 </head>
-<body>
-    <h1>Email History</h1>
-    <ul>
-        {% for email in email_history %}
-            <li>
-                <strong>{{ email.title }}</strong> 发送时间: {{ email.sent_at }} 发给:{{ email.recipients }}
-                <p>内容:{{ email.content }}</p>
-                <form action="{{ url_for('reminder.delete_email_history', email_history_id=email.id) }}" method="post">
-                    <input type="submit" value="Delete">
-                </form>
-            </li>
-        {% endfor %}
-    </ul>
+<body x-data="main" class="collapse-menu overflow-x-hidden bg-lightwhite font-public text-base font-normal text-slate-600 antialiased dark:bg-darkblue dark:text-indigo-300" :class="[ $store.app.sidebar ? 'toggle-sidebar' : '', $store.app.fullscreen ? '' : '']">
+
+    <div x-cloak class="fixed inset-0 z-40 bg-slate-800/50 lg:hidden" :class="{'hidden' : !$store.app.sidebar}" @click="$store.app.toggleSidebar()"></div>
+
+
+    <div x-data="modals">
+        <div class="flex min-h-screen w-full items-stretch">
+
+            <nav class="sidebar">
+                <div class="brand-logo">
+                    <a href="/" class="flex items-center">
+                        <div class="block min-h-[1px] shrink-0 grow-0 overflow-hidden leading-none">
+                            <img src="{{ url_for('static', filename='images/robot2.png') }}" width="42" height="35" viewbox="0 0 42 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        </div>
+                        <p class="ml-2 shrink-0 text-2xl font-bold -tracking-[0.5px] text-slate-600 opacity-100 transition-opacity duration-1000 dark:text-indigo-100">健康管理系统</p>
+                    </a>
+                </div>
+
+                <ul class="perfect-scrollbar menu-sidebar py-1" x-data="{ activeMenu: 'dashboard' }">
+                    <li class="menu-item" :class="{'active' : activeMenu === 'chat'}">
+                        <a href="/" class="menu-link" >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
+                                <path d="M240,208H224V115.55a16,16,0,0,0-5.17-11.78l-80-75.48a1.14,1.14,0,0,1-.11-.11,16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208H16a8,8,0,0,0,0,16H240a8,8,0,0,0,0-16ZM48,115.55l.11-.1L128,40l79.9,75.43.11.1V208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48ZM144,208H112V160h32Z"></path>
+                            </svg>
+                            <p>主页</p>
+                        </a>
+                    </li>
+                    <li class="menu-title">
+                        <span>功能列表</span>
+                    </li>
+                    <li class="menu-item" :class="{'active' : activeMenu === 'email'}">
+                        <a href="{{ url_for('reminder.show_email_history') }}" class="menu-link" >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
+                                <path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z"></path>
+                            </svg>
+                            <p>邮件</p>
+                        </a>
+                    </li>
+                    <li class="menu-item" :class="{'active' : activeMenu === 'contacts'}">
+                        <a href="{{ url_for('event.show_event') }}" class="menu-link" >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
+                                <path d="M128,64a40,40,0,1,0,40,40A40,40,0,0,0,128,64Zm0,64a24,24,0,1,1,24-24A24,24,0,0,1,128,128Zm0-112a88.1,88.1,0,0,0-88,88c0,31.4,14.51,64.68,42,96.25a254.19,254.19,0,0,0,41.45,38.3,8,8,0,0,0,9.18,0A254.19,254.19,0,0,0,174,200.25c27.45-31.57,42-64.85,42-96.25A88.1,88.1,0,0,0,128,16Zm0,206c-16.53-13-72-60.75-72-118a72,72,0,0,1,144,0C200,161.23,144.53,209,128,222Z"></path>
+                            </svg>
+                            <p>日程管理</p>
+                        </a>
+                    </li>
+                    <li class="menu-item" :class="{'active' : activeMenu === 'invoice'}">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle" @click="activeMenu === 'invoice' ? activeMenu = null : activeMenu = 'invoice'">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
+                                <path d="M184,112a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16h64A8,8,0,0,1,184,112Zm-8,24H112a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16Zm48-88V208a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32H208A16,16,0,0,1,224,48ZM48,208H72V48H48Zm160,0V48H88V208H208Z"></path>
+                            </svg>
+                            <p>娱乐</p>
+                        </a>
+                        <ul class="menu-sub" x-cloak x-show="activeMenu === 'invoice'" x-collapse>
+                            <li class="menu-item">
+                                <a href="https://poki.com/zh/html5" class="menu-link">
+                                    <p>在线H5游戏</p>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="https://y.qq.com/" class="menu-link">
+                                    <p>QQ音乐</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+
+
+            <div class="main-content space-y-6 pt-2">
+
+                <div class="flex items-center gap-2 rounded-lg bg-white px-4 py-3 shadow-3xl dark:bg-lightblue dark:shadow-black/10">
+                    <button type="button" @click="$store.app.toggleSidebar()" class="flex h-9 w-9 flex-none items-center justify-center rounded-lg bg-slate-100 transition-all duration-300 hover:bg-slate-200 hover:text-indigo-600 dark:bg-white/5 dark:hover:bg-lightindigo dark:hover:text-white lg:hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
+                            <path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z"></path>
+                        </svg>
+                    </button>
+                    <div class="flex flex-1 items-center justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <button onclick="goBack()">返回</button>
+                            <div class="relative hidden sm:block">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-2 top-2 text-slate-300" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
+                                    <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
+                                </svg>
+                                <input type="text" class="h-9 w-full rounded-lg border-transparent bg-transparent px-4 pl-8 text-sm focus:border-transparent focus:shadow-none focus:ring-0" placeholder="Seaech..." />
+                            </div>
+                        </div>
+                        <div class="flex flex-none items-center gap-2">
+                            <div class="relative">
+                                <button class="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 transition-all duration-300 hover:bg-slate-200 hover:text-indigo-600 dark:bg-white/5 dark:hover:bg-lightindigo dark:hover:text-white" x-cloak x-show="$store.app.mode === 'light'" @click="$store.app.toggleMode('dark')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
+                                        <path d="M233.54,142.23a8,8,0,0,0-8-2,88.08,88.08,0,0,1-109.8-109.8,8,8,0,0,0-10-10,104.84,104.84,0,0,0-52.91,37A104,104,0,0,0,136,224a103.09,103.09,0,0,0,62.52-20.88,104.84,104.84,0,0,0,37-52.91A8,8,0,0,0,233.54,142.23ZM188.9,190.34A88,88,0,0,1,65.66,67.11a89,89,0,0,1,31.4-26A106,106,0,0,0,96,56,104.11,104.11,0,0,0,200,160a106,106,0,0,0,14.92-1.06A89,89,0,0,1,188.9,190.34Z"></path>
+                                    </svg>
+                                </button>
+                                <button class="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 transition-all duration-300 hover:bg-slate-200 hover:text-indigo-600 dark:bg-white/5 dark:hover:bg-lightindigo dark:hover:text-white" x-cloak x-show="$store.app.mode === 'dark'" @click="$store.app.toggleMode('light')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
+                                        <path d="M120,40V16a8,8,0,0,1,16,0V40a8,8,0,0,1-16,0Zm72,88a64,64,0,1,1-64-64A64.07,64.07,0,0,1,192,128Zm-16,0a48,48,0,1,0-48,48A48.05,48.05,0,0,0,176,128ZM58.34,69.66A8,8,0,0,0,69.66,58.34l-16-16A8,8,0,0,0,42.34,53.66Zm0,116.68-16,16a8,8,0,0,0,11.32,11.32l16-16a8,8,0,0,0-11.32-11.32ZM192,72a8,8,0,0,0,5.66-2.34l16-16a8,8,0,0,0-11.32-11.32l-16,16A8,8,0,0,0,192,72Zm5.66,114.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32-11.32ZM48,128a8,8,0,0,0-8-8H16a8,8,0,0,0,0,16H40A8,8,0,0,0,48,128Zm80,80a8,8,0,0,0-8,8v24a8,8,0,0,0,16,0V216A8,8,0,0,0,128,208Zm112-88H216a8,8,0,0,0,0,16h24a8,8,0,0,0,0-16Z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div x-data="{ fullScreen: false }">
+                                <button class="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 transition-all duration-300 hover:bg-slate-200 hover:text-indigo-600 dark:bg-white/5 dark:hover:bg-lightindigo dark:hover:text-white" x-cloak x-bind:class="{ 'hidden': fullScreen, 'block': !fullScreen }" x-on:click="fullScreen = !fullScreen" @click="$store.app.toggleFullScreen()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
+                                        <path d="M216,48V88a8,8,0,0,1-16,0V56H168a8,8,0,0,1,0-16h40A8,8,0,0,1,216,48ZM88,200H56V168a8,8,0,0,0-16,0v40a8,8,0,0,0,8,8H88a8,8,0,0,0,0-16Zm120-40a8,8,0,0,0-8,8v32H168a8,8,0,0,0,0,16h40a8,8,0,0,0,8-8V168A8,8,0,0,0,208,160ZM88,40H48a8,8,0,0,0-8,8V88a8,8,0,0,0,16,0V56H88a8,8,0,0,0,0-16Z"></path>
+                                    </svg>
+                                </button>
+                                <button class="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 transition-all duration-300 hover:bg-slate-200 hover:text-indigo-600 dark:bg-white/5 dark:hover:bg-lightindigo dark:hover:text-white" x-cloak x-bind:class="{ 'block': fullScreen, 'hidden': !fullScreen }" x-on:click="fullScreen = !fullScreen" @click="$store.app.toggleFullScreen()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
+                                        <path d="M152,96V48a8,8,0,0,1,16,0V88h40a8,8,0,0,1,0,16H160A8,8,0,0,1,152,96ZM96,152H48a8,8,0,0,0,0,16H88v40a8,8,0,0,0,16,0V160A8,8,0,0,0,96,152Zm112,0H160a8,8,0,0,0-8,8v48a8,8,0,0,0,16,0V168h40a8,8,0,0,0,0-16ZM96,40a8,8,0,0,0-8,8V88H48a8,8,0,0,0,0,16H96a8,8,0,0,0,8-8V48A8,8,0,0,0,96,40Z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="relative" x-data="dropdown" @click.outside="open = false">
+                                <button class="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 transition-all duration-300 hover:bg-slate-200 hover:text-indigo-600 dark:bg-white/5 dark:hover:bg-lightindigo dark:hover:text-white" @click="toggle()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
+                                        <path d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216ZM48,184c7.7-13.24,16-43.92,16-80a64,64,0,1,1,128,0c0,36.05,8.28,66.73,16,80Z"></path>
+                                    </svg>
+                                </button>
+                                <ul class="absolute right-0 top-[3.25rem] z-10 w-[22rem] min-w-[190px] rounded bg-white text-sm text-slate-400 shadow-3xl dark:bg-[#323249] dark:shadow-black/10" x-cloak x-show="open" x-transition x-transition.duration.300ms>
+                                    <li class="border-b border-slate-200 dark:border-gray-100/10">
+                                        <div class="flex items-center justify-between gap-2 px-5 py-4">
+                                            <h5 class="text-base font-medium">Notification</h5>
+                                            <a href="javascript:;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
+                                                    <path d="M228.44,89.34l-96-64a8,8,0,0,0-8.88,0l-96,64A8,8,0,0,0,24,96V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V96A8,8,0,0,0,228.44,89.34ZM128,41.61l81.91,54.61-67,47.78H113.11l-67-47.78ZM40,200V111.53l65.9,47a8,8,0,0,0,4.65,1.49h34.9a8,8,0,0,0,4.65-1.49l65.9-47V200Z"></path>
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    </li>
+                                    <li class="relative max-h-96 overflow-auto">
+                                        <ul class="flex flex-col divide-y divide-slate-200 dark:divide-gray-100/10">
+                                            <li class="group relative p-4 transition-all duration-300 hover:bg-slate-100 dark:hover:bg-black/10" x-show="showElement" x-data="{ showElement: true }" x-transition x-transition.duration.300ms>
+                                                <div class="flex">
+                                                    <div class="me-4 flex-shrink-0">
+                                                        <img class="h-9 w-9 rounded-full object-cover" src="../static/images/avatar-1.png" alt="image" />
+                                                    </div>
+                                                    <div class="flex-grow text-[15px]">
+                                                        <h6 class="mb-1 font-medium text-slate-600 dark:text-indigo-300">Congratulation Lettie 🎉</h6>
+                                                        <p class>Won the monthly best seller gold badge</p>
+                                                        <small class="text-xs text-slate-400">1h ago</small>
+                                                    </div>
+                                                    <div class="flex flex-shrink-0 flex-col gap-3 text-center">
+                                                        <a href="" class="text-slate-600 transition-all duration-300">
+                                                            <div class="mx-auto h-2 w-2 rounded-full bg-indigo-600"></div>
+                                                        </a>
+                                                        <a href="" x-on:click="showElement = false" class="invisible text-slate-400 transition-all duration-300 group-hover:visible">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentcolor" viewbox="0 0 256 256">
+                                                                <path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path>
+                                                            </svg>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="group relative p-4 transition-all duration-300 hover:bg-slate-100 dark:hover:bg-black/10" x-show="showElement" x-data="{ showElement: true }" x-transition x-transition.duration.300ms>
+                                                <div class="flex">
+                                                    <div class="me-4 flex-shrink-0">
+                                                        <img class="h-9 w-9 rounded-full object-cover" src="../static/images/avatar-2.png" alt="image" />
+                                                    </div>
+                                                    <div class="flex-grow text-[15px]">
+                                                        <h6 class="mb-1 font-medium text-slate-600 dark:text-indigo-300">New Message</h6>
+                                                        <p class>You have new message from Natalie</p>
+                                                        <small class="text-xs text-slate-400">1h ago</small>
+                                                    </div>
+                                                    <div class="flex flex-shrink-0 flex-col gap-3 text-center">
+                                                        <a href="" class="invisible text-slate-600 transition-all duration-300 group-hover:visible">
+                                                            <div class="mx-auto h-2 w-2 rounded-full bg-slate-400"></div>
+                                                        </a>
+                                                        <a href="" x-on:click="showElement = false" class="invisible text-slate-400 transition-all duration-300 group-hover:visible">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentcolor" viewbox="0 0 256 256">
+                                                                <path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path>
+                                                            </svg>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="group relative p-4 transition-all duration-300 hover:bg-slate-100 dark:hover:bg-black/10" x-show="showElement" x-data="{ showElement: true }" x-transition x-transition.duration.300ms>
+                                                <div class="flex">
+                                                    <div class="me-4 flex-shrink-0">
+                                                        <img class="h-9 w-9 rounded-full object-cover" src="../static/images/avatar-3.png" alt="image" />
+                                                    </div>
+                                                    <div class="flex-grow text-[15px]">
+                                                        <h6 class="mb-1 font-medium text-slate-600 dark:text-indigo-300">Whoo! You have new order</h6>
+                                                        <p class>ACME Inc. made new order $1,154</p>
+                                                        <small class="text-xs text-slate-400">1 day ago</small>
+                                                    </div>
+                                                    <div class="flex flex-shrink-0 flex-col gap-3 text-center">
+                                                        <a href="" class="invisible text-slate-600 transition-all duration-300 group-hover:visible">
+                                                            <div class="mx-auto h-2 w-2 rounded-full bg-slate-400"></div>
+                                                        </a>
+                                                        <a href="" x-on:click="showElement = false" class="invisible text-slate-400 transition-all duration-300 group-hover:visible">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentcolor" viewbox="0 0 256 256">
+                                                                <path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path>
+                                                            </svg>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="group relative p-4 transition-all duration-300 hover:bg-slate-100 dark:hover:bg-black/10" x-show="showElement" x-data="{ showElement: true }" x-transition x-transition.duration.300ms>
+                                                <div class="flex">
+                                                    <div class="me-4 flex-shrink-0">
+                                                        <img class="h-9 w-9 rounded-full object-cover" src="../static/images/avatar-5.png" alt="image" />
+                                                    </div>
+                                                    <div class="flex-grow text-[15px]">
+                                                        <h6 class="mb-1 font-medium text-slate-600 dark:text-indigo-300">Application has been approved</h6>
+                                                        <p class>Your ABC project application has been approved.</p>
+                                                        <small class="text-xs text-slate-400">2 days ago</small>
+                                                    </div>
+                                                    <div class="flex flex-shrink-0 flex-col gap-3 text-center">
+                                                        <a href="" class="text-slate-600 transition-all duration-300">
+                                                            <div class="mx-auto h-2 w-2 rounded-full bg-indigo-600"></div>
+                                                        </a>
+                                                        <a href="" x-on:click="showElement = false" class="invisible text-slate-400 transition-all duration-300 group-hover:visible">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentcolor" viewbox="0 0 256 256">
+                                                                <path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path>
+                                                            </svg>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="group relative p-4 transition-all duration-300 hover:bg-slate-100 dark:hover:bg-black/10" x-show="showElement" x-data="{ showElement: true }" x-transition x-transition.duration.300ms>
+                                                <div class="flex">
+                                                    <div class="me-4 flex-shrink-0">
+                                                        <img class="h-9 w-9 rounded-full object-cover" src="../static/images/avatar-6.png" alt="image" />
+                                                    </div>
+                                                    <div class="flex-grow text-[15px]">
+                                                        <h6 class="mb-1 font-medium text-slate-600 dark:text-indigo-300">Send connection request</h6>
+                                                        <p class>Peter sent you connection request</p>
+                                                        <small class="text-xs text-slate-400">4 days ago</small>
+                                                    </div>
+                                                    <div class="flex flex-shrink-0 flex-col gap-3 text-center">
+                                                        <a href="" class="invisible text-slate-600 transition-all duration-300 group-hover:visible">
+                                                            <div class="mx-auto h-2 w-2 rounded-full bg-slate-400"></div>
+                                                        </a>
+                                                        <a href="" x-on:click="showElement = false" class="invisible text-slate-400 transition-all duration-300 group-hover:visible">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentcolor" viewbox="0 0 256 256">
+                                                                <path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path>
+                                                            </svg>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="border-t border-slate-200 dark:border-gray-100/10">
+                                        <a href="javascript:;" class="flex h-10 w-full items-center justify-center p-2 text-indigo-600 transition-all duration-300 hover:bg-indigo-600 hover:text-white dark:text-indigo-300 dark:hover:text-white"> View all notifications</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="relative" x-data="dropdown" @click.outside="open = false">
+                                <button type="button" class="flex items-center gap-1.5 xl:gap-0" @click="toggle()">
+                                    <img class="h-9 w-9 rounded-full xl:mr-2" src="../static/images/avatar-1.png" alt="Header Avatar" />
+                                    <span class="hidden xl:block">Jinsu H.</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="ms-1 hidden md:block" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
+                                        <path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"></path>
+                                    </svg>
+                                </button>
+                                <ul class="absolute right-0 top-11 z-10 mt-2 w-40 min-w-[190px] rounded bg-white p-2 text-sm text-slate-400 shadow-md dark:bg-[#323249]" x-cloak x-show="open" x-transition x-transition.duration.300ms>
+                                    <li>
+                                        <div class="flex items-center !p-1">
+                                            <div class="flex-none">
+                                                <img class="h-7 w-7 rounded-full object-cover" src="../static/images/avatar-1.png" alt="image" />
+                                            </div>
+                                            <div class="pl-2">
+                                                <h4 class="text-sm font-medium leading-none">Jinsu H.</h4>
+                                                <a class="text-xs hover:text-black dark:hover:text-indigo-300" href="javaScript:;"><span class="__cf_email__" data-cfemail="5b313235282e331b3e233a362b373e75383436">[email&#160;protected]</span></a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="my-1 block h-px bg-slate-200 dark:bg-gray-100/10"></li>
+                                    <li>
+                                        <a href="javaScript:;" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="16" height="16" fill="currentcolor" viewbox="0 0 256 256">
+                                                <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"></path>
+                                            </svg>
+                                            个人中心
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="javaScript:;" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="16" height="16" fill="currentcolor" viewbox="0 0 256 256">
+                                                <path d="M216,48H40A16,16,0,0,0,24,64V224a15.85,15.85,0,0,0,9.24,14.5A16.13,16.13,0,0,0,40,240a15.89,15.89,0,0,0,10.25-3.78.69.69,0,0,0,.13-.11L82.5,208H216a16,16,0,0,0,16-16V64A16,16,0,0,0,216,48ZM40,224h0ZM216,192H82.5a16,16,0,0,0-10.3,3.75l-.12.11L40,224V64H216ZM88,112a8,8,0,0,1,8-8h64a8,8,0,0,1,0,16H96A8,8,0,0,1,88,112Zm0,32a8,8,0,0,1,8-8h64a8,8,0,1,1,0,16H96A8,8,0,0,1,88,144Z"></path>
+                                            </svg>
+                                            Messages
+                                        </a>
+                                    </li>
+
+                                    <li class="my-1 block h-px bg-slate-200 dark:bg-gray-100/10"></li>
+                                    <li>
+                                        <a href="{{url_for('user.logout')}}" class="flex items-center px-4 py-2 text-red-600 transition-all duration-300 hover:bg-slate-100 dark:hover:bg-black/10">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="16" height="16" fill="currentcolor" viewbox="0 0 256 256">
+                                                <path d="M112,216a8,8,0,0,1-8,8H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32h56a8,8,0,0,1,0,16H48V208h56A8,8,0,0,1,112,216Zm109.66-93.66-40-40a8,8,0,0,0-11.32,11.32L196.69,120H104a8,8,0,0,0,0,16h92.69l-26.35,26.34a8,8,0,0,0,11.32,11.32l40-40A8,8,0,0,0,221.66,122.34Z"></path>
+                                            </svg>
+                                            退出登录
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="min-h-[calc(100vh-152px)]">
+                    <h2 class="mb-6 text-lg font-medium text-slate-600 dark:text-white">Email</h2>
+                    <div class="grid grid-cols-1 gap-6" x-data="email">
+                        <div x-data="{activeTab:'inbox'}" class="flex flex-wrap overflow-hidden rounded-lg shadow-[0_2px_6px_0_rgba(67,89,113,.12)] relative dark:shadow-black/10">
+                            <div class="absolute w-64 z-20 flex-none overflow-hidden border-r border-gray-300 dark:border-white/10 bg-white transition-all duration-300 dark:bg-lightblue -left-64 xl:static" :class="isShowChatMenu && '!left-0'">
+                                <div class="p-4">
+                                    <button @click="toggle" class="btn w-full justify-center border-indigo-600 bg-indigo-600 text-white hover:border-indigo-700 hover:bg-indigo-700">New Message</button>
+                                </div>
+
+                                <div class="h-[calc(100vh-276px)] py-2 overflow-auto">
+                                    <div class="px-4 mb-4">
+                                        <button type="button" @click="activeTab = 'inbox'" :class="activeTab === 'inbox' ? 'bg-indigo-50 dark:bg-white/10 dark:text-white text-indigo-500 font-semibold' : 'bg-transparent hover:bg-indigo-50 dark:hover:bg-white/10 dark:hover:text-white hover:text-indigo-500'" class="flex items-center gap-2 w-full p-2 rounded-md transition-all duration-300">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewbox="0 0 256 256">
+                                                <path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z"></path>
+                                            </svg>
+                                            <p class="text-[15px]">Index</p>
+                                            <span class="ms-auto bg-indigo-600 text-white text-xs py-[2px] px-1.5 rounded-md">24</span>
+                                        </button>
+                                        <button type="button" @click="activeTab = 'sent'" :class="activeTab === 'sent' ? 'bg-indigo-50 dark:bg-white/10 dark:text-white text-indigo-500 font-semibold' : 'bg-transparent hover:bg-indigo-50 dark:hover:bg-white/10 dark:hover:text-white hover:text-indigo-500'" class="flex items-center gap-2 w-full p-2 rounded-md transition-all duration-300">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewbox="0 0 256 256">
+                                                <path d="M227.32,28.68a16,16,0,0,0-15.66-4.08l-.15,0L19.57,82.84a16,16,0,0,0-2.42,29.84l85.62,40.55,40.55,85.62A15.86,15.86,0,0,0,157.74,248q.69,0,1.38-.06a15.88,15.88,0,0,0,14-11.51l58.2-191.94c0-.05,0-.1,0-.15A16,16,0,0,0,227.32,28.68ZM157.83,231.85l-.05.14L118.42,148.9l47.24-47.25a8,8,0,0,0-11.31-11.31L107.1,137.58,24,98.22l.14,0L216,40Z"></path>
+                                            </svg>
+                                            <p class="text-[15px]">Sent</p>
+                                        </button>
+                                        <button type="button" @click="activeTab = 'draft'" :class="activeTab === 'draft' ? 'bg-indigo-50 dark:bg-white/10 dark:text-white text-indigo-500 font-semibold' : 'bg-transparent hover:bg-indigo-50 dark:hover:bg-white/10 dark:hover:text-white hover:text-indigo-500'" class="flex items-center gap-2 w-full p-2 rounded-md transition-all duration-300">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewbox="0 0 256 256">
+                                                <path d="M229.66,58.34l-32-32a8,8,0,0,0-11.32,0l-96,96A8,8,0,0,0,88,128v32a8,8,0,0,0,8,8h32a8,8,0,0,0,5.66-2.34l96-96A8,8,0,0,0,229.66,58.34ZM124.69,152H104V131.31l64-64L188.69,88ZM200,76.69,179.31,56,192,43.31,212.69,64ZM224,120v88a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32h88a8,8,0,0,1,0,16H48V208H208V120a8,8,0,0,1,16,0Z"></path>
+                                            </svg>
+                                            <p class="text-[15px]">Draft</p>
+                                            <span class="ms-auto bg-yellow-500 text-white text-xs py-[2px] px-1.5 rounded-md">2</span>
+                                        </button>
+                                        <button type="button" @click="activeTab = 'starred'" :class="activeTab === 'starred' ? 'bg-indigo-50 dark:bg-white/10 dark:text-white text-indigo-500 font-semibold' : 'bg-transparent hover:bg-indigo-50 dark:hover:bg-white/10 dark:hover:text-white hover:text-indigo-500'" class="flex items-center gap-2 w-full p-2 rounded-md transition-all duration-300">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewbox="0 0 256 256">
+                                                <path d="M239.2,97.29a16,16,0,0,0-13.81-11L166,81.17,142.72,25.81h0a15.95,15.95,0,0,0-29.44,0L90.07,81.17,30.61,86.32a16,16,0,0,0-9.11,28.06L66.61,153.8,53.09,212.34a16,16,0,0,0,23.84,17.34l51-31,51.11,31a16,16,0,0,0,23.84-17.34l-13.51-58.6,45.1-39.36A16,16,0,0,0,239.2,97.29Zm-15.22,5-45.1,39.36a16,16,0,0,0-5.08,15.71L187.35,216v0l-51.07-31a15.9,15.9,0,0,0-16.54,0l-51,31h0L82.2,157.4a16,16,0,0,0-5.08-15.71L32,102.35a.37.37,0,0,1,0-.09l59.44-5.14a16,16,0,0,0,13.35-9.75L128,32.08l23.2,55.29a16,16,0,0,0,13.35,9.75L224,102.26S224,102.32,224,102.33Z"></path>
+                                            </svg>
+                                            <p class="text-[15px]">Starred</p>
+                                        </button>
+                                        <button type="button" @click="activeTab = 'spam'" :class="activeTab === 'spam' ? 'bg-indigo-50 dark:bg-white/10 dark:text-white text-indigo-500 font-semibold' : 'bg-transparent hover:bg-indigo-50 dark:hover:bg-white/10 dark:hover:text-white hover:text-indigo-500'" class="flex items-center gap-2 w-full p-2 rounded-md transition-all duration-300">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewbox="0 0 256 256">
+                                                <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm-8-80V80a8,8,0,0,1,16,0v56a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,172Z"></path>
+                                            </svg>
+                                            <p class="text-[15px]">Spam</p>
+                                            <span class="ms-auto bg-red-600 text-white text-xs py-[2px] px-1.5 rounded-md">24</span>
+                                        </button>
+                                        <button type="button" @click="activeTab = 'trash'" :class="activeTab === 'trash' ? 'bg-indigo-50 dark:bg-white/10 dark:text-white text-indigo-500 font-semibold' : 'bg-transparent hover:bg-indigo-50 dark:hover:bg-white/10 dark:hover:text-white hover:text-indigo-500'" class="flex items-center gap-2 w-full p-2 rounded-md transition-all duration-300">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewbox="0 0 256 256">
+                                                <path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"></path>
+                                            </svg>
+                                            <p class="text-[15px]">Trash</p>
+                                        </button>
+                                    </div>
+                                    <div class="px-4">
+                                        <p class="text-sm text-gray-400">LABELS</p>
+                                        <button type="button" class="flex items-center gap-2 w-full p-2">
+                                            <span class="w-2.5 h-2.5 bg-green-600 rounded-full"></span>
+                                            <p class="text-[15px]/snug">Work</p>
+                                        </button>
+                                        <button type="button" class="flex items-center gap-2 w-full p-2">
+                                            <span class="w-2.5 h-2.5 bg-indigo-600 rounded-full"></span>
+                                            <p class="text-[15px]/snug">Company</p>
+                                        </button>
+                                        <button type="button" class="flex items-center gap-2 w-full p-2">
+                                            <span class="w-2.5 h-2.5 bg-yellow-500 rounded-full"></span>
+                                            <p class="text-[15px]/snug">Important</p>
+                                        </button>
+                                        <button type="button" class="flex items-center gap-2 w-full p-2">
+                                            <span class="w-2.5 h-2.5 bg-red-600 rounded-full"></span>
+                                            <p class="text-[15px]/snug">Private</p>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-black/60 z-[5] w-full h-full absolute rounded-md hidden" :class="isShowChatMenu && '!block xl:!hidden'" @click="isShowChatMenu = !isShowChatMenu"></div>
+                            <div class="flex-1 relative">
+                                <div>
+                                    <div class="flex items-center justify-between gap-3 border-b border-gray-300 dark:border-white/10 bg-white px-4 py-2 dark:bg-lightblue">
+                                        <button type="button" class="xl:hidden" @click="isShowChatMenu = !isShowChatMenu">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentcolor" viewbox="0 0 256 256">
+                                                <path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z"></path>
+                                            </svg>
+                                        </button>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewbox="0 0 256 256">
+                                            <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
+                                        </svg>
+                                        <input type="text" class="form-input border-0 focus:shadow-none pl-0" placeholder="Search mail" />
+                                        <button type="button" class="transition-all duration-300 hover:text-indigo-600 hidden sm:block">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewbox="0 0 256 256">
+                                                <path d="M88,104H40a8,8,0,0,1-8-8V48a8,8,0,0,1,16,0V71.85C63.47,54.4,90.61,32,128,32c42.82,0,68.58,25.27,69.66,26.34a8,8,0,0,1-11.3,11.34C186.09,69.41,163.92,48,128,48,93,48,67.77,72.65,55.44,88H88a8,8,0,0,1,0,16Zm128,48H168a8,8,0,0,0,0,16h32.56C188.23,183.35,163,208,128,208c-35.92,0-58.09-21.41-58.36-21.68a8,8,0,0,0-11.3,11.34C59.42,198.73,85.18,224,128,224c37.39,0,64.53-22.4,80-39.85V208a8,8,0,0,0,16,0V160A8,8,0,0,0,216,152Z"></path>
+                                            </svg>
+                                        </button>
+                                        <div class="relative" x-data="dropdown" @click.outside="open = false">
+                                            <button class="flex items-center justify-center" @click="toggle()">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
+                                                    <path d="M112,60a16,16,0,1,1,16,16A16,16,0,0,1,112,60Zm16,52a16,16,0,1,0,16,16A16,16,0,0,0,128,112Zm0,68a16,16,0,1,0,16,16A16,16,0,0,0,128,180Z"></path>
+                                                </svg>
+                                            </button>
+                                            <ul x-cloak x-show="open" x-transition class="absolute right-0 z-10 mt-1 w-full min-w-[190px] whitespace-nowrap rounded bg-white py-2 text-[15px] text-slate-400 shadow-md dark:bg-[#323249]">
+                                                <li><a href="javascript:;" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">Mark as read</a></li>
+                                                <li><a href="javascript:;" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">Mark as unread</a></li>
+                                                <li><a href="javascript:;" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">Delete</a></li>
+                                                <li><a href="javascript:;" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">Archive</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-between gap-3 border-b border-gray-300 dark:border-white/10 bg-white p-4 dark:bg-lightblue">
+                                        <div class="flex items-center gap-4">
+                                            <input type="checkbox" class="form-checkbox text-indigo-600" />
+                                            <button type="button">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewbox="0 0 256 256">
+                                                    <path d="M216,48H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM192,208H64V64H192ZM80,24a8,8,0,0,1,8-8h80a8,8,0,0,1,0,16H88A8,8,0,0,1,80,24Z"></path>
+                                                </svg>
+                                            </button>
+                                            <button type="button"></button>
+                                            <button type="button"></button>
+                                            <button type="button"></button>
+                                        </div>
+                                        <div class="flex items-center gap-6">
+                                            <span class="text-[15px] text-gray-400 hidden sm:block">1-10 of 653</span>
+                                            <button type="button" class="text-gray-400">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewbox="0 0 256 256">
+                                                    <path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"></path>
+                                                </svg>
+                                            </button>
+                                            <button type="button">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewbox="0 0 256 256">
+                                                    <path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div x-show="activeTab === 'inbox'" class="h-[calc(100vh-318px)] overflow-auto">
+                                        <ul>
+                                            {% for email in email_history %}
+                                                <li class="p-4 cursor-pointer bg-white dark:bg-lightblue dark:border-white/10 dark:border-t-transparent dark:hover:border-t-white/10 border-b border-gray-300 border-t border-t-transparent hover:border-t-gray-300 hover:-translate-y-[2px] hover:shadow-[0_2px_5px_0_rgba(67,89,113,.15)] transition-all duration-300">
+                                                    <div class="flex items-center gap-4">
+                                                        <input type="checkbox" class="form-checkbox text-indigo-600" />
+                                                        <button type="button" class="flex-none">
+                                                            <form action="{{ url_for('reminder.delete_email_history', email_history_id=email.id) }}" method="post">
+                                                                <input type="submit" value="Delete">
+                                                            </form>
+                                                        </button>
+                                                        <div class="flex flex-wrap items-center gap-x-1">
+                                                            <p class="text-[15px] font-semibold line-clamp-1">{{ email.title }}</p>
+                                                            <p class="text-sm line-clamp-1">{{ email.content }}</p>
+                                                        </div>
+                                                        <div class="sm:flex items-center ml-auto gap-2 hidden">
+                                                            <span class="h-2.5 w-2.5 rounded-full bg-indigo-600"></span>
+                                                            <p class="text-sm whitespace-nowrap">{{ email.sent_at }}</p>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <div x-show="activeTab === 'sent'" class="h-[calc(100vh-318px)] overflow-auto">
+                                        <ul>
+                                            <li @click="selectMail = !selectMail" class="p-4 cursor-pointer bg-white dark:bg-lightblue dark:border-white/10 dark:border-t-transparent dark:hover:border-t-white/10 border-b border-gray-300 border-t border-t-transparent hover:border-t-gray-300 hover:-translate-y-[2px] hover:shadow-[0_2px_5px_0_rgba(67,89,113,.15)] transition-all duration-300">
+                                                <div class="flex items-center gap-4">
+                                                    <input type="checkbox" class="form-checkbox text-indigo-600" />
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="flex-none" width="24" height="24" fill="currentColor" viewbox="0 0 256 256">
+                                                        <path d="M239.2,97.29a16,16,0,0,0-13.81-11L166,81.17,142.72,25.81h0a15.95,15.95,0,0,0-29.44,0L90.07,81.17,30.61,86.32a16,16,0,0,0-9.11,28.06L66.61,153.8,53.09,212.34a16,16,0,0,0,23.84,17.34l51-31,51.11,31a16,16,0,0,0,23.84-17.34l-13.51-58.6,45.1-39.36A16,16,0,0,0,239.2,97.29Zm-15.22,5-45.1,39.36a16,16,0,0,0-5.08,15.71L187.35,216v0l-51.07-31a15.9,15.9,0,0,0-16.54,0l-51,31h0L82.2,157.4a16,16,0,0,0-5.08-15.71L32,102.35a.37.37,0,0,1,0-.09l59.44-5.14a16,16,0,0,0,13.35-9.75L128,32.08l23.2,55.29a16,16,0,0,0,13.35,9.75L224,102.26S224,102.32,224,102.33Z"></path>
+                                                    </svg>
+                                                    <img src="../static/images/avatar-4.png" class="h-8 w-8 flex-none rounded-full object-cover" alt="avatar" />
+                                                    <div class="flex flex-wrap items-center gap-x-1">
+                                                        <p class="text-[15px] font-semibold line-clamp-1">Verification Link</p>
+                                                        <p class="text-sm line-clamp-1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat.</p>
+                                                    </div>
+                                                    <div class="sm:flex items-center ml-auto gap-2 hidden">
+                                                        <span class="h-2.5 w-2.5 rounded-full bg-green-600"></span>
+                                                        <p class="text-sm whitespace-nowrap">12:44 PM</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li @click="selectMail = !selectMail" class="p-4 cursor-pointer bg-white dark:bg-lightblue dark:border-white/10 dark:border-t-transparent dark:hover:border-t-white/10 border-b border-gray-300 border-t border-t-transparent hover:border-t-gray-300 hover:-translate-y-[2px] hover:shadow-[0_2px_5px_0_rgba(67,89,113,.15)] transition-all duration-300">
+                                                <div class="flex items-center gap-4">
+                                                    <input type="checkbox" class="form-checkbox text-indigo-600" />
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="flex-none" width="24" height="24" fill="currentColor" viewbox="0 0 256 256">
+                                                        <path d="M239.2,97.29a16,16,0,0,0-13.81-11L166,81.17,142.72,25.81h0a15.95,15.95,0,0,0-29.44,0L90.07,81.17,30.61,86.32a16,16,0,0,0-9.11,28.06L66.61,153.8,53.09,212.34a16,16,0,0,0,23.84,17.34l51-31,51.11,31a16,16,0,0,0,23.84-17.34l-13.51-58.6,45.1-39.36A16,16,0,0,0,239.2,97.29Zm-15.22,5-45.1,39.36a16,16,0,0,0-5.08,15.71L187.35,216v0l-51.07-31a15.9,15.9,0,0,0-16.54,0l-51,31h0L82.2,157.4a16,16,0,0,0-5.08-15.71L32,102.35a.37.37,0,0,1,0-.09l59.44-5.14a16,16,0,0,0,13.35-9.75L128,32.08l23.2,55.29a16,16,0,0,0,13.35,9.75L224,102.26S224,102.32,224,102.33Z"></path>
+                                                    </svg>
+                                                    <img src="../static/images/avatar-5.png" class="h-8 w-8 flex-none rounded-full object-cover" alt="avatar" />
+                                                    <div class="flex flex-wrap items-center gap-x-1">
+                                                        <p class="text-[15px] font-semibold line-clamp-1">New Updates</p>
+                                                        <p class="text-sm line-clamp-1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat.</p>
+                                                    </div>
+                                                    <div class="sm:flex items-center ml-auto gap-2 hidden">
+                                                        <span class="h-2.5 w-2.5 rounded-full bg-indigo-600"></span>
+                                                        <p class="text-sm whitespace-nowrap">Yesterday</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li @click="selectMail = !selectMail" class="p-4 cursor-pointer bg-white dark:bg-lightblue dark:border-white/10 dark:border-t-transparent dark:hover:border-t-white/10 border-b border-gray-300 border-t border-t-transparent hover:border-t-gray-300 hover:-translate-y-[2px] hover:shadow-[0_2px_5px_0_rgba(67,89,113,.15)] transition-all duration-300">
+                                                <div class="flex items-center gap-4">
+                                                    <input type="checkbox" class="form-checkbox text-indigo-600" />
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="flex-none" width="24" height="24" fill="currentColor" viewbox="0 0 256 256">
+                                                        <path d="M239.2,97.29a16,16,0,0,0-13.81-11L166,81.17,142.72,25.81h0a15.95,15.95,0,0,0-29.44,0L90.07,81.17,30.61,86.32a16,16,0,0,0-9.11,28.06L66.61,153.8,53.09,212.34a16,16,0,0,0,23.84,17.34l51-31,51.11,31a16,16,0,0,0,23.84-17.34l-13.51-58.6,45.1-39.36A16,16,0,0,0,239.2,97.29Zm-15.22,5-45.1,39.36a16,16,0,0,0-5.08,15.71L187.35,216v0l-51.07-31a15.9,15.9,0,0,0-16.54,0l-51,31h0L82.2,157.4a16,16,0,0,0-5.08-15.71L32,102.35a.37.37,0,0,1,0-.09l59.44-5.14a16,16,0,0,0,13.35-9.75L128,32.08l23.2,55.29a16,16,0,0,0,13.35,9.75L224,102.26S224,102.32,224,102.33Z"></path>
+                                                    </svg>
+                                                    <img src="../static/images/avatar-6.png" class="h-8 w-8 flex-none rounded-full object-cover" alt="avatar" />
+                                                    <div class="flex flex-wrap items-center gap-x-1">
+                                                        <p class="text-[15px] font-semibold line-clamp-1">Schedular Alert</p>
+                                                        <p class="text-sm line-clamp-1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat.</p>
+                                                    </div>
+                                                    <div class="sm:flex items-center ml-auto gap-2 hidden">
+                                                        <span class="h-2.5 w-2.5 rounded-full bg-gray-600"></span>
+                                                        <p class="text-sm whitespace-nowrap">Yesterday</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div x-show="activeTab === 'draft'" class="h-[calc(100vh-318px)] overflow-auto">
+                                        <ul>
+                                            <li @click="selectMail = !selectMail" class="p-4 cursor-pointer bg-white dark:bg-lightblue dark:border-white/10 dark:border-t-transparent dark:hover:border-t-white/10 border-b border-gray-300 border-t border-t-transparent hover:border-t-gray-300 hover:-translate-y-[2px] hover:shadow-[0_2px_5px_0_rgba(67,89,113,.15)] transition-all duration-300">
+                                                <div class="flex items-center gap-4">
+                                                    <input type="checkbox" class="form-checkbox text-indigo-600" />
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="flex-none" width="24" height="24" fill="currentColor" viewbox="0 0 256 256">
+                                                        <path d="M239.2,97.29a16,16,0,0,0-13.81-11L166,81.17,142.72,25.81h0a15.95,15.95,0,0,0-29.44,0L90.07,81.17,30.61,86.32a16,16,0,0,0-9.11,28.06L66.61,153.8,53.09,212.34a16,16,0,0,0,23.84,17.34l51-31,51.11,31a16,16,0,0,0,23.84-17.34l-13.51-58.6,45.1-39.36A16,16,0,0,0,239.2,97.29Zm-15.22,5-45.1,39.36a16,16,0,0,0-5.08,15.71L187.35,216v0l-51.07-31a15.9,15.9,0,0,0-16.54,0l-51,31h0L82.2,157.4a16,16,0,0,0-5.08-15.71L32,102.35a.37.37,0,0,1,0-.09l59.44-5.14a16,16,0,0,0,13.35-9.75L128,32.08l23.2,55.29a16,16,0,0,0,13.35,9.75L224,102.26S224,102.32,224,102.33Z"></path>
+                                                    </svg>
+                                                    <img src="../static/images/avatar-8.png" class="h-8 w-8 flex-none rounded-full object-cover" alt="avatar" />
+                                                    <div class="flex flex-wrap items-center gap-x-1">
+                                                        <p class="text-[15px] font-semibold line-clamp-1">Green Illustration</p>
+                                                        <p class="text-sm line-clamp-1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat.</p>
+                                                    </div>
+                                                    <div class="sm:flex items-center ml-auto gap-2 hidden">
+                                                        <span class="h-2.5 w-2.5 rounded-full bg-indigo-600"></span>
+                                                        <p class="text-sm whitespace-nowrap">4 May</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li @click="selectMail = !selectMail" class="p-4 cursor-pointer bg-white dark:bg-lightblue dark:border-white/10 dark:border-t-transparent dark:hover:border-t-white/10 border-b border-gray-300 border-t border-t-transparent hover:border-t-gray-300 hover:-translate-y-[2px] hover:shadow-[0_2px_5px_0_rgba(67,89,113,.15)] transition-all duration-300">
+                                                <div class="flex items-center gap-4">
+                                                    <input type="checkbox" class="form-checkbox text-indigo-600" />
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="flex-none" width="24" height="24" fill="currentColor" viewbox="0 0 256 256">
+                                                        <path d="M239.2,97.29a16,16,0,0,0-13.81-11L166,81.17,142.72,25.81h0a15.95,15.95,0,0,0-29.44,0L90.07,81.17,30.61,86.32a16,16,0,0,0-9.11,28.06L66.61,153.8,53.09,212.34a16,16,0,0,0,23.84,17.34l51-31,51.11,31a16,16,0,0,0,23.84-17.34l-13.51-58.6,45.1-39.36A16,16,0,0,0,239.2,97.29Zm-15.22,5-45.1,39.36a16,16,0,0,0-5.08,15.71L187.35,216v0l-51.07-31a15.9,15.9,0,0,0-16.54,0l-51,31h0L82.2,157.4a16,16,0,0,0-5.08-15.71L32,102.35a.37.37,0,0,1,0-.09l59.44-5.14a16,16,0,0,0,13.35-9.75L128,32.08l23.2,55.29a16,16,0,0,0,13.35,9.75L224,102.26S224,102.32,224,102.33Z"></path>
+                                                    </svg>
+                                                    <img src="../static/images/avatar-9.png" class="h-8 w-8 flex-none rounded-full object-cover" alt="avatar" />
+                                                    <div class="flex flex-wrap items-center gap-x-1">
+                                                        <p class="text-[15px] font-semibold line-clamp-1">50% Discount</p>
+                                                        <p class="text-sm line-clamp-1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat.</p>
+                                                    </div>
+                                                    <div class="sm:flex items-center ml-auto gap-2 hidden">
+                                                        <span class="h-2.5 w-2.5 rounded-full bg-red-600"></span>
+                                                        <p class="text-sm whitespace-nowrap">3 May</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li @click="selectMail = !selectMail" class="p-4 cursor-pointer bg-white dark:bg-lightblue dark:border-white/10 dark:border-t-transparent dark:hover:border-t-white/10 border-b border-gray-300 border-t border-t-transparent hover:border-t-gray-300 hover:-translate-y-[2px] hover:shadow-[0_2px_5px_0_rgba(67,89,113,.15)] transition-all duration-300">
+                                                <div class="flex items-center gap-4">
+                                                    <input type="checkbox" class="form-checkbox text-indigo-600" />
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="flex-none" width="24" height="24" fill="currentColor" viewbox="0 0 256 256">
+                                                        <path d="M239.2,97.29a16,16,0,0,0-13.81-11L166,81.17,142.72,25.81h0a15.95,15.95,0,0,0-29.44,0L90.07,81.17,30.61,86.32a16,16,0,0,0-9.11,28.06L66.61,153.8,53.09,212.34a16,16,0,0,0,23.84,17.34l51-31,51.11,31a16,16,0,0,0,23.84-17.34l-13.51-58.6,45.1-39.36A16,16,0,0,0,239.2,97.29Zm-15.22,5-45.1,39.36a16,16,0,0,0-5.08,15.71L187.35,216v0l-51.07-31a15.9,15.9,0,0,0-16.54,0l-51,31h0L82.2,157.4a16,16,0,0,0-5.08-15.71L32,102.35a.37.37,0,0,1,0-.09l59.44-5.14a16,16,0,0,0,13.35-9.75L128,32.08l23.2,55.29a16,16,0,0,0,13.35,9.75L224,102.26S224,102.32,224,102.33Z"></path>
+                                                    </svg>
+                                                    <img src="../static/images/avatar-10.png" class="h-8 w-8 flex-none rounded-full object-cover" alt="avatar" />
+                                                    <div class="flex flex-wrap items-center gap-x-1">
+                                                        <p class="text-[15px] font-semibold line-clamp-1">eBill</p>
+                                                        <p class="text-sm line-clamp-1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat.</p>
+                                                    </div>
+                                                    <div class="sm:flex items-center ml-auto gap-2 hidden">
+                                                        <span class="h-2.5 w-2.5 rounded-full bg-green-600"></span>
+                                                        <p class="text-sm whitespace-nowrap">2 May</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div x-show="activeTab === 'starred'" class="h-[calc(100vh-318px)] overflow-auto">
+                                        <ul>
+                                            <li @click="selectMail = !selectMail" class="p-4 cursor-pointer bg-white dark:bg-lightblue dark:border-white/10 dark:border-t-transparent dark:hover:border-t-white/10 border-b border-gray-300 border-t border-t-transparent hover:border-t-gray-300 hover:-translate-y-[2px] hover:shadow-[0_2px_5px_0_rgba(67,89,113,.15)] transition-all duration-300">
+                                                <div class="flex items-center gap-4">
+                                                    <input type="checkbox" class="form-checkbox text-indigo-600" />
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="flex-none" width="24" height="24" fill="currentColor" viewbox="0 0 256 256">
+                                                        <path d="M239.2,97.29a16,16,0,0,0-13.81-11L166,81.17,142.72,25.81h0a15.95,15.95,0,0,0-29.44,0L90.07,81.17,30.61,86.32a16,16,0,0,0-9.11,28.06L66.61,153.8,53.09,212.34a16,16,0,0,0,23.84,17.34l51-31,51.11,31a16,16,0,0,0,23.84-17.34l-13.51-58.6,45.1-39.36A16,16,0,0,0,239.2,97.29Zm-15.22,5-45.1,39.36a16,16,0,0,0-5.08,15.71L187.35,216v0l-51.07-31a15.9,15.9,0,0,0-16.54,0l-51,31h0L82.2,157.4a16,16,0,0,0-5.08-15.71L32,102.35a.37.37,0,0,1,0-.09l59.44-5.14a16,16,0,0,0,13.35-9.75L128,32.08l23.2,55.29a16,16,0,0,0,13.35,9.75L224,102.26S224,102.32,224,102.33Z"></path>
+                                                    </svg>
+                                                    <img src="../static/images/avatar-6.png" class="h-8 w-8 flex-none rounded-full object-cover" alt="avatar" />
+                                                    <div class="flex flex-wrap items-center gap-x-1">
+                                                        <p class="text-[15px] font-semibold line-clamp-1">Schedular Alert</p>
+                                                        <p class="text-sm line-clamp-1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat.</p>
+                                                    </div>
+                                                    <div class="sm:flex items-center ml-auto gap-2 hidden">
+                                                        <span class="h-2.5 w-2.5 rounded-full bg-gray-600"></span>
+                                                        <p class="text-sm whitespace-nowrap">Yesterday</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li @click="selectMail = !selectMail" class="p-4 cursor-pointer bg-white dark:bg-lightblue dark:border-white/10 dark:border-t-transparent dark:hover:border-t-white/10 border-b border-gray-300 border-t border-t-transparent hover:border-t-gray-300 hover:-translate-y-[2px] hover:shadow-[0_2px_5px_0_rgba(67,89,113,.15)] transition-all duration-300">
+                                                <div class="flex items-center gap-4">
+                                                    <input type="checkbox" class="form-checkbox text-indigo-600" />
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="flex-none" width="24" height="24" fill="currentColor" viewbox="0 0 256 256">
+                                                        <path d="M239.2,97.29a16,16,0,0,0-13.81-11L166,81.17,142.72,25.81h0a15.95,15.95,0,0,0-29.44,0L90.07,81.17,30.61,86.32a16,16,0,0,0-9.11,28.06L66.61,153.8,53.09,212.34a16,16,0,0,0,23.84,17.34l51-31,51.11,31a16,16,0,0,0,23.84-17.34l-13.51-58.6,45.1-39.36A16,16,0,0,0,239.2,97.29Zm-15.22,5-45.1,39.36a16,16,0,0,0-5.08,15.71L187.35,216v0l-51.07-31a15.9,15.9,0,0,0-16.54,0l-51,31h0L82.2,157.4a16,16,0,0,0-5.08-15.71L32,102.35a.37.37,0,0,1,0-.09l59.44-5.14a16,16,0,0,0,13.35-9.75L128,32.08l23.2,55.29a16,16,0,0,0,13.35,9.75L224,102.26S224,102.32,224,102.33Z"></path>
+                                                    </svg>
+                                                    <img src="../static/images/avatar-7.png" class="h-8 w-8 flex-none rounded-full object-cover" alt="avatar" />
+                                                    <div class="flex flex-wrap items-center gap-x-1">
+                                                        <p class="text-[15px] font-semibold line-clamp-1">Motion UI Kit</p>
+                                                        <p class="text-sm line-clamp-1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat.</p>
+                                                    </div>
+                                                    <div class="sm:flex items-center ml-auto gap-2 hidden">
+                                                        <span class="h-2.5 w-2.5 rounded-full bg-green-600"></span>
+                                                        <p class="text-sm whitespace-nowrap">5 May</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div x-show="activeTab === 'spam'" class="h-[calc(100vh-318px)] overflow-auto">
+                                        <ul>
+                                            <li @click="selectMail = !selectMail" class="p-4 cursor-pointer bg-white dark:bg-lightblue dark:border-white/10 dark:border-t-transparent dark:hover:border-t-white/10 border-b border-gray-300 border-t border-t-transparent hover:border-t-gray-300 hover:-translate-y-[2px] hover:shadow-[0_2px_5px_0_rgba(67,89,113,.15)] transition-all duration-300">
+                                                <div class="flex items-center gap-4">
+                                                    <input type="checkbox" class="form-checkbox text-indigo-600" />
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="flex-none" width="24" height="24" fill="currentColor" viewbox="0 0 256 256">
+                                                        <path d="M239.2,97.29a16,16,0,0,0-13.81-11L166,81.17,142.72,25.81h0a15.95,15.95,0,0,0-29.44,0L90.07,81.17,30.61,86.32a16,16,0,0,0-9.11,28.06L66.61,153.8,53.09,212.34a16,16,0,0,0,23.84,17.34l51-31,51.11,31a16,16,0,0,0,23.84-17.34l-13.51-58.6,45.1-39.36A16,16,0,0,0,239.2,97.29Zm-15.22,5-45.1,39.36a16,16,0,0,0-5.08,15.71L187.35,216v0l-51.07-31a15.9,15.9,0,0,0-16.54,0l-51,31h0L82.2,157.4a16,16,0,0,0-5.08-15.71L32,102.35a.37.37,0,0,1,0-.09l59.44-5.14a16,16,0,0,0,13.35-9.75L128,32.08l23.2,55.29a16,16,0,0,0,13.35,9.75L224,102.26S224,102.32,224,102.33Z"></path>
+                                                    </svg>
+                                                    <img src="../static/images/avatar-2.png" class="h-8 w-8 flex-none rounded-full object-cover" alt="avatar" />
+                                                    <div class="flex flex-wrap items-center gap-x-1">
+                                                        <p class="text-[15px] font-semibold line-clamp-1">Promotion Page</p>
+                                                        <p class="text-sm line-clamp-1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue.</p>
+                                                    </div>
+                                                    <div class="sm:flex items-center ml-auto gap-2 hidden">
+                                                        <span class="h-2.5 w-2.5 rounded-full bg-red-600"></span>
+                                                        <p class="text-sm whitespace-nowrap">08:40 AM</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div x-show="activeTab === 'trash'" class="h-[calc(100vh-318px)] overflow-auto">
+                                        <ul>
+                                            <li class="p-4 cursor-pointer bg-white dark:bg-lightblue dark:border-white/10 dark:border-t-transparent dark:hover:border-t-white/10 border-b border-gray-300 border-t border-t-transparent hover:border-t-gray-300 hover:-translate-y-[2px] hover:shadow-[0_2px_5px_0_rgba(67,89,113,.15)] transition-all duration-300">
+                                                <div class="flex items-center gap-4">
+                                                    <input type="checkbox" class="form-checkbox text-indigo-600" />
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="flex-none" width="24" height="24" fill="currentColor" viewbox="0 0 256 256">
+                                                        <path d="M239.2,97.29a16,16,0,0,0-13.81-11L166,81.17,142.72,25.81h0a15.95,15.95,0,0,0-29.44,0L90.07,81.17,30.61,86.32a16,16,0,0,0-9.11,28.06L66.61,153.8,53.09,212.34a16,16,0,0,0,23.84,17.34l51-31,51.11,31a16,16,0,0,0,23.84-17.34l-13.51-58.6,45.1-39.36A16,16,0,0,0,239.2,97.29Zm-15.22,5-45.1,39.36a16,16,0,0,0-5.08,15.71L187.35,216v0l-51.07-31a15.9,15.9,0,0,0-16.54,0l-51,31h0L82.2,157.4a16,16,0,0,0-5.08-15.71L32,102.35a.37.37,0,0,1,0-.09l59.44-5.14a16,16,0,0,0,13.35-9.75L128,32.08l23.2,55.29a16,16,0,0,0,13.35,9.75L224,102.26S224,102.32,224,102.33Z"></path>
+                                                    </svg>
+                                                    <img src="../static/images/avatar-10.png" class="h-8 w-8 flex-none rounded-full object-cover" alt="avatar" />
+                                                    <div class="flex flex-wrap items-center gap-x-1">
+                                                        <p class="text-[15px] font-semibold line-clamp-1">eBill</p>
+                                                        <p class="text-sm line-clamp-1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat.</p>
+                                                    </div>
+                                                    <div class="sm:flex items-center ml-auto gap-2 hidden">
+                                                        <span class="h-2.5 w-2.5 rounded-full bg-green-600"></span>
+                                                        <p class="text-sm whitespace-nowrap">2 May</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="p-4 cursor-pointer bg-white dark:bg-lightblue dark:border-white/10 dark:border-t-transparent dark:hover:border-t-white/10 border-b border-gray-300 border-t border-t-transparent hover:border-t-gray-300 hover:-translate-y-[2px] hover:shadow-[0_2px_5px_0_rgba(67,89,113,.15)] transition-all duration-300">
+                                                <div class="flex items-center gap-4">
+                                                    <input type="checkbox" class="form-checkbox cursor-pointer text-indigo-600" />
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="flex-none" width="24" height="24" fill="currentColor" viewbox="0 0 256 256">
+                                                        <path d="M239.2,97.29a16,16,0,0,0-13.81-11L166,81.17,142.72,25.81h0a15.95,15.95,0,0,0-29.44,0L90.07,81.17,30.61,86.32a16,16,0,0,0-9.11,28.06L66.61,153.8,53.09,212.34a16,16,0,0,0,23.84,17.34l51-31,51.11,31a16,16,0,0,0,23.84-17.34l-13.51-58.6,45.1-39.36A16,16,0,0,0,239.2,97.29Zm-15.22,5-45.1,39.36a16,16,0,0,0-5.08,15.71L187.35,216v0l-51.07-31a15.9,15.9,0,0,0-16.54,0l-51,31h0L82.2,157.4a16,16,0,0,0-5.08-15.71L32,102.35a.37.37,0,0,1,0-.09l59.44-5.14a16,16,0,0,0,13.35-9.75L128,32.08l23.2,55.29a16,16,0,0,0,13.35,9.75L224,102.26S224,102.32,224,102.33Z"></path>
+                                                    </svg>
+                                                    <img src="../static/images/avatar-11.png" class="h-8 w-8 flex-none rounded-full object-cover" alt="avatar" />
+                                                    <div class="flex flex-wrap items-center gap-x-1">
+                                                        <p class="text-[15px] font-semibold line-clamp-1">Id labore ex et quam laborum</p>
+                                                        <p class="text-sm line-clamp-1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat.</p>
+                                                    </div>
+                                                    <div class="sm:flex items-center ml-auto gap-2 hidden">
+                                                        <span class="h-2.5 w-2.5 rounded-full bg-indigo-600"></span>
+                                                        <p class="text-sm whitespace-nowrap">1 May</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="bg-lightwhite dark:bg-lightblue absolute left-full top-0 transition-all duration-300" :class="selectMail && '!left-0'">
+                                    <div class="flex items-center justify-between gap-3 border-b border-gray-300 dark:border-white/10 bg-white p-4 dark:bg-lightblue">
+                                        <button type="button" @click="selectMail = !selectMail">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewbox="0 0 256 256">
+                                                <path d="M232,200a8,8,0,0,1-16,0,88.1,88.1,0,0,0-88-88H51.31l34.35,34.34a8,8,0,0,1-11.32,11.32l-48-48a8,8,0,0,1,0-11.32l48-48A8,8,0,0,1,85.66,61.66L51.31,96H128A104.11,104.11,0,0,1,232,200Z"></path>
+                                            </svg>
+                                        </button>
+                                        <p class="flex-grow text-[15px] font-medium line-clamp-1">Focused impactful open issues</p>
+                                        <button type="button">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewbox="0 0 256 256">
+                                                <path d="M214.67,72H200V40a8,8,0,0,0-8-8H64a8,8,0,0,0-8,8V72H41.33C27.36,72,16,82.77,16,96v80a8,8,0,0,0,8,8H56v32a8,8,0,0,0,8,8H192a8,8,0,0,0,8-8V184h32a8,8,0,0,0,8-8V96C240,82.77,228.64,72,214.67,72ZM72,48H184V72H72ZM184,208H72V160H184Zm40-40H200V152a8,8,0,0,0-8-8H64a8,8,0,0,0-8,8v16H32V96c0-4.41,4.19-8,9.33-8H214.67c5.14,0,9.33,3.59,9.33,8Zm-24-52a12,12,0,1,1-12-12A12,12,0,0,1,200,116Z"></path>
+                                            </svg>
+                                        </button>
+                                        <div class="relative" x-data="dropdown" @click.outside="open = false">
+                                            <button class="flex items-center justify-center" @click="toggle()">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
+                                                    <path d="M112,60a16,16,0,1,1,16,16A16,16,0,0,1,112,60Zm16,52a16,16,0,1,0,16,16A16,16,0,0,0,128,112Zm0,68a16,16,0,1,0,16,16A16,16,0,0,0,128,180Z"></path>
+                                                </svg>
+                                            </button>
+                                            <ul x-cloak x-show="open" x-transition class="absolute right-0 z-10 mt-1 w-full min-w-[190px] whitespace-nowrap rounded bg-white py-2 text-[15px] text-slate-400 shadow-md dark:bg-[#323249]">
+                                                <li><a href="javascript:;" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">Mark as unread</a></li>
+                                                <li><a href="javascript:;" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">Add star</a></li>
+                                                <li><a href="javascript:;" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">Create Event</a></li>
+                                                <li><a href="javascript:;" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">Mute</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="p-4 h-[calc(100vh-260px)] overflow-auto">
+                                        <div class="bg-white dark:bg-white/5 p-6 rounded-md shadow-[0_2px_6px_0_rgba(67,89,113,.12)]">
+                                            <div class="flex flex-wrap gap-3 items-center justify-between mb-6">
+                                                <div class="flex items-center gap-4">
+                                                    <img src="../static/images/avatar-2.png" class="h-9 w-9 flex-none rounded-full object-cover" alt="avatar" />
+                                                    <div>
+                                                        <h6 class="text-[15px] font-medium leading-[22px] line-clamp-1">Natali Craig</h6>
+                                                        <p class="text-sm text-gray-400 line-clamp-1"><a href="https://webonzer.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e28c8396838e8bcc8190838b85a2878f838b8ecc818d8f">[email&#160;protected]</a></p>
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center gap-2 ml-auto">
+                                                    <p class="text-sm text-gray-400">June 20th 2020, 08:30 AM</p>
+                                                    <button type="button" class="p-1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewbox="0 0 256 256">
+                                                            <path d="M239.2,97.29a16,16,0,0,0-13.81-11L166,81.17,142.72,25.81h0a15.95,15.95,0,0,0-29.44,0L90.07,81.17,30.61,86.32a16,16,0,0,0-9.11,28.06L66.61,153.8,53.09,212.34a16,16,0,0,0,23.84,17.34l51-31,51.11,31a16,16,0,0,0,23.84-17.34l-13.51-58.6,45.1-39.36A16,16,0,0,0,239.2,97.29Zm-15.22,5-45.1,39.36a16,16,0,0,0-5.08,15.71L187.35,216v0l-51.07-31a15.9,15.9,0,0,0-16.54,0l-51,31h0L82.2,157.4a16,16,0,0,0-5.08-15.71L32,102.35a.37.37,0,0,1,0-.09l59.44-5.14a16,16,0,0,0,13.35-9.75L128,32.08l23.2,55.29a16,16,0,0,0,13.35,9.75L224,102.26S224,102.32,224,102.33Z"></path>
+                                                        </svg>
+                                                    </button>
+                                                    <button type="button" class="p-1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewbox="0 0 256 256">
+                                                            <path d="M248,128a56.06,56.06,0,0,1-56,56H48a40,40,0,0,1,0-80H192a24,24,0,0,1,0,48H80a8,8,0,0,1,0-16H192a8,8,0,0,0,0-16H48a24,24,0,0,0,0,48H192a40,40,0,0,0,0-80H80a8,8,0,0,1,0-16H192A56.06,56.06,0,0,1,248,128Z"></path>
+                                                        </svg>
+                                                    </button>
+                                                    <div class="relative" x-data="dropdown" @click.outside="open = false">
+                                                        <button class="flex items-center justify-center" @click="toggle()">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
+                                                                <path d="M112,60a16,16,0,1,1,16,16A16,16,0,0,1,112,60Zm16,52a16,16,0,1,0,16,16A16,16,0,0,0,128,112Zm0,68a16,16,0,1,0,16,16A16,16,0,0,0,128,180Z"></path>
+                                                            </svg>
+                                                        </button>
+                                                        <ul x-cloak x-show="open" x-transition class="absolute right-0 z-10 mt-1 w-full min-w-[190px] whitespace-nowrap rounded bg-white py-2 text-[15px] text-slate-400 shadow-md dark:bg-[#323249]">
+                                                            <li><a href="javascript:;" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">Reply</a></li>
+                                                            <li><a href="javascript:;" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">Forward</a></li>
+                                                            <li><a href="javascript:;" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">Report</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="text-[15px] space-y-4">
+                                                <p class="font-bold">Greetings!</p>
+                                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                                                <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance.</p>
+                                                <div>
+                                                    <p>Sincerely yours,</p>
+                                                    <p class="font-bold">Design Team</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <footer class="flex flex-wrap items-center justify-center gap-3 px-4 pb-4 sm:justify-between">
+                    <p class="text-sm text-slate-400">&copy; 2023 made with By <a href="http://www.bootstrapmb.com">Reserved</a></p>
+                    <ul class="flex items-center text-sm text-slate-400">
+                        <li><a href="" class="px-2 py-1 transition-all duration-300 hover:text-black">About</a></li>
+                        <li><a href="" class="px-2 py-1 transition-all duration-300 hover:text-black">Support</a></li>
+                        <li><a href="" class="px-2 py-1 transition-all duration-300 hover:text-black">Contact Us</a></li>
+                    </ul>
+                </footer>
+
+            </div>
+
+        </div>
+
+        <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-slate-800/50" :class="open && '!block'">
+            <div class="flex min-h-screen items-end justify-end px-4" @click.self="open = false">
+                <div x-show="open" x-transition x-transition.duration.300 class="relative my-8 w-full max-w-[50rem] rounded-lg border-0 bg-white p-0 shadow-[0_2px_20px_0_rgba(67,89,113,.45)] dark:bg-lightblue dark:shadow-black/40">
+                    <div class="flex items-center justify-between bg-gray-100 rounded-t-lg p-4">
+                        <h5 class="text-lg font-semibold">编辑邮件</h5>
+                        <button type="button" class="-mt-5 -translate-y-5 translate-x-8 rounded-lg bg-white p-2 shadow-[0_0.125rem_0.25rem_rgba(161,172,184,.4)] transition-all duration-300 hover:-translate-y-4 hover:translate-x-7 dark:bg-lightblue dark:shadow-black/40" @click="toggle">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewbox="0 0 256 256">
+                                <path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <form action="/reminder/send_email" method="post">
+                    <div class="p-0">
+                        <div class="border-b border-gray-300 px-4 py-2 flex items-center gap-3">
+                            <p class="text-xs font-medium text-gray-400">To:</p>
+                            <div class="flex-1">
+                                <ul class="flex flex-wrap items-center gap-2">
+                                    <li class="flex items-center px-2 bg-indigo-100 gap-1 py-1 rounded-md text-indigo-600">
+                                        <img src="../static/images/avatar-4.png" class="h-6 w-6 flex-none rounded-full object-cover" alt="avatar" />
+                                        <p class="text-[13px]">后台人员</p>
+                                        <button type="button">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewbox="0 0 256 256">
+                                                <path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path>
+                                            </svg>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="border-b border-gray-300 px-4 py-2 flex items-center gap-3">
+                            <label for="title" class="text-xs font-medium text-gray-400">Title:</label>
+                            <input type="text" id="title" name="title" required class="form-input border-0 focus:shadow-none pl-0">
+                        </div>
+
+                        <div class="border-b border-gray-300 px-4 py-2 flex items-center gap-3">
+                            <textarea id="content" class="form-textarea pl-0 border-0 focus:shadow-none" placeholder="Messages..." rows="3" name="content" required ></textarea>
+                        </div>
+
+                        <div class="flex items-center justify-between gap-2 p-4">
+                            <div class="flex items-center gap-2">
+                                <input type="submit" class="btn border-indigo-600 bg-indigo-600 text-white hover:border-indigo-700 hover:bg-indigo-700" value="Send Email">
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="relative" x-data="dropdown" @click.outside="open = false">
+                                    <button class="flex items-center justify-center" @click="toggle()">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
+                                            <path d="M112,60a16,16,0,1,1,16,16A16,16,0,0,1,112,60Zm16,52a16,16,0,1,0,16,16A16,16,0,0,0,128,112Zm0,68a16,16,0,1,0,16,16A16,16,0,0,0,128,180Z"></path>
+                                        </svg>
+                                    </button>
+                                    <ul x-cloak x-show="open" x-transition class="absolute right-0 bottom-0 z-10 mt-1 w-full min-w-[190px] whitespace-nowrap rounded bg-white py-2 text-[15px] text-slate-400 shadow-md dark:bg-[#323249]">
+                                        <li><a href="javascript:;" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">Add Label</a></li>
+                                        <li><a href="javascript:;" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">Plain text mode</a></li>
+                                        <li><a href="javascript:;" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">Print</a></li>
+                                    </ul>
+                                </div>
+                                <button type="button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewbox="0 0 256 256">
+                                        <path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <script src="{{ url_for('static', filename='js/alpine-collaspe.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/alpine-persist.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/alpine.min.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/perfect-scrollbar.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+    <script>
+        document.addEventListener("alpine:init", () => {
+            Alpine.data("email", () => ({
+                isShowChatMenu: false,
+                selectMail: false,
+            }));
+        });
+    </script>
+<script>
+    function goBack() {
+  window.history.back();
+}
+</script>
 </body>
 </html>

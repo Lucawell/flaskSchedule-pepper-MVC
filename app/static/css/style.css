@@ -2925,7 +2925,7 @@ table.table-striped tbody tr:nth-child(even) {
 
 .bg-gray-100 {
     --tw-bg-opacity: 1;
-    background-color: rgb(243 244 246/var(--tw-bg-opacity))
+    background-color:  #e6e6e6
 }
 
 .bg-gray-200 {

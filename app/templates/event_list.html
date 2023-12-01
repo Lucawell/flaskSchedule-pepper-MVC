@@ -8,8 +8,8 @@
     <meta name="author" content="SRBThemes" />
     <meta name="viewport" content="width=1280, user-scalable=no" />
 
-    <title>Metrik - Tailwind CSS Admin & Dashboard Template</title>
-
+    <title>老年人健康管理系统</title>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
 
 
 {#    <link rel="stylesheet" type="text/css" media="screen" href="../static/css/perfect-scrollbar.min.css" />#}
@@ -29,92 +29,40 @@
 
             <nav class="sidebar">
                 <div class="brand-logo">
-                    <a href="index.html" class="flex items-center">
+                    <a href="/" class="flex items-center">
                         <div class="block min-h-[1px] shrink-0 grow-0 overflow-hidden leading-none">
-                            <svg width="42" height="35" viewbox="0 0 42 35" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M36.5688 1.64243L36.3926 1.42819C36.0453 1.00627 35.6135 0.661729 35.125 0.416736C34.6365 0.171743 34.1022 0.031728 33.5563 0.00568853C33.0105 -0.0203509 32.4652 0.0681618 31.9556 0.265543C31.446 0.462925 30.9834 0.764794 30.5975 1.15173L30.0792 1.66662L28.1544 3.59484C30.1725 2.98666 31.9867 3.41861 32.9923 4.51403C33.0959 4.64188 33.2031 4.76628 33.3033 4.90105C35.075 7.27331 36.1518 10.0917 36.4132 13.041C36.6746 15.9902 36.1103 18.9541 34.7835 21.601C33.4567 24.2479 31.4197 26.4735 28.9003 28.0288C26.3809 29.5841 23.4784 30.4079 20.5176 30.4079C17.5568 30.4079 14.6543 29.5841 12.1349 28.0288C9.61545 26.4735 7.57842 24.2479 6.25161 21.601C4.92481 18.9541 4.36057 15.9902 4.622 13.041C4.88342 10.0917 5.9602 7.27331 7.7319 4.90105C7.83211 4.76628 7.94268 4.63843 8.04635 4.50712C9.08303 3.41861 10.8765 2.98666 12.8842 3.59484L10.9594 1.66662L10.4687 1.15173C10.0833 0.764958 9.62133 0.463068 9.11235 0.265448C8.60336 0.067829 8.05868 -0.0211498 7.51327 0.00423323C6.96786 0.0296162 6.43379 0.168796 5.94537 0.412834C5.45694 0.656872 5.02494 1.00037 4.67715 1.42127L4.49745 1.64243C2.08193 4.6628 0.568539 8.30397 0.131521 12.1467C-0.305497 15.9894 0.351646 19.8774 2.02727 23.363C3.70289 26.8487 6.32885 29.7902 9.60282 31.849C12.8768 33.9077 16.6657 35 20.5331 35C24.4006 35 28.1895 33.9077 31.4634 31.849C34.7374 29.7902 37.3634 26.8487 39.039 23.363C40.7146 19.8774 41.3718 15.9894 40.9347 12.1467C40.4977 8.30397 38.9843 4.6628 36.5688 1.64243Z" fill="url(#paint0_linear_39_54)" />
-                                <path d="M31.3439 13.661C31.3439 11.9609 30.8118 11.5151 31.3716 9.65253C31.3716 9.65253 30.5975 10.4197 30.5975 10.4162L29.9617 11.059C29.7683 11.2605 29.6275 11.5064 29.5516 11.7752C29.4757 12.0439 29.467 12.3272 29.5263 12.6001C29.6473 13.2043 29.7086 13.8189 29.7094 14.4351C29.7097 15.7187 29.4407 16.9882 28.9196 18.1613C28.3985 19.3345 27.6371 20.3852 26.6845 21.2457C25.7319 22.1061 24.6093 22.757 23.3893 23.1564C22.1694 23.5558 20.8792 23.6947 19.6022 23.5642C18.3252 23.4337 17.0897 23.0367 15.9758 22.3988C14.8618 21.761 13.8941 20.8964 13.1352 19.8611C12.3763 18.8258 11.8431 17.6427 11.5701 16.3884C11.2971 15.1341 11.2904 13.8365 11.5503 12.5794C11.6101 12.313 11.6022 12.0359 11.5274 11.7733C11.4525 11.5107 11.3131 11.2711 11.1218 11.0762L10.4687 10.437L9.69812 9.66635C10.2545 11.5289 9.6981 11.9747 9.72575 13.6748C9.70847 13.9306 9.69812 14.1897 9.69812 14.4523C9.74884 17.2925 10.9127 19.9991 12.9391 21.9897C14.9655 23.9802 17.6926 25.0956 20.5331 25.0956C23.3737 25.0956 26.1007 23.9802 28.1271 21.9897C30.1536 19.9991 31.3174 17.2925 31.3681 14.4523C31.3681 14.1897 31.3681 13.9306 31.337 13.6748L31.3439 13.661Z" fill="#7B3AED" />
-                                <path d="M31.3232 6.88801C30.2658 7.54457 29.1739 7.77609 28.4482 7.04696C28.2685 6.85345 28.0819 6.6634 27.8849 6.48371C27.5153 6.14767 27.0304 5.96699 26.531 5.97922C26.0316 5.99145 25.5561 6.19564 25.2034 6.54937L21.8031 9.94967C21.0255 10.7551 20.5738 11.8199 20.5349 12.9388C20.496 11.8199 20.0442 10.7551 19.2667 9.94967L15.8733 6.55282C15.5204 6.19808 15.0442 5.99326 14.544 5.98102C14.0438 5.96879 13.5581 6.1501 13.1883 6.48716C12.9913 6.66685 12.8047 6.85691 12.625 7.05388C11.8959 7.78301 10.8039 7.55149 9.74652 6.89493L11.3326 8.48104L11.4363 8.58471L12.6458 9.7907L16.8409 13.9893C18.4304 15.5823 20.0546 17.4068 20.5349 19.3523C21.0152 17.4068 22.6393 15.5823 24.2324 13.9893L28.4378 9.78034L28.6728 9.54536L29.744 8.47413L31.3232 6.88801Z" fill="url(#paint1_linear_39_54)" />
-                                <defs>
-                                    <lineargradient id="paint0_linear_39_54" x1="38.0882" y1="9.72784e-08" x2="6.86275" y2="30.8824" gradientunits="userSpaceOnUse">
-                                        <stop stop-color="#7B3AED" />
-                                        <stop offset="1" stop-color="#4F46E5" />
-                                    </lineargradient>
-                                    <lineargradient id="paint1_linear_39_54" x1="36.0294" y1="-0.686275" x2="5.49023" y2="29.1667" gradientunits="userSpaceOnUse">
-                                        <stop stop-color="#7B3AED" />
-                                        <stop offset="1" stop-color="#4F46E5" />
-                                    </lineargradient>
-                                </defs>
-                            </svg>
+                            <img src="{{ url_for('static', filename='images/robot2.png') }}" width="42" height="35" viewbox="0 0 42 35" fill="none" xmlns="http://www.w3.org/2000/svg">
                         </div>
-                        <p class="ml-2 shrink-0 text-2xl font-bold -tracking-[0.5px] text-slate-600 opacity-100 transition-opacity duration-1000 dark:text-indigo-100">Metrik</p>
-                    </a>
-                    <a href="javascript:;" @click="$store.app.toggleSidebar()" class="sidebar-toggle">
-                        <svg class="align-middle text-white transition-all duration-300" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" fill="currentcolor">
-                            <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path>
-                        </svg>
+                        <p class="ml-2 shrink-0 text-2xl font-bold -tracking-[0.5px] text-slate-600 opacity-100 transition-opacity duration-1000 dark:text-indigo-100">健康管理系统</p>
                     </a>
                 </div>
 
-                <ul class="perfect-scrollbar menu-sidebar py-1" x-data="{ activeMenu: 'contacts' }">
-                    <li class="menu-item" :class="{'active' : activeMenu === 'dashboard'}">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle" @click="activeMenu === 'dashboard' ? activeMenu = null : activeMenu = 'dashboard'">
+                <ul class="perfect-scrollbar menu-sidebar py-1" x-data="{ activeMenu: 'dashboard' }">
+                    <li class="menu-item" :class="{'active' : activeMenu === 'chat'}">
+                        <a href="/" class="menu-link" >
                             <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
                                 <path d="M240,208H224V115.55a16,16,0,0,0-5.17-11.78l-80-75.48a1.14,1.14,0,0,1-.11-.11,16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208H16a8,8,0,0,0,0,16H240a8,8,0,0,0,0-16ZM48,115.55l.11-.1L128,40l79.9,75.43.11.1V208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48ZM144,208H112V160h32Z"></path>
                             </svg>
-                            <p>Dashboards</p>
+                            <p>主页</p>
                         </a>
-                        <ul class="menu-sub" x-cloak x-show="activeMenu === 'dashboard'" x-collapse>
-                            <li class="menu-item">
-                                <a href="index.html" class="menu-link">
-                                    <p>Analytics</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="finance.html" class="menu-link">
-                                    <p>Finance</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="ecommerce.html" class="menu-link">
-                                    <p>eCommerce</p>
-                                </a>
-                            </li>
-                        </ul>
                     </li>
                     <li class="menu-title">
-                        <span>Apps & Page</span>
-                    </li>
-                    <li class="menu-item" :class="{'active' : activeMenu === 'chat'}">
-                        <a href="chats.html" class="menu-link" @click="activeMenu === 'chat' ? activeMenu = null : activeMenu = 'chat'">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
-                                <path d="M216,80H184V48a16,16,0,0,0-16-16H40A16,16,0,0,0,24,48V176a8,8,0,0,0,13,6.22L72,154V184a16,16,0,0,0,16,16h93.59L219,230.22a8,8,0,0,0,5,1.78,8,8,0,0,0,8-8V96A16,16,0,0,0,216,80ZM66.55,137.78,40,159.25V48H168v88H71.58A8,8,0,0,0,66.55,137.78ZM216,207.25l-26.55-21.47a8,8,0,0,0-5-1.78H88V152h80a16,16,0,0,0,16-16V96h32Z"></path>
-                            </svg>
-                            <p>Chat</p>
-                        </a>
+                        <span>功能列表</span>
                     </li>
                     <li class="menu-item" :class="{'active' : activeMenu === 'email'}">
-                        <a href="email.html" class="menu-link" @click="activeMenu === 'email' ? activeMenu = null : activeMenu = 'email'">
+                        <a href="{{ url_for('reminder.show_email_history') }}" class="menu-link" >
                             <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
                                 <path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z"></path>
                             </svg>
-                            <p>Email</p>
+                            <p>邮件</p>
                         </a>
                     </li>
                     <li class="menu-item" :class="{'active' : activeMenu === 'contacts'}">
-                        <a href="contacts.html" class="menu-link" @click="activeMenu === 'contacts' ? activeMenu = null : activeMenu = 'contacts'">
+                        <a href="{{ url_for('event.show_event') }}" class="menu-link" >
                             <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
                                 <path d="M128,64a40,40,0,1,0,40,40A40,40,0,0,0,128,64Zm0,64a24,24,0,1,1,24-24A24,24,0,0,1,128,128Zm0-112a88.1,88.1,0,0,0-88,88c0,31.4,14.51,64.68,42,96.25a254.19,254.19,0,0,0,41.45,38.3,8,8,0,0,0,9.18,0A254.19,254.19,0,0,0,174,200.25c27.45-31.57,42-64.85,42-96.25A88.1,88.1,0,0,0,128,16Zm0,206c-16.53-13-72-60.75-72-118a72,72,0,0,1,144,0C200,161.23,144.53,209,128,222Z"></path>
                             </svg>
-                            <p>日程列表</p>
-                        </a>
-                    </li>
-                    <li class="menu-item" :class="{'active' : activeMenu === 'notes'}">
-                        <a href="notes.html" class="menu-link" @click="activeMenu === 'notes' ? activeMenu = null : activeMenu = 'notes'">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
-                                <path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Zm-32-80a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,136Zm0,32a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,168Z"></path>
-                            </svg>
-                            <p>Notes</p>
+                            <p>日程管理</p>
                         </a>
                     </li>
                     <li class="menu-item" :class="{'active' : activeMenu === 'invoice'}">
@@ -122,408 +70,21 @@
                             <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
                                 <path d="M184,112a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16h64A8,8,0,0,1,184,112Zm-8,24H112a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16Zm48-88V208a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32H208A16,16,0,0,1,224,48ZM48,208H72V48H48Zm160,0V48H88V208H208Z"></path>
                             </svg>
-                            <p>Invoice</p>
-                        </a>
-                        <ul class="menu-sub" x-cloak x-show="activeMenu === 'invoice'" x-collapse>
-                            <li class="menu-item">
-                                <a href="list.html" class="menu-link">
-                                    <p>List</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="preview.html" class="menu-link">
-                                    <p>Preview</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="add.html" class="menu-link">
-                                    <p>Add</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="edit.html" class="menu-link">
-                                    <p>Edit</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-title">
-                        <span>Components</span>
-                    </li>
-                    <li class="menu-item" :class="{'active' : activeMenu === 'cards'}">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle" @click="activeMenu === 'cards' ? activeMenu = null : activeMenu = 'cards'">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
-                                <path d="M184,72H40A16,16,0,0,0,24,88V200a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16V88A16,16,0,0,0,184,72Zm0,128H40V88H184V200ZM232,56V176a8,8,0,0,1-16,0V56H64a8,8,0,0,1,0-16H216A16,16,0,0,1,232,56Z"></path>
-                            </svg>
-                            <p>Cards</p>
-                        </a>
-                        <ul class="menu-sub" x-cloak x-show="activeMenu === 'cards'" x-collapse>
-                            <li class="menu-item">
-                                <a href="basic.html" class="menu-link">
-                                    <p>Basic</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="advance.html" class="menu-link">
-                                    <p>Advance</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="statistics.html" class="menu-link">
-                                    <p>Statistics</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="analytics.html" class="menu-link">
-                                    <p>Analytics</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item" :class="{'active' : activeMenu === 'userinterface'}">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle" @click="activeMenu === 'userinterface' ? activeMenu = null : activeMenu = 'userinterface'">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
-                                <path d="M224,48H32A16,16,0,0,0,16,64V88a16,16,0,0,0,16,16v88a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V104a16,16,0,0,0,16-16V64A16,16,0,0,0,224,48ZM208,192H48V104H208ZM224,88H32V64H224V88ZM96,136a8,8,0,0,1,8-8h48a8,8,0,0,1,0,16H104A8,8,0,0,1,96,136Z"></path>
-                            </svg>
-                            <p>User Interface</p>
-                        </a>
-                        <ul class="menu-sub" x-cloak x-show="activeMenu === 'userinterface'" x-collapse>
-                            <li class="menu-item">
-                                <a href="accordion.html" class="menu-link">
-                                    <p>Accordion</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="alerts.html" class="menu-link">
-                                    <p>Alerts</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="badges.html" class="menu-link">
-                                    <p>Badges</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="button.html" class="menu-link">
-                                    <p>Buttons</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="carousel.html" class="menu-link">
-                                    <p>Carousel</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="collapse.html" class="menu-link">
-                                    <p>Collapse</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="dropdowns.html" class="menu-link">
-                                    <p>Dropdowns</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="list-groups.html" class="menu-link">
-                                    <p>List groups</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="modals.html" class="menu-link">
-                                    <p>Modals</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="pagination.html" class="menu-link">
-                                    <p>Pagination</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="breadcrumbs.html" class="menu-link">
-                                    <p>Breadcrumbs</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="progress-bars.html" class="menu-link">
-                                    <p>Progress bars</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="spinners.html" class="menu-link">
-                                    <p>Spinners</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="tabs.html" class="menu-link">
-                                    <p>Tabs</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="toasts.html" class="menu-link">
-                                    <p>Toasts</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="tooltips.html" class="menu-link">
-                                    <p>Tooltips</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item" :class="{'active' : activeMenu === 'exrendedui'}">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle" @click="activeMenu === 'exrendedui' ? activeMenu = null : activeMenu = 'exrendedui'">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
-                                <path d="M216,32H88a8,8,0,0,0-8,8V80H40a8,8,0,0,0-8,8V216a8,8,0,0,0,8,8H168a8,8,0,0,0,8-8V176h40a8,8,0,0,0,8-8V40A8,8,0,0,0,216,32ZM160,208H48V96H160Zm48-48H176V88a8,8,0,0,0-8-8H96V48H208Z"></path>
-                            </svg>
-                            <p>Exrended UI</p>
-                        </a>
-                        <ul class="menu-sub" x-cloak x-show="activeMenu === 'exrendedui'" x-collapse>
-                            <li class="menu-item">
-                                <a href="avatar.html" class="menu-link">
-                                    <p>Avatar</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="dragandDrop.html" class="menu-link">
-                                    <p>Drag & Drop</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="sweetAlert2.html" class="menu-link">
-                                    <p>SweetAlert2</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="text-divider.html" class="menu-link">
-                                    <p>Text Divider</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="timeline.html" class="menu-link">
-                                    <p>Timeline</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="treeview.html" class="menu-link">
-                                    <p>Treeview</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item" :class="{'active' : activeMenu === 'icons'}">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle" @click="activeMenu === 'icons' ? activeMenu = null : activeMenu = 'icons'">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
-                                <path d="M243.84,76.19a12.08,12.08,0,0,0-13.34-1.7l-50.21,25L138.37,29.86a12.11,12.11,0,0,0-20.74,0L75.71,99.52l-50.19-25A12.11,12.11,0,0,0,8.62,89.12l37,113.36a8,8,0,0,0,11.68,4.4C57.55,206.73,83.12,192,128,192s70.45,14.73,70.68,14.87a8,8,0,0,0,11.71-4.39l37-113.33A12.06,12.06,0,0,0,243.84,76.19ZM198,188.83C186,183.74,162.08,176,128,176s-58,7.74-70,12.83L26.71,93l45.07,22.47a12.17,12.17,0,0,0,15.78-4.59L128,43.66l40.44,67.2a12.18,12.18,0,0,0,15.77,4.59L229.29,93Zm-22.13-32a8,8,0,0,1-7.87,6.61,8.36,8.36,0,0,1-1.4-.12,228.2,228.2,0,0,0-77.22,0,8,8,0,0,1-2.78-15.76,244.42,244.42,0,0,1,82.78,0A8,8,0,0,1,175.88,156.8Z"></path>
-                            </svg>
-                            <p>Icons</p>
-                        </a>
-                        <ul class="menu-sub" x-cloak x-show="activeMenu === 'icons'" x-collapse>
-                            <li class="menu-item">
-                                <a href="phosphor-icons.html" class="menu-link">
-                                    <p>Phosphor icons</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-title">
-                        <span>Forms & Tables</span>
-                    </li>
-                    <li class="menu-item" :class="{'active' : activeMenu === 'formelements'}">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle" @click="activeMenu === 'formelements' ? activeMenu = null : activeMenu = 'formelements'">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
-                                <path d="M88,96a8,8,0,0,1,8-8h64a8,8,0,0,1,0,16H96A8,8,0,0,1,88,96Zm8,40h64a8,8,0,0,0,0-16H96a8,8,0,0,0,0,16Zm32,16H96a8,8,0,0,0,0,16h32a8,8,0,0,0,0-16ZM224,48V156.69A15.86,15.86,0,0,1,219.31,168L168,219.31A15.86,15.86,0,0,1,156.69,224H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32H208A16,16,0,0,1,224,48ZM48,208H152V160a8,8,0,0,1,8-8h48V48H48Zm120-40v28.7L196.69,168Z"></path>
-                            </svg>
-                            <p>Form Elements</p>
-                        </a>
-                        <ul class="menu-sub" x-cloak x-show="activeMenu === 'formelements'" x-collapse>
-                            <li class="menu-item">
-                                <a href="basic-inputs.html" class="menu-link">
-                                    <p>Basic Inputs</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="input-groups.html" class="menu-link">
-                                    <p>Input groups</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="custom-options.html" class="menu-link">
-                                    <p>Custom Options</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="editors.html" class="menu-link">
-                                    <p>Editors</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="file-upload.html" class="menu-link">
-                                    <p>File upload</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="pickers.html" class="menu-link">
-                                    <p>Pickers</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="checkbox.html" class="menu-link">
-                                    <p>Checkbox</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="radio.html" class="menu-link">
-                                    <p>Radio</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="switches.html" class="menu-link">
-                                    <p>Switches</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="extras.html" class="menu-link">
-                                    <p>Extras</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="vertical-layouts.html" class="menu-link">
-                                    <p>Vertical Layouts</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="horizontal-layouts.html" class="menu-link">
-                                    <p>Horizontal Layouts</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item" :class="{'active' : activeMenu === 'formwizard'}">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle" @click="activeMenu === 'formwizard' ? activeMenu = null : activeMenu = 'formwizard'">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
-                                <path d="M88,96a8,8,0,0,1,8-8h64a8,8,0,0,1,0,16H96A8,8,0,0,1,88,96Zm8,40h64a8,8,0,0,0,0-16H96a8,8,0,0,0,0,16Zm32,16H96a8,8,0,0,0,0,16h32a8,8,0,0,0,0-16ZM224,48V156.69A15.86,15.86,0,0,1,219.31,168L168,219.31A15.86,15.86,0,0,1,156.69,224H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32H208A16,16,0,0,1,224,48ZM48,208H152V160a8,8,0,0,1,8-8h48V48H48Zm120-40v28.7L196.69,168Z"></path>
-                            </svg>
-                            <p>Form Wizard</p>
-                        </a>
-                        <ul class="menu-sub" x-cloak x-show="activeMenu === 'formwizard'" x-collapse>
-                            <li class="menu-item">
-                                <a href="numbered.html" class="menu-link">
-                                    <p>Numbered</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="icons.html" class="menu-link">
-                                    <p>Icons</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item" :class="{'active' : activeMenu === 'formvalidation'}">
-                        <a href="form-validation.html" class="menu-link" @click="activeMenu === 'formvalidation' ? activeMenu = null : activeMenu = 'formvalidation'">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
-                                <path d="M168,152a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,152Zm-8-40H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16Zm56-64V216a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V48A16,16,0,0,1,56,32H92.26a47.92,47.92,0,0,1,71.48,0H200A16,16,0,0,1,216,48ZM96,64h64a32,32,0,0,0-64,0ZM200,48H173.25A47.93,47.93,0,0,1,176,64v8a8,8,0,0,1-8,8H88a8,8,0,0,1-8-8V64a47.93,47.93,0,0,1,2.75-16H56V216H200Z"></path>
-                            </svg>
-                            <p>Form Validation</p>
+                            <p>娱乐</p>
                         </a>
                     </li>
-                    <li class="menu-item" :class="{'active' : activeMenu === 'tables'}">
-                        <a href="tables.html" class="menu-link" @click="activeMenu === 'tables' ? activeMenu = null : activeMenu = 'tables'">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
-                                <path d="M216,48H40A16,16,0,0,0,24,64V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V64A16,16,0,0,0,216,48ZM104,144V112h48v32Zm48,16v32H104V160ZM40,112H88v32H40Zm64-16V64h48V96Zm64,16h48v32H168Zm48-16H168V64h48ZM88,64V96H40V64ZM40,160H88v32H40Zm176,32H168V160h48v32Z"></path>
-                            </svg>
-                            <p>Tables</p>
-                        </a>
-                    </li>
-                    <li class="menu-item" :class="{'active' : activeMenu === 'datatables'}">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle" @click="activeMenu === 'datatables' ? activeMenu = null : activeMenu = 'datatables'">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
-                                <path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM40,112H80v32H40Zm56,0H216v32H96ZM216,64V96H40V64ZM40,160H80v32H40Zm176,32H96V160H216v32Z"></path>
-                            </svg>
-                            <p>Datatables</p>
-                        </a>
-                        <ul class="menu-sub" x-cloak x-show="activeMenu === 'datatables'" x-collapse>
+                    <ul class="menu-sub" x-cloak x-show="activeMenu === 'invoice'" x-collapse>
                             <li class="menu-item">
-                                <a href="dt-Basic.html" class="menu-link">
-                                    <p>Basic</p>
+                                <a href="https://poki.com/zh/html5" class="menu-link">
+                                    <p>在线H5游戏</p>
                                 </a>
                             </li>
                             <li class="menu-item">
-                                <a href="dt-advanced.html" class="menu-link">
-                                    <p>Advanced</p>
+                                <a href="https://y.qq.com/" class="menu-link">
+                                    <p>QQ音乐</p>
                                 </a>
                             </li>
-                            <li class="menu-item">
-                                <a href="dt-extensions.html" class="menu-link">
-                                    <p>Extensions</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-title">
-                        <span>User & Pages</span>
-                    </li>
-                    <li class="menu-item" :class="{'active' : activeMenu === 'authentication'}">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle" @click="activeMenu === 'authentication' ? activeMenu = null : activeMenu = 'authentication'">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
-                                <path d="M208,80H96V56a32,32,0,0,1,32-32c15.37,0,29.2,11,32.16,25.59a8,8,0,0,0,15.68-3.18C171.32,24.15,151.2,8,128,8A48.05,48.05,0,0,0,80,56V80H48A16,16,0,0,0,32,96V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V96A16,16,0,0,0,208,80ZM48,128H208v16H48Zm0,32H208v16H48ZM208,96v16H48V96Zm0,112H48V192H208v16Z"></path>
-                            </svg>
-                            <p>Authentication</p>
-                        </a>
-                        <ul class="menu-sub" x-cloak x-show="activeMenu === 'authentication'" x-collapse>
-                            <li class="menu-item">
-                                <a href="login.html" target="_blank" class="menu-link">
-                                    <p>Login</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="register.html" target="_blank" class="menu-link">
-                                    <p>Register</p>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="forgot-password.html" target="_blank" class="menu-link">
-                                    <p>Forgot Password</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-title">
-                        <span>Charts & Maps</span>
-                    </li>
-                    <li class="menu-item" :class="{'active' : activeMenu === 'Charts'}">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle" @click="activeMenu === 'Charts' ? activeMenu = null : activeMenu = 'Charts'">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
-                                <path d="M232,208a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V48a8,8,0,0,1,16,0v94.37L90.73,98a8,8,0,0,1,10.07-.38l58.81,44.11L218.73,90a8,8,0,1,1,10.54,12l-64,56a8,8,0,0,1-10.07.38L96.39,114.29,40,163.63V200H224A8,8,0,0,1,232,208Z"></path>
-                            </svg>
-                            <p>Charts</p>
-                        </a>
-                        <ul class="menu-sub" x-cloak x-show="activeMenu === 'Charts'" x-collapse>
-                            <li class="menu-item">
-                                <a href="apex.html" class="menu-link">
-                                    <p>Apex</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item" :class="{'active' : activeMenu === 'maps'}">
-                        <a href="leaflet-maps.html" class="menu-link" @click="activeMenu === 'maps' ? activeMenu = null : activeMenu = 'maps'">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
-                                <path d="M228.92,49.69a8,8,0,0,0-6.86-1.45L160.93,63.52,99.58,32.84a8,8,0,0,0-5.52-.6l-64,16A8,8,0,0,0,24,56V200a8,8,0,0,0,9.94,7.76l61.13-15.28,61.35,30.68A8.15,8.15,0,0,0,160,224a8,8,0,0,0,1.94-.24l64-16A8,8,0,0,0,232,200V56A8,8,0,0,0,228.92,49.69ZM104,52.94l48,24V203.06l-48-24ZM40,62.25l48-12v127.5l-48,12Zm176,131.5-48,12V78.25l48-12Z"></path>
-                            </svg>
-                            <p>Leaflet Maps</p>
-                        </a>
-                    </li>
-                    <li class="menu-title">
-                        <span>Misc</span>
-                    </li>
-                    <li class="menu-item" :class="{'active' : activeMenu === 'documentation'}">
-                        <a href="javascript:;" class="menu-link" @click="activeMenu === 'documentation' ? activeMenu = null : activeMenu = 'documentation'">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
-                                <path d="M168,128a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,128Zm-8,24H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16ZM216,48V200a32,32,0,0,1-32,32H72a32,32,0,0,1-32-32V48A16,16,0,0,1,56,32H72V24a8,8,0,0,1,16,0v8h32V24a8,8,0,0,1,16,0v8h32V24a8,8,0,0,1,16,0v8h16A16,16,0,0,1,216,48Zm-16,0H184v8a8,8,0,0,1-16,0V48H136v8a8,8,0,0,1-16,0V48H88v8a8,8,0,0,1-16,0V48H56V200a16,16,0,0,0,16,16H184a16,16,0,0,0,16-16Z"></path>
-                            </svg>
-                            <p>Documentation</p>
-                        </a>
-                    </li>
+                    </ul>
                 </ul>
             </nav>
 
@@ -540,19 +101,7 @@
 
                     <div class="flex flex-1 items-center justify-between gap-2">
                         <div class="flex items-center gap-2">
-                            <div class="hidden md:block">
-                                <nav aria-label="breadcrumb" class="w-full px-2 py-1 text-sm">
-                                    <ol class="flex space-x-2">
-                                        <li class="flex items-center">
-                                            <a href="javaScript:;" class="flex items-center text-slate-600/50 hover:text-indigo-600 dark:text-indigo-300 dark:hover:text-white">Jinsu</a>
-                                        </li>
-                                        <li class="flex items-center space-x-1">
-                                            <span class="text-slate-600/50 dark:text-indigo-300">/</span>
-                                            <a href="javaScript:;" class="flex items-center px-2 text-indigo-600 dark:text-white">Contacts</a>
-                                        </li>
-                                    </ol>
-                                </nav>
-                            </div>
+                            <button onclick="goBack()">返回</button>
                             <div class="relative hidden sm:block">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-2 top-2 text-slate-300" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
                                     <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
@@ -752,15 +301,7 @@
                                             <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="16" height="16" fill="currentcolor" viewbox="0 0 256 256">
                                                 <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"></path>
                                             </svg>
-                                            Profile
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javaScript:;" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="16" height="16" fill="currentcolor" viewbox="0 0 256 256">
-                                                <path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm109.94-52.79a8,8,0,0,0-3.89-5.4l-29.83-17-.12-33.62a8,8,0,0,0-2.83-6.08,111.91,111.91,0,0,0-36.72-20.67,8,8,0,0,0-6.46.59L128,41.85,97.88,25a8,8,0,0,0-6.47-.6A112.1,112.1,0,0,0,54.73,45.15a8,8,0,0,0-2.83,6.07l-.15,33.65-29.83,17a8,8,0,0,0-3.89,5.4,106.47,106.47,0,0,0,0,41.56,8,8,0,0,0,3.89,5.4l29.83,17,.12,33.62a8,8,0,0,0,2.83,6.08,111.91,111.91,0,0,0,36.72,20.67,8,8,0,0,0,6.46-.59L128,214.15,158.12,231a7.91,7.91,0,0,0,3.9,1,8.09,8.09,0,0,0,2.57-.42,112.1,112.1,0,0,0,36.68-20.73,8,8,0,0,0,2.83-6.07l.15-33.65,29.83-17a8,8,0,0,0,3.89-5.4A106.47,106.47,0,0,0,237.94,107.21Zm-15,34.91-28.57,16.25a8,8,0,0,0-3,3c-.58,1-1.19,2.06-1.81,3.06a7.94,7.94,0,0,0-1.22,4.21l-.15,32.25a95.89,95.89,0,0,1-25.37,14.3L134,199.13a8,8,0,0,0-3.91-1h-.19c-1.21,0-2.43,0-3.64,0a8.08,8.08,0,0,0-4.1,1l-28.84,16.1A96,96,0,0,1,67.88,201l-.11-32.2a8,8,0,0,0-1.22-4.22c-.62-1-1.23-2-1.8-3.06a8.09,8.09,0,0,0-3-3.06l-28.6-16.29a90.49,90.49,0,0,1,0-28.26L61.67,97.63a8,8,0,0,0,3-3c.58-1,1.19-2.06,1.81-3.06a7.94,7.94,0,0,0,1.22-4.21l.15-32.25a95.89,95.89,0,0,1,25.37-14.3L122,56.87a8,8,0,0,0,4.1,1c1.21,0,2.43,0,3.64,0a8.08,8.08,0,0,0,4.1-1l28.84-16.1A96,96,0,0,1,188.12,55l.11,32.2a8,8,0,0,0,1.22,4.22c.62,1,1.23,2,1.8,3.06a8.09,8.09,0,0,0,3,3.06l28.6,16.29A90.49,90.49,0,0,1,222.9,142.12Z"></path>
-                                            </svg>
-                                            Settings
+                                            个人中心
                                         </a>
                                     </li>
                                     <li>
@@ -771,21 +312,14 @@
                                             Messages
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="javaScript:;" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="16" height="16" fill="currentcolor" viewbox="0 0 256 256">
-                                                <path d="M244.8,150.4a8,8,0,0,1-11.2-1.6A51.6,51.6,0,0,0,192,128a8,8,0,0,1-7.37-4.89,8,8,0,0,1,0-6.22A8,8,0,0,1,192,112a24,24,0,1,0-23.24-30,8,8,0,1,1-15.5-4A40,40,0,1,1,219,117.51a67.94,67.94,0,0,1,27.43,21.68A8,8,0,0,1,244.8,150.4ZM190.92,212a8,8,0,1,1-13.84,8,57,57,0,0,0-98.16,0,8,8,0,1,1-13.84-8,72.06,72.06,0,0,1,33.74-29.92,48,48,0,1,1,58.36,0A72.06,72.06,0,0,1,190.92,212ZM128,176a32,32,0,1,0-32-32A32,32,0,0,0,128,176ZM72,120a8,8,0,0,0-8-8A24,24,0,1,1,87.24,82a8,8,0,1,0,15.5-4A40,40,0,1,0,37,117.51,67.94,67.94,0,0,0,9.6,139.19a8,8,0,1,0,12.8,9.61A51.6,51.6,0,0,1,64,128,8,8,0,0,0,72,120Z"></path>
-                                            </svg>
-                                            Support
-                                        </a>
-                                    </li>
+
                                     <li class="my-1 block h-px bg-slate-200 dark:bg-gray-100/10"></li>
                                     <li>
-                                        <a href="javaScript:;" class="flex items-center px-4 py-2 text-red-600 transition-all duration-300 hover:bg-slate-100 dark:hover:bg-black/10">
+                                        <a href="{{url_for('user.logout')}}" class="flex items-center px-4 py-2 text-red-600 transition-all duration-300 hover:bg-slate-100 dark:hover:bg-black/10">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="16" height="16" fill="currentcolor" viewbox="0 0 256 256">
                                                 <path d="M112,216a8,8,0,0,1-8,8H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32h56a8,8,0,0,1,0,16H48V208h56A8,8,0,0,1,112,216Zm109.66-93.66-40-40a8,8,0,0,0-11.32,11.32L196.69,120H104a8,8,0,0,0,0,16h92.69l-26.35,26.34a8,8,0,0,0,11.32,11.32l40-40A8,8,0,0,0,221.66,122.34Z"></path>
                                             </svg>
-                                            Sign Out
+                                            退出登录
                                         </a>
                                     </li>
                                 </ul>
@@ -797,7 +331,6 @@
                 <div class="min-h-[calc(100vh-152px)] text-[15px]">
                     <h2 class="mb-6 text-lg font-medium text-slate-600 dark:text-white">日程列表</h2>
                     <div class="flex flex-wrap gap-3 items-center justify-end mb-3">
-
                         <a href="{{ url_for('event.create_event') }}">
                             <button class="btn items-center gap-2 border-indigo-600 bg-indigo-600 text-white hover:border-indigo-700 hover:bg-indigo-700">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewbox="0 0 256 256">
@@ -808,57 +341,57 @@
                         </a>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6 mb-6">
+                    <div class="flex flex-col gap-6 mb-6">
                         {% for event in events %}
-                            <div class="rounded-lg bg-white p-6 shadow-3xl dark:bg-lightblue dark:shadow-black/10 space-y-5">
-                                <img src="../static/images/list.png" class="h-24 w-24 mx-auto flex-none rounded-full object-cover ring-2 ring-green-600 border-4 border-white dark:border-lightblue" alt="avatar">
-                                <div>
+                            <div class="rounded-lg bg-white p-6 shadow-3xl dark:bg-lightblue dark:shadow-black/10 space-y-5" x-data="{ open: true }">
+{#                                <div class="flex justify-between">#}
+{#                                    <h2 class="text-lg/5 font-medium text-center">{{ event.title }}</h2>#}
+{#                                    <p class="text-center text-gray-400" ><strong>日期：</strong>{{ event.start_date }} - {{ event.end_date }}</p>#}
+{#                                    <p class="text-center text-gray-400" ><strong>时间：</strong>{{ event.event_time }}</p>#}
+{#                                    <p class="text-center text-gray-400" ><strong>地点：</strong>{{ event.location }}</p>#}
+{#                                    <p class="text-center text-gray-400" ><strong>描述：</strong>{{ event.description }}</p>#}
+{#                                    <p class="text-center text-gray-400" ><strong>重复：</strong>{{ event.repeat }}</p>#}
+{#                                    <p class="text-center text-gray-400" ><strong>提醒类型:</strong>{{ event.reminder_type }}</p>#}
+{#                                    {% with days=event.reminder_time // (24 * 60), hours=(event.reminder_time % (24 * 60)) // 60, minutes=(event.reminder_time % 60) %}#}
+{#                                        <p class="text-center text-gray-400" ><strong>提醒时间:</strong>{{ days }} 天 {{ hours }} 小时 {{ minutes }} 分钟</p>#}
+{#                                    {% endwith %}#}
+{#                                </div>#}
+                                <div class="flex justify-between">
                                     <h2 class="text-lg/5 font-medium text-center">{{ event.title }}</h2>
-                                    <p class="text-center text-gray-400"><strong>日期：</strong>{{ event.start_date }} - {{ event.end_date }}</p>
-                                    <p class="text-center text-gray-400"><strong>时间：</strong>{{ event.event_time }}</p>
-                                    <p class="text-center text-gray-400"><strong>地点：</strong>{{ event.location }}</p>
-                                    <p class="text-center text-gray-400"><strong>描述：</strong>{{ event.description }}</p>
-                                    <p class="text-center text-gray-400"><strong>重复：</strong>{{ event.repeat }}</p>
-                                    <p class="text-center text-gray-400"><strong>提醒类型:</strong>{{ event.reminder_type }}</p>
-{#                                    <p class="text-center text-gray-400"><strong>提醒时间:</strong>{{ event.reminder_time }}</p>#}
-                                    {% with days=event.reminder_time // (24 * 60), hours=(event.reminder_time % (24 * 60)) // 60, minutes=(event.reminder_time % 60) %}
-                                        <p class="text-center text-gray-400"><strong>提醒时间:</strong>{{ days }} 天 {{ hours }} 小时 {{ minutes }} 分钟</p>
-                                    {% endwith %}
+                                    <p class="text-center"><strong>{{ event.event_time }}</strong></p>
+                                    <p class="text-center text-green-400" style="color: cornflowerblue !important;"><strong></strong>{{ event.start_date }} - {{ event.end_date }}</p>
                                 </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <a href="{{ url_for('event.edit_event', event_id=event.id) }}" class="btn border-indigo-600 justify-center bg-transparent text-indigo-600 hover:bg-indigo-600 hover:text-white">编辑</a>
-                                    <form method="post" action="{{ url_for('event.delete_event', event_id=event.id) }}">
-                                        <input type="submit" value="删除" class="btn border-red-600 justify-center bg-transparent text-red-600 hover:bg-red-700 hover:text-white">
-                                    </form>
+                                <div class="flex justify-between items-center">
+                                    <p class="text-black-50"><strong></strong>{{ event.description }}</p>
+                                    <div class="flex justify-end gap-4">
+                                        <a href="{{ url_for('event.edit_event', event_id=event.id) }}" class="btn border-indigo-600 justify-center bg-transparent text-indigo-600 hover:bg-indigo-600 hover:text-white">编辑</a>
+                                        <form method="post" action="{{ url_for('event.delete_event', event_id=event.id) }}">
+                                            <input type="submit" value="删除" class="btn border-red-600 justify-center bg-transparent text-red-600 hover:bg-red-700 hover:text-white">
+                                        </form>
+                                    </div>
                                 </div>
+
                             </div>
                         {% endfor %}
                         <!--显示过期的事件-->
                         {% for event in expired_events %}
-                            <div class="rounded-lg bg-white p-6 shadow-3xl dark:bg-lightblue dark:shadow-black/10 space-y-5">
-                                <img src="../static/images/list.png" class="h-24 w-24 mx-auto flex-none rounded-full object-cover ring-2 ring-green-600 border-4 border-white dark:border-lightblue" alt="avatar">
-                                <div>
-                                    <h2 class="text-lg/5 font-medium text-center">{{ event.title }}</h2>
-                                    <p class="text-center text-red-600"><strong>日期：</strong>{{ event.start_date }} - {{ event.end_date }}</p>
-                                    <p class="text-center text-gray-400"><strong>时间：</strong>{{ event.event_time }}</p>
-                                    <p class="text-center text-gray-400"><strong>地点：</strong>{{ event.location }}</p>
-                                    <p class="text-center text-gray-400"><strong>描述：</strong>{{ event.description }}</p>
-                                    <p class="text-center text-gray-400"><strong>重复：</strong>{{ event.repeat }}</p>
-                                    <p class="text-center text-gray-400"><strong>提醒类型:</strong>{{ event.reminder_type }}</p>
-{#                                    <p class="text-center text-gray-400"><strong>提醒时间:</strong>{{ event.reminder_time }}</p>#}
-                                    {% with days=event.reminder_time // (24 * 60), hours=(event.reminder_time % (24 * 60)) // 60, minutes=(event.reminder_time % 60) %}
-                                        <p class="text-center text-gray-400"><strong>提醒时间:</strong>{{ days }} 天 {{ hours }} 小时 {{ minutes }} 分钟</p>
-                                    {% endwith %}
+                            <div class="rounded-lg bg-gray-100 p-6 shadow-3xl dark:bg-lightblue dark:shadow-black/10 space-y-5">
+                                <div class="flex justify-between">
+                                    <h2 class="text-lg/5 font-medium text-center text-gray-400 ">{{ event.title }}</h2>
+                                    <p class="text-center text-gray-400"><strong>{{ event.event_time }}</strong></p>
+                                    <p class="text-center text-gray-400"><strong></strong>{{ event.start_date }} - {{ event.end_date }}（已过期）</p>
                                 </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <a href="{{ url_for('event.edit_event', event_id=event.id) }}" class="btn border-indigo-600 justify-center bg-transparent text-indigo-600 hover:bg-indigo-600 hover:text-white">编辑</a>
-                                    <form method="post" action="{{ url_for('event.delete_event', event_id=event.id) }}">
-                                        <input type="submit" value="删除" class="btn border-red-600 justify-center bg-transparent text-red-600 hover:bg-red-700 hover:text-white">
-                                    </form>
+                                <div class="flex justify-between items-center">
+                                    <p class="text-gray-400"><strong></strong>{{ event.description }}</p>
+                                    <div class="flex justify-end gap-4">
+                                        <a href="{{ url_for('event.edit_event', event_id=event.id) }}" class="btn border-gray-600 justify-center bg-transparent text-gray-400 hover:bg-gray-700 hover:text-white">编辑</a>
+                                        <form method="post" action="{{ url_for('event.delete_event', event_id=event.id) }}">
+                                            <input type="submit" value="删除" class="btn border-gray-600 justify-center bg-transparent text-gray-400 hover:bg-gray-700 hover:text-white">
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         {% endfor %}
-
                     </div>
 
                 </div>
@@ -892,5 +425,10 @@
     <script src="{{ url_for('static', filename='js/alpine.min.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/perfect-scrollbar.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+    <script>
+    function goBack() {
+  window.history.back();
+}
+</script>
 </body>
 </html>

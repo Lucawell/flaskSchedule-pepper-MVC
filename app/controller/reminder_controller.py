@@ -35,7 +35,7 @@ def send_reminder_email():
     到用户的电子邮件地址。保存已发送的电子邮件到历史记录。
 
     Returns:
-        带有表单数据的呈现的“send_email.html”模板。
+        带有表单数据的呈现的“email_history.html”模板。
     """
     if request.method == 'POST':
         title = request.form.get('title')
@@ -53,7 +53,8 @@ def send_reminder_email():
                                      recipients=", ".join(recipients))
         db.session.add(email_history)
         db.session.commit()
-    return render_template('send_email.html', form=request.form)
+    return show_email_history()
+    # return render_template('email_history.html', form=request.form)
 
 
 # 显示历史记录
