@@ -1,6 +1,6 @@
 # encoding:utf-8
 import os
-from datetime import timedelta
+from datetime import timedelta, datetime
 from dotenv import load_dotenv
 
 # 加载环境变量
@@ -11,7 +11,7 @@ DEBUG = True
 # 是否追踪对象的修改。
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 # 查询时显示原始SQL语句
-SQLALCHEMY_ECHO = True
+SQLALCHEMY_ECHO = False
 # session必须要设置key
 SECRET_KEY = 'c798ee1f5fd894f6e0ba9fc0d16b8b22'
 # mysql数据库连接信息
@@ -40,8 +40,11 @@ ALIYUN_REGION_ID = 'cn-hangzhou'
 API_TOKEN = os.getenv('API_TOKEN')
 
 # 上传文件配置
-UPLOADED_PHOTOS_DEST = os.path.join(os.path.dirname(__file__), 'uploads/images')
+# 获取当前日期
+current_date = datetime.now().strftime("%Y/%m/%d")
+UPLOADED_PHOTOS_DEST = os.path.join(os.path.dirname(__file__), f'uploads/images/{current_date}')
 UPLOADS_AUTOSERVE = True
 
 # 调度器配置
 SCHEDULER_API_ENABLED = True
+

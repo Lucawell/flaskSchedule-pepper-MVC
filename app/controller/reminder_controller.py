@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from flask import request, render_template, redirect, url_for, current_app
+from flask import request, render_template, redirect, url_for, current_app, session
 from flask_login import login_required, current_user
 from flask_mail import Message
 
@@ -94,14 +94,15 @@ def delete_email_history(email_history_id):
 
 # 浏览器提醒
 # 定义定时任务
-def check_reminder():
+def check_reminder(user_id):
     with scheduler.app.app_context():
         # 获取当前时间
         current_time = datetime.now().time()
+        # 获取用户id
 
         # 查询需要提醒的事件，仅限当前用户
         events_to_remind = Event.query.filter(
-            Event.user_id == 1,
+            Event.user_id == user_id,
             Event.event_time <= current_time,
             Event.reminder_type != "none",
         ).all()
@@ -115,3 +116,5 @@ def check_reminder():
             if current_time >= reminder_datetime.time():
                 # 在这里执行提醒逻辑，可以使用 Flask-SocketIO 或其他方式通知前端
                 print(f"Reminder for event '{event.title}' at {current_time}")
+
+

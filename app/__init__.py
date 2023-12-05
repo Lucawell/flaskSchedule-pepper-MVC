@@ -10,6 +10,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 from flask_apscheduler import APScheduler
 
+
 # 创建Flask应用实例
 db = SQLAlchemy()  # 数据库实例
 login_manager = LoginManager()  # 登录管理实例
@@ -131,7 +132,7 @@ def configure_scheduler(app: Flask) -> None:
     """
     from app.controller.reminder_controller import check_reminder
     scheduler.init_app(app)
-    scheduler.add_job(id='reminder_job', func=check_reminder, trigger='interval', seconds=6)
+    scheduler.add_job(id='reminder_job', func=check_reminder, args=[1], trigger='interval', seconds=5)
     scheduler.start()
 
 

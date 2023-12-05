@@ -4,6 +4,9 @@ from aliyunsdkcore.client import AcsClient
 from aliyunsdkdysmsapi.request.v20170525.SendSmsRequest import SendSmsRequest
 import json
 from flask_uploads import UploadSet, IMAGES
+from datetime import datetime
+from werkzeug.utils import secure_filename
+
 from app.config import ALIYUN_ACCESS_KEY_ID, ALIYUN_ACCESS_KEY_SECRET, API_TOKEN
 
 # 令牌配置
@@ -173,16 +176,15 @@ class FileUploadResource(Resource):
             # 检查请求中是否包含“照片”文件
             if "photo" not in request.files:
                 return {"error": "No file part"}, 400
-
             photo = request.files["photo"]
-
             # 检查是否提供了文件名
             if photo.filename == "":
                 return {"error": "No selected file"}, 400
-
-            # 保存上传的文件
-            filename = photos.save(photo)
-
+            # 重命名文件-时间戳
+            file_extension = secure_filename(photo.filename).rsplit('.', 1)[1].lower()
+            filename = f"{int(datetime.timestamp(datetime.now()))}.{file_extension}"
+            # 保存文件
+            photos.save(photo, name=filename)
             # 获取上传文件的URL
             file_url = photos.url(filename)
 

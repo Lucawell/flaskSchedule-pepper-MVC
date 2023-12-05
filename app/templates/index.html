@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="Premium Tailwind CSS Admin & Dashboard Template" />
     <meta name="author" content="SRBThemes" />
-{#    <meta name="viewport" content="width=1280, user-scalable=no" />#}
+    <meta name="viewport" content="width=1280, user-scalable=no" />
 
 
     <title>老年人健康管理系统</title>
@@ -541,6 +541,36 @@
 
     // Initial update
     updateClock();
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        {% for event in events %}
+            var eventTimeStr = '{{ event.event_time }}';
+            var eventTimeArray = eventTimeStr.split(':');
+            var eventTime = new Date();
+            eventTime.setHours(parseInt(eventTimeArray[0], 10));
+            eventTime.setMinutes(parseInt(eventTimeArray[1], 10));
+            eventTime.setSeconds(parseInt(eventTimeArray[2], 10));
+
+            var reminderTime = parseFloat('{{ event.reminder_time }}') * 60 * 1000; // 将提醒时间转换为毫秒（将分钟转换为毫秒）
+            var currentTime = new Date();
+
+            // 计算提醒时间点
+            var remindAt = new Date(eventTime - reminderTime);
+
+            // 如果事件时间已过，则不设置提醒
+            if (remindAt >= currentTime) {
+                // 设置提醒定时器
+                var timeoutId = setTimeout(function () {
+                    // 在这里可以添加播放声音的逻辑，可以使用HTML5的 <audio> 元素
+                    var audio = new Audio("{{ url_for('static', filename='mm/beep.mp3') }}");
+                    audio.play();
+                    // 显示提示
+                    alert('提醒：' + '{{ event.title }}');
+                }, remindAt - currentTime);
+            }
+        {% endfor %}
+    });
 </script>
 </body>
 </html>

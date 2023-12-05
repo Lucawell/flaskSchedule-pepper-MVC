@@ -1,5 +1,5 @@
 # encoding:utf-8
-from flask import flash, redirect, url_for, render_template
+from flask import flash, redirect, url_for, render_template, make_response
 from flask_login import login_user, login_required, logout_user, current_user
 from app.forms import RegisterForm, LoginForm
 from app.model.User import User
@@ -65,8 +65,13 @@ def login():
             # 用户验证成功，将用户标记为已登录
             # 可以使用 Flask-Login 或自己的会话管理逻辑来处理登录状态
             login_user(user, remember=form.remember)
+            # return redirect(url_for('event.show_event'))  # 跳转到用户仪表板或其他受保护的页面
+            # 设置cookie
+            response = make_response(redirect(url_for('event.show_event')))
+            response.set_cookie('user_id', str(user.id))  # 存储用户ID在cookie中
             flash('登录成功', 'success')
-            return redirect(url_for('event.show_event'))  # 跳转到用户仪表板或其他受保护的页面
+
+            return response
         else:
             flash('登录失败，请检查邮箱或密码', 'error')
 
