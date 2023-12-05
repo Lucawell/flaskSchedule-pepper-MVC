@@ -6,12 +6,16 @@ from flask_restful import Api
 from flask_admin import Admin
 from flask_mail import Mail
 from flask_uploads import configure_uploads
+import logging
+from logging.handlers import RotatingFileHandler
+from flask_apscheduler import APScheduler
 
 # 创建Flask应用实例
 db = SQLAlchemy()  # 数据库实例
 login_manager = LoginManager()  # 登录管理实例
 migrate = Migrate()  # 数据库迁移实例
 mail = Mail()  # 邮件实例
+scheduler = APScheduler()
 
 
 def create_app() -> Flask:
@@ -24,13 +28,14 @@ def create_app() -> Flask:
     app.config.from_object('app.config')
     app.config.from_envvar('FLASKR_CONFIGS')
 
-    initialize_extensions(app)
+    configure_logging(app)  # 添加日志配置
+    initialize_extensions(app)  # 初始化
     register_blueprints(app)
     configure_api_resources(app)
     configure_admin(app)
+    # configure_scheduler(app)
 
     return app
-
 
 def initialize_extensions(app: Flask) -> None:
     """初始化扩展，包括数据库、登录管理、数据库迁移、邮件和文件上传。
@@ -100,3 +105,36 @@ def configure_admin(app: Flask) -> None:
     admin.add_view(EventAdminView(Event, db.session, url='events', name='events', endpoint='events_admin'))
     admin.add_view(EmailHistoryAdminView(EmailHistory, db.session, url='email-history', name='email-history',
                                          endpoint='email_history_admin'))
+
+
+def configure_logging(app: Flask) -> None:
+    """配置应用程序日志。
+
+    Args:
+        app (Flask): Flask应用实例。
+    """
+    log_file_path = 'app.log'
+    log_handler = RotatingFileHandler(log_file_path, maxBytes=10240, backupCount=10)
+    log_handler.setFormatter(logging.Formatter(
+        '%(asctime)s %(levelname)s: %(message)s '
+        '[in %(pathname)s:%(lineno)d]'
+    ))
+    log_handler.setLevel(logging.INFO)
+    app.logger.addHandler(log_handler)
+
+
+def configure_scheduler(app: Flask) -> None:
+    """配置定时任务。
+
+    Args:
+        app (Flask): Flask应用实例。
+    """
+    from app.controller.reminder_controller import check_reminder
+    scheduler.init_app(app)
+    scheduler.add_job(id='reminder_job', func=check_reminder, trigger='interval', seconds=6)
+    scheduler.start()
+
+
+
+
+

@@ -42,3 +42,6 @@ API_TOKEN = os.getenv('API_TOKEN')
 # 上传文件配置
 UPLOADED_PHOTOS_DEST = os.path.join(os.path.dirname(__file__), 'uploads/images')
 UPLOADS_AUTOSERVE = True
+
+# 调度器配置
+SCHEDULER_API_ENABLED = True

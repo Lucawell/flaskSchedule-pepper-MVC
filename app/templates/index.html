@@ -341,16 +341,15 @@
                         <div class="2xl:col-span-2 rounded-lg bg-white shadow-3xl dark:bg-lightblue dark:shadow-black/10 order-1">
                             <div class="flex flex-col sm:flex-row items-stretch justify-between gap-3">
                                 <div class="sm:w-5/12 flex items-center justify-center">
-                                    <img src="../static/images/girl-with-laptop.png" class="w-full xl:w-72 py-2.5 px-6">
+                                    <img src="../static/images/pepper_contact.png" class="w-full xl:w-72 py-2.5 px-6">
                                 </div>
                                 <div class="sm:w-7/12 p-6 flex flex-col justify-between">
                                     <div>
-                                        <h5 class="text-lg font-medium mb-1">欢迎来到老年人健康管理页面</h5>
-                                        <p class="text-sm mb-3 text-gray-400 line-clamp-3">You have 12 task to finish today, Your already completed 189 task good job. Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                                        <h5 class="text-lg font-medium mb-1">欢迎使用老年人健康管理系统！</h5>
+
+                                        <p class="text-sm mb-3 text-gray-400 line-clamp-3">您今天有{{ events|length }}个待办日程，有{{ expired_events|length }}个日程已经过期</p>
                                     </div>
-                                    <div>
-                                        <span class="mt-auto rounded bg-indigo-100 px-2.5 py-0.5 text-xs font-medium text-indigo-600">68% OF TARGET</span>
-                                    </div>
+                                    <div id="clock" class="clock-container"></div>
                                 </div>
                             </div>
                         </div>
@@ -520,6 +519,28 @@
     function goBack() {
   window.history.back();
 }
+</script>
+<script>
+    function updateClock() {
+        var now = new Date();
+        var hours = now.getHours();
+        var minutes = now.getMinutes();
+        var seconds = now.getSeconds();
+
+        // Add leading zero if the value is less than 10
+        hours = (hours < 10) ? "0" + hours : hours;
+        minutes = (minutes < 10) ? "0" + minutes : minutes;
+        seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+        var timeString = hours + ":" + minutes + ":" + seconds;
+        document.getElementById("clock").innerHTML = timeString;
+    }
+
+    // Update the clock every second
+    setInterval(updateClock, 1000);
+
+    // Initial update
+    updateClock();
 </script>
 </body>
 </html>

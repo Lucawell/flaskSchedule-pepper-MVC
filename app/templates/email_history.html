@@ -6,14 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="Premium Tailwind CSS Admin & Dashboard Template" />
     <meta name="author" content="SRBThemes" />
-
     <title>老年人健康管理系统</title>
-
-
-
-    <link rel="stylesheet" type="text/css" media="screen" href="../static/css/perfect-scrollbar.min.css" />
-
-    <link rel="stylesheet" type="text/css" media="screen" href="../static/css/style.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/perfect-scrollbar.min.css') }}" />
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/style.css') }}" />
 </head>
 <body x-data="main" class="collapse-menu overflow-x-hidden bg-lightwhite font-public text-base font-normal text-slate-600 antialiased dark:bg-darkblue dark:text-indigo-300" :class="[ $store.app.sidebar ? 'toggle-sidebar' : '', $store.app.fullscreen ? '' : '']">
 
@@ -462,7 +457,8 @@
                                                         </button>
                                                         <div class="flex flex-wrap items-center gap-x-1">
                                                             <p class="text-[15px] font-semibold line-clamp-1">{{ email.title }}</p>
-                                                            <p class="text-sm line-clamp-1">{{ email.content }}</p>
+                                                            <p class="text-sm line-clamp-1">
+                                                                {{ email.content }}</p>
                                                         </div>
                                                         <div class="sm:flex items-center ml-auto gap-2 hidden">
                                                             <span class="h-2.5 w-2.5 rounded-full bg-indigo-600"></span>
@@ -818,25 +814,6 @@
                         <div class="flex items-center justify-between gap-2 p-4">
                             <div class="flex items-center gap-2">
                                 <input type="submit" class="btn border-indigo-600 bg-indigo-600 text-white hover:border-indigo-700 hover:bg-indigo-700" value="Send Email">
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <div class="relative" x-data="dropdown" @click.outside="open = false">
-                                    <button class="flex items-center justify-center" @click="toggle()">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
-                                            <path d="M112,60a16,16,0,1,1,16,16A16,16,0,0,1,112,60Zm16,52a16,16,0,1,0,16,16A16,16,0,0,0,128,112Zm0,68a16,16,0,1,0,16,16A16,16,0,0,0,128,180Z"></path>
-                                        </svg>
-                                    </button>
-                                    <ul x-cloak x-show="open" x-transition class="absolute right-0 bottom-0 z-10 mt-1 w-full min-w-[190px] whitespace-nowrap rounded bg-white py-2 text-[15px] text-slate-400 shadow-md dark:bg-[#323249]">
-                                        <li><a href="javascript:;" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">Add Label</a></li>
-                                        <li><a href="javascript:;" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">Plain text mode</a></li>
-                                        <li><a href="javascript:;" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">Print</a></li>
-                                    </ul>
-                                </div>
-                                <button type="button">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewbox="0 0 256 256">
-                                        <path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"></path>
-                                    </svg>
-                                </button>
                             </div>
                         </div>
                     </div>
