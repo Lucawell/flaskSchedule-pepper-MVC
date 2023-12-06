@@ -42,7 +42,7 @@ API_TOKEN = os.getenv('API_TOKEN')
 # 上传文件配置
 # 获取当前日期
 current_date = datetime.now().strftime("%Y/%m/%d")
-UPLOADED_PHOTOS_DEST = os.path.join(os.path.dirname(__file__), f'uploads/images/{current_date}')
+UPLOADED_PHOTOS_DEST = os.path.join(os.path.dirname(__file__), f'static/uploads/images/{current_date}')
 UPLOADS_AUTOSERVE = True
 
 # 调度器配置

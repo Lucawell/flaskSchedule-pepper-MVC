@@ -31,9 +31,9 @@ def create_app() -> Flask:
 
     configure_logging(app)  # 添加日志配置
     initialize_extensions(app)  # 初始化
-    register_blueprints(app)
-    configure_api_resources(app)
-    configure_admin(app)
+    register_blueprints(app)  # 注册蓝图
+    configure_api_resources(app)  # 配置api
+    configure_admin(app)  # 配置管理员
     # configure_scheduler(app)
 
     return app
@@ -64,11 +64,13 @@ def register_blueprints(app: Flask) -> None:
     from app.views.user_view import user_blueprint
     from app.views.event_view import event_blueprint
     from app.views.reminder_view import reminder_blueprint
+    from app.views.album_view import album_blueprint
 
     app.register_blueprint(index_blueprint, url_prefix='/')
     app.register_blueprint(user_blueprint, url_prefix='/user')
     app.register_blueprint(event_blueprint, url_prefix='/event')
     app.register_blueprint(reminder_blueprint, url_prefix='/reminder')
+    app.register_blueprint(album_blueprint, url_prefix='/album')
 
 
 def configure_api_resources(app: Flask) -> None:

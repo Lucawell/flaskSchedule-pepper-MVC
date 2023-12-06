@@ -7,11 +7,9 @@
     <meta name="description" content="Premium Tailwind CSS Admin & Dashboard Template" />
     <meta name="author" content="SRBThemes" />
     <meta name="viewport" content="width=1280, user-scalable=no" />
-
-
-    <title>老年人健康管理系统</title>
-
+    <title>相册</title>
     <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/perfect-scrollbar.min.css') }}" />
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/swiper-bundle.min.css') }}" />
     <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/style.css') }}" />
 
 </head>
@@ -62,14 +60,6 @@
                         </a>
                     </li>
                     <li class="menu-item" :class="{'active' : activeMenu === 'contacts'}">
-                        <a href="{{ url_for('album.album_list') }}" class="menu-link" >
-                            <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
-                                <path d="M128,64a40,40,0,1,0,40,40A40,40,0,0,0,128,64Zm0,64a24,24,0,1,1,24-24A24,24,0,0,1,128,128Zm0-112a88.1,88.1,0,0,0-88,88c0,31.4,14.51,64.68,42,96.25a254.19,254.19,0,0,0,41.45,38.3,8,8,0,0,0,9.18,0A254.19,254.19,0,0,0,174,200.25c27.45-31.57,42-64.85,42-96.25A88.1,88.1,0,0,0,128,16Zm0,206c-16.53-13-72-60.75-72-118a72,72,0,0,1,144,0C200,161.23,144.53,209,128,222Z"></path>
-                            </svg>
-                            <p>相册</p>
-                        </a>
-                    </li>
-                    <li class="menu-item" :class="{'active' : activeMenu === 'contacts'}">
                         <a href="https://m.uzz.me/" class="menu-link" >
                             <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
                                 <path d="M128,64a40,40,0,1,0,40,40A40,40,0,0,0,128,64Zm0,64a24,24,0,1,1,24-24A24,24,0,0,1,128,128Zm0-112a88.1,88.1,0,0,0-88,88c0,31.4,14.51,64.68,42,96.25a254.19,254.19,0,0,0,41.45,38.3,8,8,0,0,0,9.18,0A254.19,254.19,0,0,0,174,200.25c27.45-31.57,42-64.85,42-96.25A88.1,88.1,0,0,0,128,16Zm0,206c-16.53-13-72-60.75-72-118a72,72,0,0,1,144,0C200,161.23,144.53,209,128,222Z"></path>
@@ -85,12 +75,29 @@
                             <p>游戏</p>
                         </a>
                     </li>
+                    <li class="menu-item" :class="{'active' : activeMenu === 'invoice'}">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle" @click="activeMenu === 'invoice' ? activeMenu = null : activeMenu = 'invoice'">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
+                                <path d="M184,112a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16h64A8,8,0,0,1,184,112Zm-8,24H112a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16Zm48-88V208a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32H208A16,16,0,0,1,224,48ZM48,208H72V48H48Zm160,0V48H88V208H208Z"></path>
+                            </svg>
+                            <p>娱乐</p>
+                        </a>
+                        <ul class="menu-sub" x-cloak x-show="activeMenu === 'invoice'" x-collapse>
+                            <li class="menu-item">
+                                <a href="https://poki.com/zh/html5" class="menu-link">
+                                    <p>在线H5游戏</p>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="https://y.qq.com/" class="menu-link">
+                                    <p>QQ音乐</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
 
                 </ul>
             </nav>
-
-
-
 
             <div class="main-content space-y-6 pt-2">
 
@@ -100,10 +107,21 @@
                             <path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z"></path>
                         </svg>
                     </button>
-
                     <div class="flex flex-1 items-center justify-between gap-2">
                         <div class="flex items-center gap-2">
-                            <button onclick="goBack()">返回</button>
+                            <div class="hidden md:block">
+                                <nav aria-label="breadcrumb" class="w-full px-2 py-1 text-sm">
+                                    <ol class="flex space-x-2">
+                                        <li class="flex items-center">
+                                            <a href="javaScript:;" class="flex items-center text-slate-600/50 hover:text-indigo-600 dark:text-indigo-300 dark:hover:text-white">User Interface</a>
+                                        </li>
+                                        <li class="flex items-center space-x-1">
+                                            <span class="text-slate-600/50 dark:text-indigo-300">/</span>
+                                            <a href="javaScript:;" class="flex items-center px-2 text-indigo-600 dark:text-white">Carousel</a>
+                                        </li>
+                                    </ol>
+                                </nav>
+                            </div>
                             <div class="relative hidden sm:block">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-2 top-2 text-slate-300" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
                                     <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
@@ -111,7 +129,6 @@
                                 <input type="text" class="h-9 w-full rounded-lg border-transparent bg-transparent px-4 pl-8 text-sm focus:border-transparent focus:shadow-none focus:ring-0" placeholder="Seaech..." />
                             </div>
                         </div>
-
                         <div class="flex flex-none items-center gap-2">
                             <div class="relative">
                                 <button class="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 transition-all duration-300 hover:bg-slate-200 hover:text-indigo-600 dark:bg-white/5 dark:hover:bg-lightindigo dark:hover:text-white" x-cloak x-show="$store.app.mode === 'light'" @click="$store.app.toggleMode('dark')">
@@ -125,7 +142,6 @@
                                     </svg>
                                 </button>
                             </div>
-
                             <div x-data="{ fullScreen: false }">
                                 <button class="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 transition-all duration-300 hover:bg-slate-200 hover:text-indigo-600 dark:bg-white/5 dark:hover:bg-lightindigo dark:hover:text-white" x-cloak x-bind:class="{ 'hidden': fullScreen, 'block': !fullScreen }" x-on:click="fullScreen = !fullScreen" @click="$store.app.toggleFullScreen()">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
@@ -138,7 +154,6 @@
                                     </svg>
                                 </button>
                             </div>
-
                             <div class="relative" x-data="dropdown" @click.outside="open = false">
                                 <button class="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 transition-all duration-300 hover:bg-slate-200 hover:text-indigo-600 dark:bg-white/5 dark:hover:bg-lightindigo dark:hover:text-white" @click="toggle()">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
@@ -160,9 +175,6 @@
                                         <ul class="flex flex-col divide-y divide-slate-200 dark:divide-gray-100/10">
                                             <li class="group relative p-4 transition-all duration-300 hover:bg-slate-100 dark:hover:bg-black/10" x-show="showElement" x-data="{ showElement: true }" x-transition x-transition.duration.300ms>
                                                 <div class="flex">
-                                                    <div class="me-4 flex-shrink-0">
-                                                        <img class="h-9 w-9 rounded-full object-cover" src="../static/images/avatar-1.png" alt="image" />
-                                                    </div>
                                                     <div class="flex-grow text-[15px]">
                                                         <h6 class="mb-1 font-medium text-slate-600 dark:text-indigo-300">Congratulation Lettie 🎉</h6>
                                                         <p class>Won the monthly best seller gold badge</p>
@@ -182,9 +194,6 @@
                                             </li>
                                             <li class="group relative p-4 transition-all duration-300 hover:bg-slate-100 dark:hover:bg-black/10" x-show="showElement" x-data="{ showElement: true }" x-transition x-transition.duration.300ms>
                                                 <div class="flex">
-                                                    <div class="me-4 flex-shrink-0">
-                                                        <img class="h-9 w-9 rounded-full object-cover" src="../static/images/avatar-2.png" alt="image" />
-                                                    </div>
                                                     <div class="flex-grow text-[15px]">
                                                         <h6 class="mb-1 font-medium text-slate-600 dark:text-indigo-300">New Message</h6>
                                                         <p class>You have new message from Natalie</p>
@@ -204,9 +213,6 @@
                                             </li>
                                             <li class="group relative p-4 transition-all duration-300 hover:bg-slate-100 dark:hover:bg-black/10" x-show="showElement" x-data="{ showElement: true }" x-transition x-transition.duration.300ms>
                                                 <div class="flex">
-                                                    <div class="me-4 flex-shrink-0">
-                                                        <img class="h-9 w-9 rounded-full object-cover" src="../static/images/avatar-3.png" alt="image" />
-                                                    </div>
                                                     <div class="flex-grow text-[15px]">
                                                         <h6 class="mb-1 font-medium text-slate-600 dark:text-indigo-300">Whoo! You have new order</h6>
                                                         <p class>ACME Inc. made new order $1,154</p>
@@ -226,9 +232,6 @@
                                             </li>
                                             <li class="group relative p-4 transition-all duration-300 hover:bg-slate-100 dark:hover:bg-black/10" x-show="showElement" x-data="{ showElement: true }" x-transition x-transition.duration.300ms>
                                                 <div class="flex">
-                                                    <div class="me-4 flex-shrink-0">
-                                                        <img class="h-9 w-9 rounded-full object-cover" src="../static/images/avatar-5.png" alt="image" />
-                                                    </div>
                                                     <div class="flex-grow text-[15px]">
                                                         <h6 class="mb-1 font-medium text-slate-600 dark:text-indigo-300">Application has been approved</h6>
                                                         <p class>Your ABC project application has been approved.</p>
@@ -248,9 +251,6 @@
                                             </li>
                                             <li class="group relative p-4 transition-all duration-300 hover:bg-slate-100 dark:hover:bg-black/10" x-show="showElement" x-data="{ showElement: true }" x-transition x-transition.duration.300ms>
                                                 <div class="flex">
-                                                    <div class="me-4 flex-shrink-0">
-                                                        <img class="h-9 w-9 rounded-full object-cover" src="../static/images/avatar-6.png" alt="image" />
-                                                    </div>
                                                     <div class="flex-grow text-[15px]">
                                                         <h6 class="mb-1 font-medium text-slate-600 dark:text-indigo-300">Send connection request</h6>
                                                         <p class>Peter sent you connection request</p>
@@ -275,41 +275,39 @@
                                     </li>
                                 </ul>
                             </div>
-
-
                             <div class="relative" x-data="dropdown" @click.outside="open = false">
                                 <button type="button" class="flex items-center gap-1.5 xl:gap-0" @click="toggle()">
-                                    <img class="h-9 w-9 rounded-full xl:mr-2" src="../static/images/avatar-1.png" alt="Header Avatar" />
                                     <span class="hidden xl:block">Jinsu H.</span>
                                     <svg xmlns="http://www.w3.org/2000/svg" class="ms-1 hidden md:block" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
                                         <path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"></path>
                                     </svg>
                                 </button>
-
                                 <ul class="absolute right-0 top-11 z-10 mt-2 w-40 min-w-[190px] rounded bg-white p-2 text-sm text-slate-400 shadow-md dark:bg-[#323249]" x-cloak x-show="open" x-transition x-transition.duration.300ms>
                                     <li>
                                         <div class="flex items-center !p-1">
-                                            <div class="flex-none">
-                                                <img class="h-7 w-7 rounded-full object-cover" src="../static/images/avatar-1.png" alt="image" />
-                                            </div>
                                             <div class="pl-2">
                                                 <h4 class="text-sm font-medium leading-none">Jinsu H.</h4>
-                                                <a class="text-xs hover:text-black dark:hover:text-indigo-300" href="javaScript:;"><span class="__cf_email__" data-cfemail="5e3437302d2b361e3b263f332e323b703d3133">[email&#160;protected]</span></a>
+                                                <a class="text-xs hover:text-black dark:hover:text-indigo-300" href="javaScript:;"><span class="__cf_email__" data-cfemail="d1bbb8bfa2a4b991b4a9b0bca1bdb4ffb2bebc">[email&#160;protected]</span></a>
                                             </div>
                                         </div>
                                     </li>
-
                                     <li class="my-1 block h-px bg-slate-200 dark:bg-gray-100/10"></li>
-
                                     <li>
-                                        <a href="{{ url_for('user.profile')}}" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">
+                                        <a href="javaScript:;" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="16" height="16" fill="currentcolor" viewbox="0 0 256 256">
                                                 <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"></path>
                                             </svg>
                                             Profile
                                         </a>
                                     </li>
-
+                                    <li>
+                                        <a href="javaScript:;" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="16" height="16" fill="currentcolor" viewbox="0 0 256 256">
+                                                <path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm109.94-52.79a8,8,0,0,0-3.89-5.4l-29.83-17-.12-33.62a8,8,0,0,0-2.83-6.08,111.91,111.91,0,0,0-36.72-20.67,8,8,0,0,0-6.46.59L128,41.85,97.88,25a8,8,0,0,0-6.47-.6A112.1,112.1,0,0,0,54.73,45.15a8,8,0,0,0-2.83,6.07l-.15,33.65-29.83,17a8,8,0,0,0-3.89,5.4,106.47,106.47,0,0,0,0,41.56,8,8,0,0,0,3.89,5.4l29.83,17,.12,33.62a8,8,0,0,0,2.83,6.08,111.91,111.91,0,0,0,36.72,20.67,8,8,0,0,0,6.46-.59L128,214.15,158.12,231a7.91,7.91,0,0,0,3.9,1,8.09,8.09,0,0,0,2.57-.42,112.1,112.1,0,0,0,36.68-20.73,8,8,0,0,0,2.83-6.07l.15-33.65,29.83-17a8,8,0,0,0,3.89-5.4A106.47,106.47,0,0,0,237.94,107.21Zm-15,34.91-28.57,16.25a8,8,0,0,0-3,3c-.58,1-1.19,2.06-1.81,3.06a7.94,7.94,0,0,0-1.22,4.21l-.15,32.25a95.89,95.89,0,0,1-25.37,14.3L134,199.13a8,8,0,0,0-3.91-1h-.19c-1.21,0-2.43,0-3.64,0a8.08,8.08,0,0,0-4.1,1l-28.84,16.1A96,96,0,0,1,67.88,201l-.11-32.2a8,8,0,0,0-1.22-4.22c-.62-1-1.23-2-1.8-3.06a8.09,8.09,0,0,0-3-3.06l-28.6-16.29a90.49,90.49,0,0,1,0-28.26L61.67,97.63a8,8,0,0,0,3-3c.58-1,1.19-2.06,1.81-3.06a7.94,7.94,0,0,0,1.22-4.21l.15-32.25a95.89,95.89,0,0,1,25.37-14.3L122,56.87a8,8,0,0,0,4.1,1c1.21,0,2.43,0,3.64,0a8.08,8.08,0,0,0,4.1-1l28.84-16.1A96,96,0,0,1,188.12,55l.11,32.2a8,8,0,0,0,1.22,4.22c.62,1,1.23,2,1.8,3.06a8.09,8.09,0,0,0,3,3.06l28.6,16.29A90.49,90.49,0,0,1,222.9,142.12Z"></path>
+                                            </svg>
+                                            Settings
+                                        </a>
+                                    </li>
                                     <li>
                                         <a href="javaScript:;" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="16" height="16" fill="currentcolor" viewbox="0 0 256 256">
@@ -318,12 +316,17 @@
                                             Messages
                                         </a>
                                     </li>
-
-
-                                    <li class="my-1 block h-px bg-slate-200 dark:bg-gray-100/10"></li>
-
                                     <li>
-                                        <a href="{{url_for('user.logout')}}" class="flex items-center px-4 py-2 text-red-600 transition-all duration-300 hover:bg-slate-100 dark:hover:bg-black/10">
+                                        <a href="javaScript:;" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="16" height="16" fill="currentcolor" viewbox="0 0 256 256">
+                                                <path d="M244.8,150.4a8,8,0,0,1-11.2-1.6A51.6,51.6,0,0,0,192,128a8,8,0,0,1-7.37-4.89,8,8,0,0,1,0-6.22A8,8,0,0,1,192,112a24,24,0,1,0-23.24-30,8,8,0,1,1-15.5-4A40,40,0,1,1,219,117.51a67.94,67.94,0,0,1,27.43,21.68A8,8,0,0,1,244.8,150.4ZM190.92,212a8,8,0,1,1-13.84,8,57,57,0,0,0-98.16,0,8,8,0,1,1-13.84-8,72.06,72.06,0,0,1,33.74-29.92,48,48,0,1,1,58.36,0A72.06,72.06,0,0,1,190.92,212ZM128,176a32,32,0,1,0-32-32A32,32,0,0,0,128,176ZM72,120a8,8,0,0,0-8-8A24,24,0,1,1,87.24,82a8,8,0,1,0,15.5-4A40,40,0,1,0,37,117.51,67.94,67.94,0,0,0,9.6,139.19a8,8,0,1,0,12.8,9.61A51.6,51.6,0,0,1,64,128,8,8,0,0,0,72,120Z"></path>
+                                            </svg>
+                                            Support
+                                        </a>
+                                    </li>
+                                    <li class="my-1 block h-px bg-slate-200 dark:bg-gray-100/10"></li>
+                                    <li>
+                                        <a href="javaScript:;" class="flex items-center px-4 py-2 text-red-600 transition-all duration-300 hover:bg-slate-100 dark:hover:bg-black/10">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="16" height="16" fill="currentcolor" viewbox="0 0 256 256">
                                                 <path d="M112,216a8,8,0,0,1-8,8H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32h56a8,8,0,0,1,0,16H48V208h56A8,8,0,0,1,112,216Zm109.66-93.66-40-40a8,8,0,0,0-11.32,11.32L196.69,120H104a8,8,0,0,0,0,16h92.69l-26.35,26.34a8,8,0,0,0,11.32,11.32l40-40A8,8,0,0,0,221.66,122.34Z"></path>
                                             </svg>
@@ -337,161 +340,21 @@
                 </div>
 
 
-
-
-                <div class="min-h-[calc(100vh-152px)] space-y-6 text-[15px]">
-                    <h2 class="mb-6 text-lg font-medium text-slate-600 dark:text-white">数据呈现</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-6">
-                        <div class="2xl:col-span-2 rounded-lg bg-white shadow-3xl dark:bg-lightblue dark:shadow-black/10 order-1">
-                            <div class="flex flex-col sm:flex-row items-stretch justify-between gap-3">
-                                <div class="sm:w-5/12 flex items-center justify-center">
-                                    <img src="../static/images/pepper_contact.png" class="w-full xl:w-72 py-2.5 px-6">
-                                </div>
-                                <div class="sm:w-7/12 p-6 flex flex-col justify-between">
-                                    <div>
-                                        <h5 class="text-lg font-medium mb-1">欢迎使用老年人健康管理系统！</h5>
-
-                                        <p class="text-sm mb-3 text-gray-400 line-clamp-3">您今天有{{ events|length }}个待办日程，有{{ expired_events|length }}个日程已经过期</p>
-                                    </div>
-                                    <div id="clock" class="clock-container"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 order-2">
-                            <div class="rounded-lg bg-white shadow-3xl dark:bg-lightblue dark:shadow-black/10">
-                                <div class="px-6 pt-6">
-                                    <p class="font-semibold leading-6 mb-1">Order</p>
-                                    <h3 class="text-[26px] leading-6 font-medium mb-1">385k</h3>
-                                </div>
-                                <div id="orderChart" class="mb-3"></div>
-                            </div>
-                            <div class="rounded-lg bg-white p-6 shadow-3xl dark:bg-lightblue dark:shadow-black/10">
-                                <div class="flex items-start justify-between gap-3 mb-3.5">
-                                    <img src="../static/images/icon-4.png" class="rounded-md w-10 h-10">
-                                    <div class="relative" x-data="dropdown" @click.outside="open = false">
-                                        <button class="flex items-center justify-center" @click="toggle()">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
-                                                <path d="M112,60a16,16,0,1,1,16,16A16,16,0,0,1,112,60Zm16,52a16,16,0,1,0,16,16A16,16,0,0,0,128,112Zm0,68a16,16,0,1,0,16,16A16,16,0,0,0,128,180Z"></path>
-                                            </svg>
-                                        </button>
-                                        <ul x-cloak x-show="open" x-transition class="absolute right-0 z-10 mt-1 w-full min-w-[190px] whitespace-nowrap rounded bg-white py-2 text-[15px] text-slate-400 shadow-md dark:bg-[#323249]">
-                                            <li><a href="javascript:;" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">View More</a></li>
-                                            <li><a href="javascript:;" class="flex items-center px-4 py-2 transition-all duration-300 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-black/10 dark:hover:text-indigo-300">Delete</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <p class="mb-1">Payments</p>
-                                <h3 class="text-[26px] font-medium leading-7 mb-2">$1,996</h3>
-                                <p class="text-[13px] text-red-600 flex gap-2 items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewbox="0 0 256 256">
-                                        <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm37.66-85.66a8,8,0,0,1,0,11.32l-32,32a8,8,0,0,1-11.32,0l-32-32a8,8,0,0,1,11.32-11.32L120,148.69V88a8,8,0,0,1,16,0v60.69l18.34-18.35A8,8,0,0,1,165.66,130.34Z"></path>
-                                    </svg>-16.50%
-                                </p>
-                            </div>
-                        </div>
-
-
-
-
-
-
-                        <div class="rounded-lg bg-white 2xl:col-span-2 shadow-3xl dark:bg-lightblue dark:shadow-black/10 order-9" style="width: 800px;">
-                        <a href="{{ url_for('event.show_event') }}" class="btn btn-primary">创建事件</a>
-
-                            <div class="table-responsive">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th><input type="checkbox" class="form-checkbox text-indigo-600" /></th>
-                                            <th>标题</th>
-                                            <th>日期</th>
-                                            <th>时间</th>
-                                            <th>地点</th>
-                                            <th>描述</th>
-                                            <th>重复</th>
-                                            <th class="text-center">操作 </th>
-                                        </tr>
-                                    </thead>
-                                    {% for event in events %}
-                                    <tbody>
-                                        <tr>
-                                            <td><input type="checkbox" class="form-checkbox text-indigo-600" /></td>
-                                            <td class="whitespace-nowrap">{{ event.title }}</td>
-                                            <td class="whitespace-nowrap">{{ event.start_date }} - {{ event.end_date }}</td>
-                                            <td>
-                                                <div class="flex items-center justify-start -space-x-2">
-                                                    {{ event.event_time }}
-                                                </div>
-                                            </td>
-                                            <td>
-                                                {{ event.location }}
-                                            </td>
-                                            <td>
-                                                {{ event.description }}
-                                            </td>
-                                            <td class="whitespace-nowrap text-indigo-600 dark:text-indigo-300">{{ event.repeat }}</td>
-                                            <td class="text-center space-x-1 flex items-center">
-                                                <button type="button" aria-label="Edit" onclick="location.href='{{ url_for('event.edit_event', event_id=event.id) }}'">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
-                                                        <path d="M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM51.31,160,136,75.31,152.69,92,68,176.68ZM48,179.31,76.69,208H48Zm48,25.38L79.31,188,164,103.31,180.69,120Zm96-96L147.31,64l24-24L216,84.68Z"></path>
-                                                    </svg>
-                                                </button>
-                                                <form method="post" action="{{ url_for('event.delete_event', event_id=event.id) }}" id="deleteForm">
-                                                    <button type="button" aria-label="Delete" onclick="document.getElementById('deleteForm').submit();">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
-                                                            <path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"></path>
-                                                        </svg>
-                                                    </button>
-                                                </form>
-                                            </td>
-                                        </tr>
-
-                                    </tbody>
+                <div class="min-h-[calc(100vh-152px)]">
+                    <h2 class="mb-6 text-lg font-medium text-slate-600 dark:text-white">Carousel</h2>
+                    <div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
+                        <div class="rounded-lg bg-white p-6 shadow-3xl dark:bg-lightblue dark:shadow-black/10">
+                            <h5 class="mb-6 text-base font-medium text-slate-600 dark:text-indigo-300">With arrow</h5>
+                            <div class="swiper SwiperwithArrows">
+                                <div class="swiper-wrapper">
+                                    {% for path in image_paths %}
+                                    <div class="swiper-slide"><img src="{{ url_for('static', filename=path) }}" alt="slider" class="max-h-96 w-full object-cover" /></div>
                                     {% endfor %}
-                                    {% for event in expired_events %}
-                                    <tbody>
-                                        <tr>
-                                            <td><input type="checkbox" class="form-checkbox text-indigo-600" /></td>
-                                            <td class="whitespace-nowrap">{{ event.title }}</td>
-                                            <td class="whitespace-nowrap text-red-600">{{ event.start_date }} - {{ event.end_date }}</td>
-                                            <td>
-                                                <div class="flex items-center justify-start -space-x-2">
-                                                    {{ event.event_time }}
-                                                </div>
-                                            </td>
-                                            <td>
-                                                {{ event.location }}
-                                            </td>
-                                            <td>
-                                                {{ event.description }}
-                                            </td>
-                                            <td class="whitespace-nowrap text-indigo-600 dark:text-indigo-300">{{ event.repeat }}</td>
-                                            <td class="text-center space-x-1 flex items-center">
-                                                <button type="button" aria-label="Edit" onclick="location.href='{{ url_for('event.edit_event', event_id=event.id) }}'">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
-                                                        <path d="M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM51.31,160,136,75.31,152.69,92,68,176.68ZM48,179.31,76.69,208H48Zm48,25.38L79.31,188,164,103.31,180.69,120Zm96-96L147.31,64l24-24L216,84.68Z"></path>
-                                                    </svg>
-                                                </button>
-                                                <form method="post" action="{{ url_for('event.delete_event', event_id=event.id) }}" id="deleteForm">
-                                                    <button type="button" aria-label="Delete" onclick="document.getElementById('deleteForm').submit();">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentcolor" viewbox="0 0 256 256">
-                                                            <path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"></path>
-                                                        </svg>
-                                                    </button>
-                                                </form>
-                                            </td>
-                                        </tr>
-
-                                    </tbody>
-                                    {% endfor %}
-                                </table>
+                                </div>
+                                <div class="swiper-button-next text-white"></div>
+                                <div class="swiper-button-prev text-white"></div>
                             </div>
-
                         </div>
-
-
-
-
                     </div>
                 </div>
 
@@ -511,7 +374,6 @@
     </div>
 
 
-
     <script src="{{ url_for('static', filename='js/apexcharts.js') }}"></script>
     <script src="{{ url_for('static', filename='js/analyticscharts.js') }}"></script>
     <script src="{{ url_for('static', filename='js/alpine-collaspe.min.js') }}"></script>
@@ -519,61 +381,42 @@
     <script src="{{ url_for('static', filename='js/alpine.min.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/perfect-scrollbar.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/swiper-bundle.min.js') }}"></script>
 <script>
     function goBack() {
   window.history.back();
 }
 </script>
 <script>
-    function updateClock() {
-        var now = new Date();
-        var hours = now.getHours();
-        var minutes = now.getMinutes();
-        var seconds = now.getSeconds();
-
-        // Add leading zero if the value is less than 10
-        hours = (hours < 10) ? "0" + hours : hours;
-        minutes = (minutes < 10) ? "0" + minutes : minutes;
-        seconds = (seconds < 10) ? "0" + seconds : seconds;
-
-        var timeString = hours + ":" + minutes + ":" + seconds;
-        document.getElementById("clock").innerHTML = timeString;
-    }
-
-    // Update the clock every second
-    setInterval(updateClock, 1000);
-
-    // Initial update
-    updateClock();
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        {% for event in events %}
-            var eventTimeStr = '{{ event.event_time }}';
-            var eventTimeArray = eventTimeStr.split(':');
-            var eventTime = new Date();
-            eventTime.setHours(parseInt(eventTimeArray[0], 10));
-            eventTime.setMinutes(parseInt(eventTimeArray[1], 10));
-            eventTime.setSeconds(parseInt(eventTimeArray[2], 10));
-
-            var reminderTime = parseFloat('{{ event.reminder_time }}') * 60 * 1000; // 将提醒时间转换为毫秒（将分钟转换为毫秒）
-            var currentTime = new Date();
-
-            // 计算提醒时间点
-            var remindAt = new Date(eventTime - reminderTime);
-
-            // 如果事件时间已过，则不设置提醒
-            if (remindAt >= currentTime) {
-                // 设置提醒定时器
-                var timeoutId = setTimeout(function () {
-                    // 在这里可以添加播放声音的逻辑，可以使用HTML5的 <audio> 元素
-                    var audio = new Audio("{{ url_for('static', filename='mm/beep.mp3') }}");
-                    audio.play();
-                    // 显示提示
-                    alert('提醒：' + '{{ event.title }}');
-                }, remindAt - currentTime);
-            }
-        {% endfor %}
+    var swiper = new Swiper(".SwiperDefault", {});
+    var swiper = new Swiper(".SwiperwithArrows", {
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+    });
+    var swiper = new Swiper(".SwiperwithPagination", {
+        pagination: {
+            el: ".swiper-pagination",
+        },
+    });
+    var swiper = new Swiper(".SwiperwithProgress", {
+        pagination: {
+            el: ".swiper-pagination",
+            type: "progressbar",
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+    });
+    var swiper = new Swiper(".SwiperMultiple", {
+        slidesPerView: 3,
+        spaceBetween: 30,
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
     });
 </script>
 </body>
